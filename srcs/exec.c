@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:25 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/10/22 21:04:46 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/10/23 18:06:48 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 void	runcmd(t_node *node)
 {
 	t_execnode	*enode;
+	t_redirnode	*rnode;
+	mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 
 	if (node == 0)
 		exit(0);
@@ -28,6 +30,13 @@ void	runcmd(t_node *node)
 		// TODO: use execve instead of execvp
 		execvp(enode->av[0], enode->av);
 		printf("exec %s failed\n", enode->av[0]);
+		break ;
+	case REDIR:
+		rnode = (t_redirnode *)node;
+		close(rnode->fd);
+		if (open(rnode->file, rnode->mode, mode) < 0)
+			panic("open failed");
+		runcmd(rnode->execnode);
 		break ;
 	default:
 		panic("runcmd");

@@ -86,50 +86,9 @@ void	runcmd(struct cmd *cmd)
 		rcmd = (struct redircmd *)cmd;
 		close(rcmd->fd);
 		if (open(rcmd->file, rcmd->mode) < 0)
-		{
-			printf(2, "open %s failed\n", rcmd->file);
-			exit();
-		}
+			panic("open failed");
 		runcmd(rcmd->cmd);
 		break ;
-	case LIST:
-		lcmd = (struct listcmd *)cmd;
-		if (fork1() == 0)
-			runcmd(lcmd->left);
-		wait();
-		runcmd(lcmd->right);
-		break ;
-	case PIPE:
-		pcmd = (struct pipecmd *)cmd;
-		if (pipe(p) < 0)
-			panic("pipe");
-		if (fork1() == 0)
-		{
-			close(1);
-			dup(p[1]);
-			close(p[0]);
-			close(p[1]);
-			runcmd(pcmd->left);
-		}
-		if (fork1() == 0)
-		{
-			close(0);
-			dup(p[0]);
-			close(p[0]);
-			close(p[1]);
-			runcmd(pcmd->right);
-		}
-		close(p[0]);
-		close(p[1]);
-		wait();
-		wait();
-		break ;
-	case BACK:
-		bcmd = (struct backcmd *)cmd;
-		if (fork1() == 0)
-			runcmd(bcmd->cmd);
-		break ;
-	}
 	exit();
 }
 
