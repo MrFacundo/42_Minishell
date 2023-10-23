@@ -4,7 +4,7 @@ OBJECTS	= $(patsubst srcs/%.c,objects/%.o,$(SOURCES))
 LIBFT_DIR  = ./libft
 CC		 = gcc
 CFLAGS	 = -g -Wall -Wextra -Werror
-LDFLAGS	= -L$(LIBFT_DIR) -lft
+LDFLAGS = -L$(LIBFT_DIR) -lft -lreadline
 
 # --- COLORS ---
 
