@@ -3,6 +3,9 @@
 		"*.css": "tailwindcss",
 		"*.js": "javascriptreact",
 		"minishell.h": "c",
-		"history.h": "c"
+		"history.h": "c",
+		"fcntl.h": "c",
+		"stat.h": "c",
+		"unistd.h": "c"
 	}
 }
