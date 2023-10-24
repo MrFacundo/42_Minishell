@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:20:06 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/10/24 17:07:52 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/10/24 17:29:14 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int	gettoken(char **pointer_to_cmd, char **ptr_to_token, char **end_of_token)
 		*end_of_token = p;
 	p += ft_strspn(p, whitespace);
 	*pointer_to_cmd = p;
+	printf("//token: %c\n", ret);
 	return (ret);
 }
  

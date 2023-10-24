@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:07:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/10/24 17:10:20 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/10/24 17:23:11 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ t_node	*parseexec(char **pointer_to_cmd)
 	while (!peek(pointer_to_cmd, "|)&;"))
 	{
 		token = gettoken(pointer_to_cmd, &ptr_to_token, &end_of_token);
-		printf("token: %c\n", token);
 		if (token == 0)
 			break ;
 		if (token != 'a')

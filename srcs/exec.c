@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:25 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/10/24 16:58:49 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/10/24 17:28:39 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	runcmd(t_node *node)
 		if (enode->av[0] == 0)
 			exit(0);
 		// TODO: use execve instead of execvp
+		printf("//output:\n");
 		execvp(enode->av[0], enode->av);
 		printf("exec %s failed\n", enode->av[0]);
 		break ;
