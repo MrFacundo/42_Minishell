@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:20:06 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/10/23 19:56:54 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/10/24 14:28:10 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ t_node	*parseexec(char **pointer_to_cmd)
 	ac = 0;
 	ret = execnode();
 	exec_node = (t_execnode *)ret;
-	// ret = parseredirs(ret, pointer_to_cmd); not sure what this line does
 	// ret = parseredirs(ret, pointer_to_cmd); not sure what this line does
 	while (!peek(pointer_to_cmd, "|)&;"))
 	{
