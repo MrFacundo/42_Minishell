@@ -6,11 +6,17 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:20:06 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/10/24 17:29:14 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/10/24 18:22:36 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+static void	save_history(char *input)
+{
+	if (input && *input)
+		add_history(input);
+}
 
 int	main(void)
 {
@@ -20,6 +26,7 @@ int	main(void)
 	while (getcmd(&buf) >= 0) // Main loop
 	{
 		// TODO: before forking, check for builtins
+		save_history(buf);
 		if (fork1() == 0)
 			runcmd(parsecmd(buf));
 		wait(0);
