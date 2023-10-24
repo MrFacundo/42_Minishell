@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:07:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/10/24 17:23:11 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/10/24 18:34:24 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,29 +23,29 @@ t_node	*parsecmd(char *cmd)
 }
 
 // Recursive parse function: pipe node
-t_node	*parsepipe(char **pointer_to_cmd)
+t_node	*parsepipe(char **ptr_to_cmd)
 {
 	t_node	*left;
 
-	left = parseexec(pointer_to_cmd);
-	if (peek(pointer_to_cmd, "|"))
+	left = parseexec(ptr_to_cmd);
+	if (peek(ptr_to_cmd, "|"))
 	{
-		gettoken(pointer_to_cmd, 0, 0);
-		return (pipenode(left, parsepipe(pointer_to_cmd)));
+		gettoken(ptr_to_cmd, 0, 0);
+		return (pipenode(left, parsepipe(ptr_to_cmd)));
 	}
 	return (left);
 }
 
 // Recursive parse function: redirection node
-t_node	*parseredirs(t_node *node, char **pointer_to_cmd)
+t_node	*parseredirs(t_node *node, char **ptr_to_cmd)
 {
 	int	token;
 
 	char	*ptr_to_token, *end_of_token;
-	while (peek(pointer_to_cmd, "<>"))
+	while (peek(ptr_to_cmd, "<>"))
 	{
-		token = gettoken(pointer_to_cmd, 0, 0);
-		if (gettoken(pointer_to_cmd, &ptr_to_token, &end_of_token) != 'a')
+		token = gettoken(ptr_to_cmd, 0, 0);
+		if (gettoken(ptr_to_cmd, &ptr_to_token, &end_of_token) != 'a')
 			panic("missing file for redirection");
 		switch (token)
 		{
@@ -64,7 +64,7 @@ t_node	*parseredirs(t_node *node, char **pointer_to_cmd)
 }
 
 // Recursive parse function: exec node
-t_node	*parseexec(char **pointer_to_cmd)
+t_node	*parseexec(char **ptr_to_cmd)
 {
 	t_node		*ret;
 	t_execnode	*exec_node;
@@ -74,10 +74,10 @@ t_node	*parseexec(char **pointer_to_cmd)
 	ac = 0;
 	ret = execnode();
 	exec_node = (t_execnode *)ret;
-	// ret = parseredirs(ret, pointer_to_cmd); not sure about this line
-	while (!peek(pointer_to_cmd, "|)&;"))
+	// ret = parseredirs(ret, ptr_to_cmd); not sure about this line
+	while (!peek(ptr_to_cmd, "|)&;"))
 	{
-		token = gettoken(pointer_to_cmd, &ptr_to_token, &end_of_token);
+		token = gettoken(ptr_to_cmd, &ptr_to_token, &end_of_token);
 		if (token == 0)
 			break ;
 		if (token != 'a')
@@ -87,7 +87,7 @@ t_node	*parseexec(char **pointer_to_cmd)
 		ac++;
 		if (ac >= MAXARGS)
 			panic("too many args");
-		ret = parseredirs(ret, pointer_to_cmd);
+		ret = parseredirs(ret, ptr_to_cmd);
 	}
 	exec_node->av[ac] = 0;
 	exec_node->eav[ac] = 0;
