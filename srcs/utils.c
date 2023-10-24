@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:00 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/10/23 17:24:04 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/10/24 14:25:22 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ t_node	*nulterminate(t_node *node)
 		break ;
 	case REDIR:
 		rnode = (t_redirnode *)node;
+		*rnode->efile = 0;
 		nulterminate(rnode->execnode);
 		break ;
 	}
