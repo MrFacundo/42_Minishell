@@ -6,17 +6,11 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:20:06 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/10/24 18:22:36 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/10/24 18:35:52 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-static void	save_history(char *input)
-{
-	if (input && *input)
-		add_history(input);
-}
 
 int	main(void)
 {
@@ -26,7 +20,9 @@ int	main(void)
 	while (getcmd(&buf) >= 0) // Main loop
 	{
 		// TODO: before forking, check for builtins
-		save_history(buf);
+		
+		if (*buf)
+			add_history(buf);
 		if (fork1() == 0)
 			runcmd(parsecmd(buf));
 		wait(0);
@@ -43,14 +39,14 @@ int	getcmd(char **buf)
 }
 
 // Returns a character representing the token type, updates the pointers received as arguments
-int	gettoken(char **pointer_to_cmd, char **ptr_to_token, char **end_of_token)
+int	gettoken(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token)
 {
 	char	*p;
 	int		ret;
 	char	whitespace[] = " \t\r\n\v";
 	char  	symbols_and_whitespace[] = " \t\r\n\v<|>&;()";
 	
-	p = *pointer_to_cmd;
+	p = *ptr_to_cmd;
 	p += ft_strspn(p, whitespace);
 	if (ptr_to_token)
 		*ptr_to_token = p;
@@ -76,7 +72,7 @@ int	gettoken(char **pointer_to_cmd, char **ptr_to_token, char **end_of_token)
 	if (end_of_token)
 		*end_of_token = p;
 	p += ft_strspn(p, whitespace);
-	*pointer_to_cmd = p;
+	*ptr_to_cmd = p;
 	printf("//token: %c\n", ret);
 	return (ret);
 }
