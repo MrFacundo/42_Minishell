@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/10/23 17:43:15 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/10/24 17:09:33 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 
 #define EXEC 1
 #define REDIR 2
+#define PIPE 3
+
 
 
 typedef struct	s_node
@@ -50,18 +52,31 @@ typedef struct s_redirnode
 	int			fd;
 }				t_redirnode;
 
+typedef struct s_pipenode
+{
+	int			type;
+	t_node		*left;
+	t_node		*right;
+}				t_pipenode;
+
 // minishell.c
 int		getcmd(char **buf);
-t_node	*parsecmd(char *cmd);
-t_node	*parseexec(char **pointer_to_cmd);
+int		gettoken(char **pointer_to_cmd, char **ptr_to_token, char **end_of_token);
 int		gettoken(char **pointer_to_cmd, char **pointer_to_token, char **end_of_token);
 
 // constructors.c
 t_node	*execnode(void);
 t_node	*redircmd(t_node *execnode, char *file, char *efile, int mode, int fd);
+t_node	*pipenode(t_node *left, t_node *right);
 
 // exec.c
 void	runcmd(t_node *node);
+
+// parse.c
+t_node	*parsecmd(char *cmd);
+t_node	*parsepipe(char **pointer_to_cmd);
+t_node	*parseredirs(t_node *node, char **pointer_to_cmd);
+t_node	*parseexec(char **pointer_to_cmd);
 
 // utils.c
 void	panic(char *s);

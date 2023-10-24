@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:00 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/10/24 14:25:22 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/10/24 15:07:22 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ t_node	*nulterminate(t_node *node)
 	int			i;
 	t_execnode	*enode;
 	t_redirnode	*rnode;
+	t_pipenode	*pnode;
 
 	if (node == 0)
 		return (0);
@@ -50,6 +51,11 @@ t_node	*nulterminate(t_node *node)
 		rnode = (t_redirnode *)node;
 		*rnode->efile = 0;
 		nulterminate(rnode->execnode);
+		break ;
+	case PIPE:
+		pnode = (t_pipenode *)node;
+		nulterminate(pnode->left);
+		nulterminate(pnode->right);
 		break ;
 	}
 	return (node);
