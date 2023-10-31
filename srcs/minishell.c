@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:20:06 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/10/25 21:56:11 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/10/31 16:08:19 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+t_shell	g_shell;
 
 int	is_builtin(t_node *node)
 {
@@ -63,11 +64,32 @@ void	run_builtin(t_node *node)
 	// 	run_unset(enode->av);
 }
 
-int	main(void)
+void	initialize_env(t_shell *g_shell, char **envp)
+{
+	int		i;
+	int		size;
+
+	i = 0;
+	size = 0;
+	while (envp[size])
+		size++;
+	g_shell->env = malloc(sizeof(char *) * (size + 1));
+	while (envp[i])
+	{
+		g_shell->env[i] = ft_strdup(envp[i]);
+		i++;
+	}
+	g_shell->env[i] = 0;
+}
+
+int	main(int argc, char **argv, char **envp)
 {
 	char *buf;
 
-  // TODO: Loop that ensures three file descriptors are open
+  	// TODO: ensure three file descriptors are open
+	(void)argc;
+	(void)argv;
+	initialize_env(&g_shell, envp);
 	while (getcmd(&buf) >= 0) // Main loop
 	{
 		t_node *node;
@@ -75,10 +97,10 @@ int	main(void)
 		if (*buf)
 			add_history(buf);
 		node = parsecmd(buf);
-		if (is_builtin(node))
+		if (is_builtin(node)) // except cd, builtins should actually be inside the recursive execute function
 			run_builtin(node);
 		else
-			if (fork1() == 0)
+			if (fork1() == 0) // forking should probably be done further down the recursion path
 				runcmd(node);
 		wait(0);
 	}

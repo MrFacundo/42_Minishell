@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:07:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/10/24 18:34:24 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/10/31 19:43:04 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ t_node	*parsepipe(char **ptr_to_cmd)
 	if (peek(ptr_to_cmd, "|"))
 	{
 		gettoken(ptr_to_cmd, 0, 0);
+		if (peek(ptr_to_cmd, "|()&;<>"))
+			panic("syntax");
 		return (pipenode(left, parsepipe(ptr_to_cmd)));
 	}
 	return (left);

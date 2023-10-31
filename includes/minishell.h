@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/10/24 17:09:33 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/10/31 19:43:54 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,13 @@ typedef struct s_pipenode
 	t_node		*right;
 }				t_pipenode;
 
+typedef struct s_shell
+{
+	char		**env;
+}	t_shell;
+
+extern t_shell	g_shell;
+
 // minishell.c
 int		getcmd(char **buf);
 int		gettoken(char **pointer_to_cmd, char **ptr_to_token, char **end_of_token);
@@ -68,6 +75,9 @@ int		gettoken(char **pointer_to_cmd, char **pointer_to_token, char **end_of_toke
 t_node	*execnode(void);
 t_node	*redircmd(t_node *execnode, char *file, char *efile, int mode, int fd);
 t_node	*pipenode(t_node *left, t_node *right);
+
+// env
+char	*ft_get_env(char *key, char **env);
 
 // exec.c
 void	runcmd(t_node *node);
@@ -83,4 +93,6 @@ void	panic(char *s);
 int		fork1(void);
 t_node	*nulterminate(t_node *node);
 int		peek(char **pointer_to_cmd, char *tokens);
+void	free_array(char **array);
+
 #endif
