@@ -3,30 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:00 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/10/31 19:35:34 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/04 16:21:54 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	fork1(void)
-{
-	int	pid;
-
-	pid = fork();
-	if (pid == -1)
-		panic("fork error\n");
-	return (pid);
-}
-
-void	panic(char *s)
-{
-	printf("%s\n", s);
-	exit(0);
-}
 
 // Replaces the chars at the end of the tokens with \0 so that
 // execve has strings to work with
@@ -76,9 +60,49 @@ void	free_array(char **array)
 
 	i = 0;
 	while (array[i])
-	{
-		free(array[i]);
-		i++;
-	}
+		free(array[i++]);
 	free(array);
+}
+
+int	open_1(char *file, int flags)
+{
+	mode_t		mode;
+	int	fd;
+
+	mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+	fd = open(file, flags, mode);
+	if (fd < 0)
+		print_error(file);
+	return (fd);
+}
+
+int	pipe_1(int *p)
+{
+	int	pipefd;
+
+	pipefd = pipe(p);
+	if (pipefd < 0)
+		print_error("pipe");
+	return (pipefd);
+}
+
+int	fork_1(void)
+{
+	int	pid;
+
+	pid = fork();
+	if (pid < 0)
+		print_error("fork");
+	return (pid);
+}
+
+void	print_error(char *str)
+{
+	if (errno)
+	{
+		ft_putstr_fd(strerror(errno), 2);
+		ft_putstr_fd(": ", 2);
+	}
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd("\n", 2);
 }

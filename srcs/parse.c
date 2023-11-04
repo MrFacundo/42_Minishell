@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:07:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/10/31 19:43:04 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/04 15:53:42 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ t_node	*parsepipe(char **ptr_to_cmd)
 	if (peek(ptr_to_cmd, "|"))
 	{
 		gettoken(ptr_to_cmd, 0, 0);
-		if (peek(ptr_to_cmd, "|()&;<>"))
-			panic("syntax");
+		if (**ptr_to_cmd == '\0' || peek(ptr_to_cmd, "|()&;<>"))
+            return (print_error("minishell: parse error near pipe"), NULL);
 		return (pipenode(left, parsepipe(ptr_to_cmd)));
 	}
 	return (left);
@@ -48,7 +48,7 @@ t_node	*parseredirs(t_node *node, char **ptr_to_cmd)
 	{
 		token = gettoken(ptr_to_cmd, 0, 0);
 		if (gettoken(ptr_to_cmd, &ptr_to_token, &end_of_token) != 'a')
-			panic("missing file for redirection");
+            return (print_error("minishell: parse error near redirection"), NULL);
 		switch (token)
 		{
 		case '<':
@@ -77,18 +77,16 @@ t_node	*parseexec(char **ptr_to_cmd)
 	ret = execnode();
 	exec_node = (t_execnode *)ret;
 	// ret = parseredirs(ret, ptr_to_cmd); not sure about this line
-	while (!peek(ptr_to_cmd, "|)&;"))
+	while (!peek(ptr_to_cmd, "|()&;"))
 	{
 		token = gettoken(ptr_to_cmd, &ptr_to_token, &end_of_token);
 		if (token == 0)
 			break ;
-		if (token != 'a')
-			panic("syntax");
 		exec_node->av[ac] = ptr_to_token;
 		exec_node->eav[ac] = end_of_token;
 		ac++;
 		if (ac >= MAXARGS)
-			panic("too many args");
+            return (print_error("minishell: too many args"), NULL);
 		ret = parseredirs(ret, ptr_to_cmd);
 	}
 	exec_node->av[ac] = 0;

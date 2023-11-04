@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+	/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:25 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/10/31 19:51:08 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/03 19:02:06 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,15 @@ char	*find_path(char *cmd)
 		}
 	}
 	free_array(paths);
+	if (!ret)
+		ret = ft_strdup(cmd);
 	return (ret);
 }
 
 void	execute_command(char *path, char **av, char **env)
 {
 	execve(path, av, env);
-	// exit code and error message will be provided by execve, errno and strerror
-	printf("exec %s failed\n", av[0]);
+	print_error(path);
 	// free path?
 	exit(0);
 }
@@ -60,11 +61,8 @@ void	runcmd(t_node *node)
 	t_execnode	*enode;
 	t_redirnode	*rnode;
 	t_pipenode	*pnode;
-	mode_t		mode;
 	int			p[2];
 	char		*path;
-
-	mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 	if (node == 0)
 		exit(0);
 	switch (node->type)
@@ -72,40 +70,43 @@ void	runcmd(t_node *node)
 	case EXEC:
 		enode = (t_execnode *)node;
 		if (enode->av[0] == 0)
-			exit(0);
+			exit (0);
 		if (ft_strchr(enode->av[0], '/') == 0)
 			path = find_path(enode->av[0]);
 		else
 			path = ft_strdup(enode->av[0]);
-		printf("//path: %s\n", path);
-		execute_command(path, enode->av, g_shell.env);
+		if (fork_1() == 0)
+			execute_command(path, enode->av, g_shell.env);
+		wait(0);
 		break ;
 	case REDIR:
 		rnode = (t_redirnode *)node;
 		close(rnode->fd);
-		if (open(rnode->file, rnode->mode, mode) < 0)
-			panic("open failed");
+		if (open_1(rnode->file, rnode->mode) < 0)
+			exit (0);
 		runcmd(rnode->execnode);
 		break ;
 	case PIPE:
 		pnode = (t_pipenode *)node;
-		if (pipe(p) < 0)
-			panic("pipe");
-		if (fork1() == 0)
+		if (pipe_1(p) < 0)
+			exit (0);
+		if (fork_1() == 0)
 		{
 			close(1);
 			dup(p[1]);
 			close(p[0]);
 			close(p[1]);
 			runcmd(pnode->left);
+			break ;
 		}
-		if (fork1() == 0)
+		if (fork_1() == 0)
 		{
 			close(0);
 			dup(p[0]);
 			close(p[0]);
 			close(p[1]);
 			runcmd(pnode->right);
+			break ;
 		}
 		close(p[0]);
 		close(p[1]);
@@ -113,7 +114,7 @@ void	runcmd(t_node *node)
 		wait(0);
 		break ;
 	default:
-		panic("runcmd");
+		print_error("runcmd");
 	}
-	exit(0);
+	exit(0); ;
 }
