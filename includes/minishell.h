@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/03 16:39:30 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/04 16:12:16 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,13 +88,12 @@ t_node	*parseredirs(t_node *node, char **pointer_to_cmd);
 t_node	*parseexec(char **pointer_to_cmd);
 
 // utils.c
-void	panic(char *s);
-int		fork1(void);
 t_node	*nulterminate(t_node *node);
 int		peek(char **pointer_to_cmd, char *tokens);
 void	free_array(char **array);
 void	print_error(char *error);
+int		fork_1(void);
 int		open_1(char *file, int mode);
-
+int		pipe_1(int *p);
 
 #endif

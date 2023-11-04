@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:20:06 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/03 18:59:26 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/04 16:20:51 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	initialize_env(t_shell *g_shell, char **envp)
 	g_shell->env[i] = 0;
 }
 
-static	void	keep_in_out(int *fd_in, int *fd_out)
+/* static	void	keep_in_out(int *fd_in, int *fd_out)
 {
 	*fd_in = dup(STDIN_FILENO);
 	*fd_out = dup(STDOUT_FILENO);
@@ -93,30 +93,35 @@ void	set_in_out(int in, int out)
 	dup2(in, STDIN_FILENO);
 	dup2(out, STDOUT_FILENO);
 }
+ */
 
 int	main(int argc, char **argv, char **envp)
 {
 	char *buf;
 	t_node *node;
-	int		fd_in;
-	int		fd_out;
+	// int		fd_in;
+	// int		fd_out;
 
   	// TODO: ensure three file descriptors are open
 	(void)argc;
 	(void)argv;
 	initialize_env(&g_shell, envp);
-	keep_in_out(&fd_in, &fd_out);
+	// keep_in_out(&fd_in, &fd_out);
 	while (getcmd(&buf) >= 0) // Main loop
 	{
 
 		if (*buf)
 			add_history(buf);
 		node = parsecmd(buf);
-		if (is_builtin(node)) // except cd, builtins should actually be inside the recursive execute function
+		if (node == 0)
+			continue ;
+		if (is_builtin(node)) // except cd, builtins should actually be inside runcmd()
 			run_builtin(node);
 		else
-			runcmd(node);
-		set_in_out(fd_in, fd_out);
+			if (fork_1() == 0)
+				runcmd(node);
+		wait(0);
+		// set_in_out(fd_in, fd_out);j
 	}
 	return (0);
 }
@@ -155,8 +160,11 @@ int	gettoken(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token)
 		break ;
 	case '>':
 		p++;
-		if (*p++ == '>')
+		if (*p == '>')
+		{
+			p++;
 			ret = '+';
+		}
 		break ;
 	default:
 		ret = 'a';
@@ -167,7 +175,7 @@ int	gettoken(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token)
 		*end_of_token = p;
 	p += ft_strspn(p, whitespace);
 	*ptr_to_cmd = p;
-	// printf("//token: %c\n", ret);
+	printf("//tk: %c\n", ret);
 	return (ret);
 }
  

@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+	/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
@@ -41,14 +41,15 @@ char	*find_path(char *cmd)
 		}
 	}
 	free_array(paths);
+	if (!ret)
+		ret = ft_strdup(cmd);
 	return (ret);
 }
 
 void	execute_command(char *path, char **av, char **env)
 {
 	execve(path, av, env);
-	// exit code and error message will be provided by execve, errno and strerror
-	printf("exec %s failed\n", av[0]);
+	print_error(path);
 	// free path?
 	exit(0);
 }
@@ -69,12 +70,12 @@ void	runcmd(t_node *node)
 	case EXEC:
 		enode = (t_execnode *)node;
 		if (enode->av[0] == 0)
-			return ;
+			exit (0);
 		if (ft_strchr(enode->av[0], '/') == 0)
 			path = find_path(enode->av[0]);
 		else
 			path = ft_strdup(enode->av[0]);
-		if (fork1() == 0)
+		if (fork_1() == 0)
 			execute_command(path, enode->av, g_shell.env);
 		wait(0);
 		break ;
@@ -82,30 +83,30 @@ void	runcmd(t_node *node)
 		rnode = (t_redirnode *)node;
 		close(rnode->fd);
 		if (open_1(rnode->file, rnode->mode) < 0)
-			return ;
+			exit (0);
 		runcmd(rnode->execnode);
 		break ;
 	case PIPE:
 		pnode = (t_pipenode *)node;
-		if (pipe(p) < 0)
-			panic("pipe");
-		if (fork1() == 0)
+		if (pipe_1(p) < 0)
+			exit (0);
+		if (fork_1() == 0)
 		{
 			close(1);
 			dup(p[1]);
 			close(p[0]);
 			close(p[1]);
 			runcmd(pnode->left);
-			exit(0);
+			break ;
 		}
-		if (fork1() == 0)
+		if (fork_1() == 0)
 		{
 			close(0);
 			dup(p[0]);
 			close(p[0]);
 			close(p[1]);
 			runcmd(pnode->right);
-			exit(0);
+			break ;
 		}
 		close(p[0]);
 		close(p[1]);
@@ -113,7 +114,7 @@ void	runcmd(t_node *node)
 		wait(0);
 		break ;
 	default:
-		panic("runcmd");
+		print_error("runcmd");
 	}
-	return ;
+	exit(0); ;
 }
