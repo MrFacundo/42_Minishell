@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:25 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/10/31 19:51:08 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/03 19:02:06 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,8 @@ void	runcmd(t_node *node)
 	t_execnode	*enode;
 	t_redirnode	*rnode;
 	t_pipenode	*pnode;
-	mode_t		mode;
 	int			p[2];
 	char		*path;
-
-	mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 	if (node == 0)
 		exit(0);
 	switch (node->type)
@@ -72,19 +69,20 @@ void	runcmd(t_node *node)
 	case EXEC:
 		enode = (t_execnode *)node;
 		if (enode->av[0] == 0)
-			exit(0);
+			return ;
 		if (ft_strchr(enode->av[0], '/') == 0)
 			path = find_path(enode->av[0]);
 		else
 			path = ft_strdup(enode->av[0]);
-		printf("//path: %s\n", path);
-		execute_command(path, enode->av, g_shell.env);
+		if (fork1() == 0)
+			execute_command(path, enode->av, g_shell.env);
+		wait(0);
 		break ;
 	case REDIR:
 		rnode = (t_redirnode *)node;
 		close(rnode->fd);
-		if (open(rnode->file, rnode->mode, mode) < 0)
-			panic("open failed");
+		if (open_1(rnode->file, rnode->mode) < 0)
+			return ;
 		runcmd(rnode->execnode);
 		break ;
 	case PIPE:
@@ -98,6 +96,7 @@ void	runcmd(t_node *node)
 			close(p[0]);
 			close(p[1]);
 			runcmd(pnode->left);
+			exit(0);
 		}
 		if (fork1() == 0)
 		{
@@ -106,6 +105,7 @@ void	runcmd(t_node *node)
 			close(p[0]);
 			close(p[1]);
 			runcmd(pnode->right);
+			exit(0);
 		}
 		close(p[0]);
 		close(p[1]);
@@ -115,5 +115,5 @@ void	runcmd(t_node *node)
 	default:
 		panic("runcmd");
 	}
-	exit(0);
+	return ;
 }

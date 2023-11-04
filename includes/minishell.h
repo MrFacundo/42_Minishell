@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/10/31 19:43:54 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/03 16:39:30 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,14 @@
 # include <unistd.h> // execve
 # include <sys/wait.h> // wait
 # include <fcntl.h> // open O_CREAT|O_WRONLY
-#include <sys/stat.h> // S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+# include <sys/stat.h> // S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+# include <errno.h> // errno
 
 #define MAXARGS 10
 
 #define EXEC 1
 #define REDIR 2
 #define PIPE 3
-
-
 
 typedef struct	s_node
 {
@@ -94,5 +93,8 @@ int		fork1(void);
 t_node	*nulterminate(t_node *node);
 int		peek(char **pointer_to_cmd, char *tokens);
 void	free_array(char **array);
+void	print_error(char *error);
+int		open_1(char *file, int mode);
+
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:20:06 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/10/31 16:08:19 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/03 18:59:26 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,17 +82,32 @@ void	initialize_env(t_shell *g_shell, char **envp)
 	g_shell->env[i] = 0;
 }
 
+static	void	keep_in_out(int *fd_in, int *fd_out)
+{
+	*fd_in = dup(STDIN_FILENO);
+	*fd_out = dup(STDOUT_FILENO);
+}
+
+void	set_in_out(int in, int out)
+{
+	dup2(in, STDIN_FILENO);
+	dup2(out, STDOUT_FILENO);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char *buf;
+	t_node *node;
+	int		fd_in;
+	int		fd_out;
 
   	// TODO: ensure three file descriptors are open
 	(void)argc;
 	(void)argv;
 	initialize_env(&g_shell, envp);
+	keep_in_out(&fd_in, &fd_out);
 	while (getcmd(&buf) >= 0) // Main loop
 	{
-		t_node *node;
 
 		if (*buf)
 			add_history(buf);
@@ -100,9 +115,8 @@ int	main(int argc, char **argv, char **envp)
 		if (is_builtin(node)) // except cd, builtins should actually be inside the recursive execute function
 			run_builtin(node);
 		else
-			if (fork1() == 0) // forking should probably be done further down the recursion path
-				runcmd(node);
-		wait(0);
+			runcmd(node);
+		set_in_out(fd_in, fd_out);
 	}
 	return (0);
 }
@@ -111,7 +125,10 @@ int	getcmd(char **buf)
 {
 	*buf = readline("ms$ ");
 	if (*buf == 0) // Ctrl+D was pressed (EOF)
+	{
+		perror(""); // Debugging
 		return (-1);
+	}
 	return (0);
 }
 
@@ -150,7 +167,7 @@ int	gettoken(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token)
 		*end_of_token = p;
 	p += ft_strspn(p, whitespace);
 	*ptr_to_cmd = p;
-	printf("//token: %c\n", ret);
+	// printf("//token: %c\n", ret);
 	return (ret);
 }
  

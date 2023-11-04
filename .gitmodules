@@ -2,3 +2,6 @@
 	path = libft
 	url = https://github.com/MrFacundo/42_Libft
 	branch=main
+[submodule "minishell_tester"]
+	path = minishell_tester
+	url = https://github.com/LucasKuhn/minishell_tester

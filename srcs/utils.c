@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:00 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/10/31 19:35:34 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/03 18:23:38 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,24 @@ void	free_array(char **array)
 		i++;
 	}
 	free(array);
+}
+
+int	open_1(char *file, int flags)
+{
+	mode_t		mode;
+	int	fd;
+
+	mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+	fd = open(file, flags, mode);
+	if (fd < 0)
+		print_error(file);
+	return (fd);
+}
+
+void	print_error(char *str)
+{
+	ft_putstr_fd(strerror(errno), 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd("\n", 2);
 }
