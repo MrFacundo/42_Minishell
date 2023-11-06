@@ -51,7 +51,12 @@ void	execute_command(char *path, char **av, char **env)
 	execve(path, av, env);
 	print_error(path);
 	// free path?
-	exit(0);
+	if (!errno)
+		exit(1);
+	g_shell.exit_code = errno;
+	if (errno == ENOENT)
+		g_shell.exit_code = 127;
+	exit(g_shell.exit_code);
 }
 
 // Recursively executes the command tree
@@ -63,6 +68,8 @@ void	runcmd(t_node *node)
 	t_pipenode	*pnode;
 	int			p[2];
 	char		*path;
+	int			status;
+
 	if (node == 0)
 		exit(0);
 	switch (node->type)
@@ -77,20 +84,21 @@ void	runcmd(t_node *node)
 			path = ft_strdup(enode->av[0]);
 		if (fork_1() == 0)
 			execute_command(path, enode->av, g_shell.env);
-		wait(0);
+		wait(&status);
 		break ;
 	case REDIR:
 		rnode = (t_redirnode *)node;
 		close(rnode->fd);
 		if (open_1(rnode->file, rnode->mode) < 0)
-			exit (0);
+			exit (ENOENT);
 		runcmd(rnode->execnode);
 		break ;
 	case PIPE:
 		pnode = (t_pipenode *)node;
 		if (pipe_1(p) < 0)
-			exit (0);
-		if (fork_1() == 0)
+			exit (1);
+		pid_t left_side_process = fork_1();
+		if (left_side_process == 0)
 		{
 			close(1);
 			dup(p[1]);
@@ -99,7 +107,8 @@ void	runcmd(t_node *node)
 			runcmd(pnode->left);
 			break ;
 		}
-		if (fork_1() == 0)
+		pid_t rigth_side_process = fork_1();
+		if (rigth_side_process == 0)
 		{
 			close(0);
 			dup(p[0]);
@@ -110,11 +119,17 @@ void	runcmd(t_node *node)
 		}
 		close(p[0]);
 		close(p[1]);
-		wait(0);
-		wait(0);
+		waitpid(left_side_process, &status, 0);
+    	waitpid(rigth_side_process, &status, 0);
 		break ;
 	default:
 		print_error("runcmd");
 	}
-	exit(0); ;
+	if (WIFEXITED(status))
+		g_shell.exit_code = WEXITSTATUS(status);
+	else
+		g_shell.exit_code = 0;
+	// printf("node->type: %d\n", node->type);
+	// printf("runcmd exit code: %d\n", g_shell.exit_code);
+	exit(g_shell.exit_code);
 }

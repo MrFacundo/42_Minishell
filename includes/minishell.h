@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/04 16:12:16 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/05 18:20:05 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct s_pipenode
 typedef struct s_shell
 {
 	char		**env;
+	int			exit_code;
 }	t_shell;
 
 extern t_shell	g_shell;
