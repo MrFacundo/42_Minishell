@@ -6,14 +6,13 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:00 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/04 16:21:54 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/07 21:13:51 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-// Replaces the chars at the end of the tokens with \0 so that
-// execve has strings to work with
+// Replaces the chars at the end of the tokens with \0
 t_node	*nulterminate(t_node *node)
 {
 	int			i;
@@ -98,6 +97,7 @@ int	fork_1(void)
 
 void	print_error(char *str)
 {
+	ft_putstr_fd("minishell: ", 2);
 	if (errno)
 	{
 		ft_putstr_fd(strerror(errno), 2);

@@ -3,14 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 19:41:47 by facu              #+#    #+#             */
-/*   Updated: 2023/10/31 19:43:01 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/07 20:31:08 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	initialize_env(t_shell *g_shell, char **envp)
+{
+	int		i;
+	int		size;
+
+	i = 0;
+	size = 0;
+	while (envp[size])
+		size++;
+	g_shell->env = malloc(sizeof(char *) * (size + 1));
+	while (envp[i])
+	{
+		g_shell->env[i] = ft_strdup(envp[i]);
+		i++;
+	}
+	g_shell->env[i] = 0;
+}
 
 char	*ft_get_env(char *key, char **env)
 {

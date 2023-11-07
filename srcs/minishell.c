@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:20:06 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/04 16:20:51 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/07 21:04:02 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,30 @@ void	run_exit(char **av)
 	int	exit_code;
 
 	exit_code = 0;
-	if (av[1])
+	if (av[2])
+	{
+		print_error("exit: too many arguments");
+		exit_code = 1;
+		return ;
+	}
+	else if (av[1])
 		exit_code = ft_atoi(av[1]);
 	exit(exit_code);
+}
+
+void	run_echo(char **av)
+{
+	int	i;
+
+	i = 1;
+	while (av[i])
+	{
+		ft_putstr_fd(av[i], STDOUT_FILENO);
+		if (av[i + 1])
+			ft_putchar_fd(' ', STDOUT_FILENO);
+		i++;
+	}
+	ft_putchar_fd('\n', STDOUT_FILENO);
 }
 
 void	run_builtin(t_node *node)
@@ -52,9 +73,9 @@ void	run_builtin(t_node *node)
 	enode = (t_execnode *)node;
 	if (ft_strcmp(enode->av[0], "exit") == 0)
 		run_exit(enode->av);
-	// else if (ft_strcmp(enode->av[0], "echo") == 0)
-	// 	run_echo(enode->av);
-	// else if (ft_strcmp(enode->av[0], "exit") == 0)
+	else if (ft_strcmp(enode->av[0], "echo") == 0)
+		run_echo(enode->av);
+	// else if (ft_strcmp(enode->av[0], "cd") == 0)
 	// 	run_cd(enode->av);
 	// else if (ft_strcmp(enode->av[0], "export") == 0)
 	// 	run_export(enode->av);
@@ -62,78 +83,43 @@ void	run_builtin(t_node *node)
 	// 	run_pwd(enode->av);
 	// else if (ft_strcmp(enode->av[0], "unset") == 0)
 	// 	run_unset(enode->av);
+	// exit code should be set to 0 after a successful builtin run
 }
-
-void	initialize_env(t_shell *g_shell, char **envp)
-{
-	int		i;
-	int		size;
-
-	i = 0;
-	size = 0;
-	while (envp[size])
-		size++;
-	g_shell->env = malloc(sizeof(char *) * (size + 1));
-	while (envp[i])
-	{
-		g_shell->env[i] = ft_strdup(envp[i]);
-		i++;
-	}
-	g_shell->env[i] = 0;
-}
-
-/* static	void	keep_in_out(int *fd_in, int *fd_out)
-{
-	*fd_in = dup(STDIN_FILENO);
-	*fd_out = dup(STDOUT_FILENO);
-}
-
-void	set_in_out(int in, int out)
-{
-	dup2(in, STDIN_FILENO);
-	dup2(out, STDOUT_FILENO);
-}
- */
 
 int	main(int argc, char **argv, char **envp)
 {
 	char *buf;
 	t_node *node;
-	// int		fd_in;
-	// int		fd_out;
+	int		status;
 
   	// TODO: ensure three file descriptors are open
 	(void)argc;
 	(void)argv;
 	initialize_env(&g_shell, envp);
-	// keep_in_out(&fd_in, &fd_out);
-	while (getcmd(&buf) >= 0) // Main loop
+	g_shell.exit_code = 0;
+	while (getcmd(&buf) >= 0)
 	{
-
 		if (*buf)
 			add_history(buf);
 		node = parsecmd(buf);
 		if (node == 0)
 			continue ;
-		if (is_builtin(node)) // except cd, builtins should actually be inside runcmd()
+		if (is_builtin(node)) // TODO: move to runcmd
 			run_builtin(node);
 		else
 			if (fork_1() == 0)
 				runcmd(node);
-		wait(0);
-		// set_in_out(fd_in, fd_out);j
+		wait(&status);
+		g_shell.exit_code = WEXITSTATUS(status);
 	}
 	return (0);
 }
 
 int	getcmd(char **buf)
 {
-	*buf = readline("ms$ ");
+	*buf = readline("ms > ");
 	if (*buf == 0) // Ctrl+D was pressed (EOF)
-	{
-		perror(""); // Debugging
 		return (-1);
-	}
 	return (0);
 }
 
@@ -166,6 +152,17 @@ int	gettoken(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token)
 			ret = '+';
 		}
 		break ;
+	case '$':
+		p++;
+		if (*p == '?')
+		{
+			*ptr_to_token = ft_itoa(g_shell.exit_code);
+			*end_of_token = *ptr_to_token + ft_strlen(*ptr_to_token);
+			p += ft_strcspn(p, whitespace);
+			*ptr_to_cmd = p;
+			return 'a';
+		}
+		break ;
 	default:
 		ret = 'a';
 		p += ft_strcspn(p, symbols_and_whitespace);
@@ -175,7 +172,7 @@ int	gettoken(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token)
 		*end_of_token = p;
 	p += ft_strspn(p, whitespace);
 	*ptr_to_cmd = p;
-	printf("//tk: %c\n", ret);
+	//printf("//tk: %c\n", ret);
 	return (ret);
 }
  
