@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/05 18:20:05 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/07 20:31:00 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ t_node	*redircmd(t_node *execnode, char *file, char *efile, int mode, int fd);
 t_node	*pipenode(t_node *left, t_node *right);
 
 // env
+void	initialize_env(t_shell *g_shell, char **envp);
 char	*ft_get_env(char *key, char **env);
 
 // exec.c

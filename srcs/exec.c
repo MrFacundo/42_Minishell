@@ -129,7 +129,5 @@ void	runcmd(t_node *node)
 		g_shell.exit_code = WEXITSTATUS(status);
 	else
 		g_shell.exit_code = 0;
-	// printf("node->type: %d\n", node->type);
-	// printf("runcmd exit code: %d\n", g_shell.exit_code);
 	exit(g_shell.exit_code);
 }

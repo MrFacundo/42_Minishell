@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:07:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/04 15:53:42 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/07 20:58:52 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ t_node	*parsecmd(char *cmd)
 	return (node);
 }
 
-// Recursive parse function: pipe node
 t_node	*parsepipe(char **ptr_to_cmd)
 {
 	t_node	*left;
@@ -32,13 +31,12 @@ t_node	*parsepipe(char **ptr_to_cmd)
 	{
 		gettoken(ptr_to_cmd, 0, 0);
 		if (**ptr_to_cmd == '\0' || peek(ptr_to_cmd, "|()&;<>"))
-            return (print_error("minishell: parse error near pipe"), NULL);
+            return (print_error("parse error near pipe"), NULL);
 		return (pipenode(left, parsepipe(ptr_to_cmd)));
 	}
 	return (left);
 }
 
-// Recursive parse function: redirection node
 t_node	*parseredirs(t_node *node, char **ptr_to_cmd)
 {
 	int	token;
@@ -48,7 +46,7 @@ t_node	*parseredirs(t_node *node, char **ptr_to_cmd)
 	{
 		token = gettoken(ptr_to_cmd, 0, 0);
 		if (gettoken(ptr_to_cmd, &ptr_to_token, &end_of_token) != 'a')
-            return (print_error("minishell: parse error near redirection"), NULL);
+            return (print_error("parse error near redirection"), NULL);
 		switch (token)
 		{
 		case '<':
@@ -86,7 +84,7 @@ t_node	*parseexec(char **ptr_to_cmd)
 		exec_node->eav[ac] = end_of_token;
 		ac++;
 		if (ac >= MAXARGS)
-            return (print_error("minishell: too many args"), NULL);
+            return (print_error("too many args"), NULL);
 		ret = parseredirs(ret, ptr_to_cmd);
 	}
 	exec_node->av[ac] = 0;
