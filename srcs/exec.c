@@ -46,17 +46,69 @@ char	*find_path(char *cmd)
 	return (ret);
 }
 
-void	execute_command(char *path, char **av, char **env)
-{
-	execve(path, av, env);
-	print_error(path);
-	// free path?
-	if (!errno)
-		exit(1);
-	g_shell.exit_code = errno;
-	if (errno == ENOENT)
-		g_shell.exit_code = 127;
-	exit(g_shell.exit_code);
+void handle_file_not_found(char *path) {
+    if (ft_strchr(path, '/') != 0)
+        print_error(1, strerror(errno));
+    else
+        print_error(1, "command not found");
+    g_shell.exit_code = 127;
+    exit(g_shell.exit_code);
+}
+
+void handle_permission_denied(char *path) {
+    if (ft_strchr(path, '/') == 0) {
+        print_error(1, "command not found");
+        g_shell.exit_code = 127;
+    } else {
+        print_error(1, strerror(errno));
+        g_shell.exit_code = 126;
+    }
+    exit(g_shell.exit_code);
+}
+
+int is_regular_file(char *path, struct stat *file_stat) {
+    if (stat(path, file_stat) == -1) {
+        handle_file_not_found(path);
+    }
+    return S_ISREG(file_stat->st_mode);
+}
+
+// Function to check if the file is executable
+int is_executable(char *path) {
+    return access(path, X_OK) == 0;
+}
+
+// Function to execute the command
+void execute_command(char *path, char **av, char **env) {
+    struct stat file_stat;
+
+    if (is_regular_file(path, &file_stat)) {
+        if (is_executable(path)) {
+            execve(path, av, env);
+            // If execve fails, handle the error
+            if (errno == ENOENT || (errno == EACCES && ft_strchr(path, '/') == 0)) {
+                handle_file_not_found(path);
+            } else if (errno == EACCES) {
+                handle_permission_denied(path);
+            } else {
+                // Other error
+                print_error(1, strerror(errno));
+                g_shell.exit_code = errno;
+                exit(g_shell.exit_code);
+            }
+        } else {
+            // File is not executable
+            handle_file_not_found(path);
+        }
+    } else if (ft_strchr(path, '/') != 0 && S_ISDIR(file_stat.st_mode)) {
+        // Is a directory
+        print_error(1, strerror(EISDIR));
+        g_shell.exit_code = 126;
+        exit(g_shell.exit_code);
+    } else {
+        // Not a regular file or directory
+        handle_file_not_found(path);
+    }
 }
 
 // Recursively executes the command tree
@@ -123,7 +175,7 @@ void	runcmd(t_node *node)
     	waitpid(rigth_side_process, &status, 0);
 		break ;
 	default:
-		print_error("runcmd");
+		print_error(1, "runcmd");
 	}
 	if (WIFEXITED(status))
 		g_shell.exit_code = WEXITSTATUS(status);

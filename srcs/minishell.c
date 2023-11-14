@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:20:06 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/14 17:47:44 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/14 20:16:51 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	run_exit(char **av)
 	exit_code = 0;
 	if (av[2])
 	{
-		print_error("exit: too many arguments");
+		print_error(1, "exit: too many arguments");
 		exit_code = 1;
 		return ;
 	}

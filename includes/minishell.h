@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/14 17:56:27 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/14 21:16:12 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <fcntl.h> // open O_CREAT|O_WRONLY
 # include <sys/stat.h> // S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 # include <errno.h> // errno
+# include <stdarg.h> // va_start, va_arg, va_end
+#include <sys/stat.h> // stat
 
 #define MAXARGS 10
 
@@ -95,10 +97,10 @@ t_node	*parseexec(char **pointer_to_cmd);
 int get_token(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token);
 
 // utils.c
-t_node	*nulterminate(t_node *node);
+t_node	*nul_terminate(t_node *node);
 int		peek(char **pointer_to_cmd, char *tokens);
 void	free_array(char **array);
-void	print_error(char *error);
+void	print_error(int n, ...);
 int		fork_1(void);
 int		open_1(char *file, int mode);
 int		pipe_1(int *p);
