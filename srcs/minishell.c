@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:20:06 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/07 21:04:02 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/14 17:47:44 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ int	main(int argc, char **argv, char **envp)
 				runcmd(node);
 		wait(&status);
 		g_shell.exit_code = WEXITSTATUS(status);
+		
 	}
 	return (0);
 }
@@ -122,57 +123,3 @@ int	getcmd(char **buf)
 		return (-1);
 	return (0);
 }
-
-// Returns a character representing the token type, updates the pointers received as arguments
-int	gettoken(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token)
-{
-	char	*p;
-	int		ret;
-	char	whitespace[] = " \t\r\n\v";
-	char  	symbols_and_whitespace[] = " \t\r\n\v<|>&;()";
-	
-	p = *ptr_to_cmd;
-	p += ft_strspn(p, whitespace);
-	if (ptr_to_token)
-		*ptr_to_token = p;
-	ret = *p;
-	switch (*p)
-	{
-	case 0:
-		break ;
-	case '|':
-	case '<':
-		p++;
-		break ;
-	case '>':
-		p++;
-		if (*p == '>')
-		{
-			p++;
-			ret = '+';
-		}
-		break ;
-	case '$':
-		p++;
-		if (*p == '?')
-		{
-			*ptr_to_token = ft_itoa(g_shell.exit_code);
-			*end_of_token = *ptr_to_token + ft_strlen(*ptr_to_token);
-			p += ft_strcspn(p, whitespace);
-			*ptr_to_cmd = p;
-			return 'a';
-		}
-		break ;
-	default:
-		ret = 'a';
-		p += ft_strcspn(p, symbols_and_whitespace);
-		break ;
-	}
-	if (end_of_token)
-		*end_of_token = p;
-	p += ft_strspn(p, whitespace);
-	*ptr_to_cmd = p;
-	//printf("//tk: %c\n", ret);
-	return (ret);
-}
- 
