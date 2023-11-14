@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:07:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/07 20:58:52 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/14 17:56:51 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_node	*parsepipe(char **ptr_to_cmd)
 	left = parseexec(ptr_to_cmd);
 	if (peek(ptr_to_cmd, "|"))
 	{
-		gettoken(ptr_to_cmd, 0, 0);
+		get_token(ptr_to_cmd, 0, 0);
 		if (**ptr_to_cmd == '\0' || peek(ptr_to_cmd, "|()&;<>"))
             return (print_error("parse error near pipe"), NULL);
 		return (pipenode(left, parsepipe(ptr_to_cmd)));
@@ -44,8 +44,8 @@ t_node	*parseredirs(t_node *node, char **ptr_to_cmd)
 	char	*ptr_to_token, *end_of_token;
 	while (peek(ptr_to_cmd, "<>"))
 	{
-		token = gettoken(ptr_to_cmd, 0, 0);
-		if (gettoken(ptr_to_cmd, &ptr_to_token, &end_of_token) != 'a')
+		token = get_token(ptr_to_cmd, 0, 0);
+		if (get_token(ptr_to_cmd, &ptr_to_token, &end_of_token) != 'a')
             return (print_error("parse error near redirection"), NULL);
 		switch (token)
 		{
@@ -77,7 +77,7 @@ t_node	*parseexec(char **ptr_to_cmd)
 	// ret = parseredirs(ret, ptr_to_cmd); not sure about this line
 	while (!peek(ptr_to_cmd, "|()&;"))
 	{
-		token = gettoken(ptr_to_cmd, &ptr_to_token, &end_of_token);
+		token = get_token(ptr_to_cmd, &ptr_to_token, &end_of_token);
 		if (token == 0)
 			break ;
 		exec_node->av[ac] = ptr_to_token;

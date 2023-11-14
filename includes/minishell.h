@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/07 20:31:00 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/14 17:56:27 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,15 +68,16 @@ extern t_shell	g_shell;
 
 // minishell.c
 int		getcmd(char **buf);
-int		gettoken(char **pointer_to_cmd, char **ptr_to_token, char **end_of_token);
-int		gettoken(char **pointer_to_cmd, char **pointer_to_token, char **end_of_token);
 
 // constructors.c
 t_node	*execnode(void);
 t_node	*redircmd(t_node *execnode, char *file, char *efile, int mode, int fd);
 t_node	*pipenode(t_node *left, t_node *right);
 
-// env
+// debug.c
+void	print_token(int token);
+
+// env.c
 void	initialize_env(t_shell *g_shell, char **envp);
 char	*ft_get_env(char *key, char **env);
 
@@ -88,6 +89,10 @@ t_node	*parsecmd(char *cmd);
 t_node	*parsepipe(char **pointer_to_cmd);
 t_node	*parseredirs(t_node *node, char **pointer_to_cmd);
 t_node	*parseexec(char **pointer_to_cmd);
+
+
+// tokenizer.c
+int get_token(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token);
 
 // utils.c
 t_node	*nulterminate(t_node *node);
