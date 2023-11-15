@@ -6,18 +6,28 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 16:30:30 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/14 17:56:49 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/14 19:25:25 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int process_symbol(char **ptr, int ret) {
+void	expand_exit_status(char **ptr, char **ptr_to_token, char **end_of_token, int *ret)
+{
+    *ptr_to_token = ft_itoa(g_shell.exit_code);
+    *end_of_token = *ptr_to_token + ft_strlen(*ptr_to_token);
+    *ptr = *end_of_token;
+    *ret = 'a';
+}
+
+int process_symbol(char **ptr, int ret)
+{
     char	*p;
 	
 	p = *ptr;
 	p++;
-	if (*p == '>') {
+	if (*p == '>')
+	{
 		p++;
 		ret = '+';
 	}
@@ -25,25 +35,23 @@ int process_symbol(char **ptr, int ret) {
     return (ret);
 }
 
-int process_dollar(char **ptr, char **ptr_to_token, char **end_of_token) {
+int process_dollar(char **ptr, char **ptr_to_token, char **end_of_token)
+{
     char	*p;
     int		ret;
 	
-	ret = 0;
 	p = *ptr;
-	p++;
-	if (*p == '?')
-	{
-		*ptr_to_token = ft_itoa(g_shell.exit_code);
-		*end_of_token = *ptr_to_token + ft_strlen(*ptr_to_token);
-		p += ft_strcspn(p, " \t\r\n\v");
-		ret = 'a';
-	}
-    *ptr = p;
+	ret = 0;
+    p++;
+    if (*p == '?')
+        expand_exit_status(ptr, ptr_to_token, end_of_token, &ret);
+    *ptr = p + ft_strcspn(p, " \t\r\n\v");
     return (ret);
 }
 
-int process_default(char **ptr, char **end_of_token, int ret) {
+
+int process_default(char **ptr, char **end_of_token, int ret)
+{
     char	*p;
 	
 	p = *ptr;
@@ -56,7 +64,8 @@ int process_default(char **ptr, char **end_of_token, int ret) {
     return (ret);
 }
 
-int get_token(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token) {
+int get_token(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token)
+{
     char	*p;
     int		ret;
 	
