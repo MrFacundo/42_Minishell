@@ -6,30 +6,39 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 12:17:02 by facu              #+#    #+#             */
-/*   Updated: 2023/11/15 12:22:38 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/15 16:03:47 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	is_builtin(t_node *node)
+int	is_builtin_helper(const char *command, const char *builtin_commands[])
 {
-	int		is_builtin;
-	t_execnode	*enode;
+	int	i;
 
-	is_builtin = 0;
+	i = 0;
+	while (builtin_commands[i] != 0)
+		if (!ft_strcmp(command, builtin_commands[i++]))
+			return (1);
+	return (0);
+}
+
+int	is_builtin(t_node *node, int nested_execution)
+{
+	t_execnode	*enode;
+	const char	*non_nested_commands[] = {"cd", "exit", 0};
+	const char	*commands[] = {"echo", "export", "unset", "cd", "exit", "pwd", 0};
+	int			is_non_nested_builtin;
+	int			is_builtin;
+
 	if (node->type != EXEC)
 		return (0);
 	enode = (t_execnode *)node;
-	if (enode->av[0] == 0)
-		return (0);
-	if (ft_strcmp(enode->av[0], "cd") == 0
-		|| ft_strcmp(enode->av[0], "echo") == 0
-		|| ft_strcmp(enode->av[0], "exit") == 0
-		|| ft_strcmp(enode->av[0], "export") == 0
-		|| ft_strcmp(enode->av[0], "pwd") == 0
-		|| ft_strcmp(enode->av[0], "unset") == 0)
-		is_builtin = 1;
+	is_non_nested_builtin = is_builtin_helper(enode->av[0], non_nested_commands);
+	is_builtin = is_builtin_helper(enode->av[0], commands);
+	if (nested_execution)
+		if (is_non_nested_builtin)
+			exit(0);
 	return (is_builtin);
 }
 
@@ -53,25 +62,37 @@ void	run_builtin(t_node *node)
 	// exit code should be set to 0 after a successful builtin run
 }
 
+int	has_alphabetic_chars(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		if (ft_isalpha(str[i++]))
+			return (1);
+	return (0);
+}
+
 void	run_exit(char **av)
 {
-	int	exit_code;
-
-	exit_code = 0;
 	if (av[2])
 	{
 		print_error(2, "exit", "too many arguments");
-		exit_code = 1;
-		return ;
+		g_shell.exit_code = 1;
+	}
+	else if (has_alphabetic_chars(av[1]))
+	{
+		print_error(2, "exit", "numeric argument required");
+		g_shell.exit_code = 2;
 	}
 	else if (av[1])
-		exit_code = ft_atoi(av[1]);
-	exit(exit_code);
+		g_shell.exit_code = ft_atoi(av[1]);
+	exit(g_shell.exit_code);
 }
 
 void	run_echo(char **av)
 {
-	int	i;
+	int i;
 
 	i = 1;
 	while (av[i])
@@ -83,4 +104,3 @@ void	run_echo(char **av)
 	}
 	ft_putchar_fd('\n', STDOUT_FILENO);
 }
-
