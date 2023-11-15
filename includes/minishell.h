@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/14 21:16:12 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/15 11:20:15 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,12 @@ char	*ft_get_env(char *key, char **env);
 
 // exec.c
 void	runcmd(t_node *node);
+
+// exec_utils.c
+void	handle_file_not_found(char *path);
+void	handle_permission_denied(char *path);
+void	handle_default_error();
+void	handle_directory();
 
 // parse.c
 t_node	*parsecmd(char *cmd);

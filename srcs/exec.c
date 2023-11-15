@@ -1,4 +1,4 @@
-	/* ************************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:25 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/03 19:02:06 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/15 11:30:30 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,69 +46,28 @@ char	*find_path(char *cmd)
 	return (ret);
 }
 
-void handle_file_not_found(char *path) {
-    if (ft_strchr(path, '/') != 0)
-        print_error(1, strerror(errno));
-    else
-        print_error(1, "command not found");
-    g_shell.exit_code = 127;
-    exit(g_shell.exit_code);
-}
 
-void handle_permission_denied(char *path) {
-    if (ft_strchr(path, '/') == 0) {
-        print_error(1, "command not found");
-        g_shell.exit_code = 127;
-    } else {
-        print_error(1, strerror(errno));
-        g_shell.exit_code = 126;
-    }
-    exit(g_shell.exit_code);
-}
+void	execute_command(char *path, char **av)
+{
+	struct stat	file_stat;
 
-int is_regular_file(char *path, struct stat *file_stat) {
-    if (stat(path, file_stat) == -1) {
-        handle_file_not_found(path);
-    }
-    return S_ISREG(file_stat->st_mode);
-}
-
-// Function to check if the file is executable
-int is_executable(char *path) {
-    return access(path, X_OK) == 0;
-}
-
-// Function to execute the command
-void execute_command(char *path, char **av, char **env) {
-    struct stat file_stat;
-
-    if (is_regular_file(path, &file_stat)) {
-        if (is_executable(path)) {
-            execve(path, av, env);
-            // If execve fails, handle the error
-            if (errno == ENOENT || (errno == EACCES && ft_strchr(path, '/') == 0)) {
-                handle_file_not_found(path);
-            } else if (errno == EACCES) {
-                handle_permission_denied(path);
-            } else {
-                // Other error
-                print_error(1, strerror(errno));
-                g_shell.exit_code = errno;
-                exit(g_shell.exit_code);
-            }
-        } else {
-            // File is not executable
-            handle_file_not_found(path);
-        }
-    } else if (ft_strchr(path, '/') != 0 && S_ISDIR(file_stat.st_mode)) {
-        // Is a directory
-        print_error(1, strerror(EISDIR));
-        g_shell.exit_code = 126;
-        exit(g_shell.exit_code);
-    } else {
-        // Not a regular file or directory
-        handle_file_not_found(path);
-    }
+	if (stat(path, &file_stat) == -1)
+		handle_file_not_found(path);
+	if (S_ISREG(file_stat.st_mode))
+	{
+		execve(path, av, g_shell.env);
+		if (errno == EACCES)
+			handle_permission_denied(path);
+		else
+			handle_default_error();
+	}
+	else if (S_ISDIR(file_stat.st_mode))
+	{
+		if (ft_strchr(path, '/') != 0)
+			handle_directory();
+		else
+			handle_file_not_found(path);
+	}
 }
 
 // Recursively executes the command tree
@@ -121,6 +80,8 @@ void	runcmd(t_node *node)
 	int			p[2];
 	char		*path;
 	int			status;
+	pid_t		left_side_process;
+	pid_t		rigth_side_process;
 
 	if (node == 0)
 		exit(0);
@@ -129,27 +90,27 @@ void	runcmd(t_node *node)
 	case EXEC:
 		enode = (t_execnode *)node;
 		if (enode->av[0] == 0)
-			exit (0);
+			exit(0);
 		if (ft_strchr(enode->av[0], '/') == 0)
 			path = find_path(enode->av[0]);
 		else
 			path = ft_strdup(enode->av[0]);
 		if (fork_1() == 0)
-			execute_command(path, enode->av, g_shell.env);
+			execute_command(path, enode->av);
 		wait(&status);
 		break ;
 	case REDIR:
 		rnode = (t_redirnode *)node;
 		close(rnode->fd);
 		if (open_1(rnode->file, rnode->mode) < 0)
-			exit (ENOENT);
+			exit(ENOENT);
 		runcmd(rnode->execnode);
 		break ;
 	case PIPE:
 		pnode = (t_pipenode *)node;
 		if (pipe_1(p) < 0)
-			exit (1);
-		pid_t left_side_process = fork_1();
+			exit(1);
+		left_side_process = fork_1();
 		if (left_side_process == 0)
 		{
 			close(1);
@@ -159,7 +120,7 @@ void	runcmd(t_node *node)
 			runcmd(pnode->left);
 			break ;
 		}
-		pid_t rigth_side_process = fork_1();
+		rigth_side_process = fork_1();
 		if (rigth_side_process == 0)
 		{
 			close(0);
@@ -172,7 +133,7 @@ void	runcmd(t_node *node)
 		close(p[0]);
 		close(p[1]);
 		waitpid(left_side_process, &status, 0);
-    	waitpid(rigth_side_process, &status, 0);
+		waitpid(rigth_side_process, &status, 0);
 		break ;
 	default:
 		print_error(1, "runcmd");
