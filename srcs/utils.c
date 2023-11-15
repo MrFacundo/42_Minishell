@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:00 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/15 12:22:40 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/15 12:29:35 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	pipe_1(int *p)
 
 	pipefd = pipe(p);
 	if (pipefd < 0)
-		print_error(1, strerror(errno));
+		print_error(1, "Broken pipe");
 	return (pipefd);
 }
 
