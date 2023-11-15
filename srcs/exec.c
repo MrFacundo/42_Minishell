@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:25 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/15 12:19:05 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/15 16:26:29 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	runcmd(t_node *node)
 		enode = (t_execnode *)node;
 		if (enode->av[0] == 0)
 			exit(0);
-		if (is_builtin(node))
+		if (is_builtin(node, 1))
 		{
 			run_builtin(node);
 			break;

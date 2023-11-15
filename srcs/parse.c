@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:07:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/14 20:18:48 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/15 12:46:43 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_node	*parsepipe(char **ptr_to_cmd)
 	{
 		get_token(ptr_to_cmd, 0, 0);
 		if (**ptr_to_cmd == '\0' || peek(ptr_to_cmd, "|()&;<>"))
-            return (print_error(1, "parse error near pipe"), NULL);
+			return (print_error(1, "parse error near pipe"), NULL);
 		return (pipenode(left, parsepipe(ptr_to_cmd)));
 	}
 	return (left);
@@ -40,25 +40,19 @@ t_node	*parsepipe(char **ptr_to_cmd)
 t_node	*parseredirs(t_node *node, char **ptr_to_cmd)
 {
 	int	token;
-
-	char	*ptr_to_token, *end_of_token;
+	char *ptr_to_token;
+	char *end_of_token;
 	while (peek(ptr_to_cmd, "<>"))
 	{
 		token = get_token(ptr_to_cmd, 0, 0);
 		if (get_token(ptr_to_cmd, &ptr_to_token, &end_of_token) != 'a')
-            return (print_error(1, "parse error near redirection"), NULL);
-		switch (token)
-		{
-		case '<':
+			return (print_error(1, "parse error near redirection"), NULL);
+		if (token == '<')
 			node = redircmd(node, ptr_to_token, end_of_token, O_RDONLY, 0);
-			break ;
-		case '>':
+		else if (token == '>')
 			node = redircmd(node, ptr_to_token, end_of_token, O_WRONLY | O_CREAT | O_TRUNC, 1);
-			break ;
-		case '+': // >>	
+		else if (token == '+') // >>
 			node = redircmd(node, ptr_to_token, end_of_token, O_WRONLY | O_CREAT | O_APPEND, 1);
-			break ;
-		}
 	}
 	return (node);
 }
@@ -66,11 +60,11 @@ t_node	*parseredirs(t_node *node, char **ptr_to_cmd)
 // Recursive parse function: exec node
 t_node	*parseexec(char **ptr_to_cmd)
 {
-	t_node		*ret;
-	t_execnode	*exec_node;
-	char		*ptr_to_token, *end_of_token;
-	int			token, ac;
-	
+	t_node *ret;
+	t_execnode *exec_node;
+	char *ptr_to_token, *end_of_token;
+	int token, ac;
+
 	ac = 0;
 	ret = execnode();
 	exec_node = (t_execnode *)ret;
@@ -84,7 +78,7 @@ t_node	*parseexec(char **ptr_to_cmd)
 		exec_node->eav[ac] = end_of_token;
 		ac++;
 		if (ac >= MAXARGS)
-            return (print_error(1, "too many args"), NULL);
+			return (print_error(1, "too many args"), NULL);
 		ret = parseredirs(ret, ptr_to_cmd);
 	}
 	exec_node->av[ac] = 0;

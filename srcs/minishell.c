@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:20:06 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/15 12:12:45 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/15 16:06:47 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	main(int argc, char **argv, char **envp)
 		node = parsecmd(buf);
 		if (node == 0)
 			continue ;
+		if (is_builtin(node, 0))
+			run_builtin(node);
 		else
 			if (fork_1() == 0)
 				runcmd(node);

@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/15 12:19:56 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/15 15:12:12 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ typedef struct s_shell
 extern t_shell	g_shell;
 
 // builtins.c
-int		is_builtin(t_node *node);
+int		is_builtin(t_node *node, int inside_recursive);
 void	run_builtin(t_node *node);
 void	run_exit(char **av);
 void	run_echo(char **av);
