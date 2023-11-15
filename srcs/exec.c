@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:25 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/15 11:30:30 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/15 12:19:05 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ char	*find_path(char *cmd)
 		ret = ft_strdup(cmd);
 	return (ret);
 }
-
 
 void	execute_command(char *path, char **av)
 {
@@ -91,6 +90,11 @@ void	runcmd(t_node *node)
 		enode = (t_execnode *)node;
 		if (enode->av[0] == 0)
 			exit(0);
+		if (is_builtin(node))
+		{
+			run_builtin(node);
+			break;
+		}
 		if (ft_strchr(enode->av[0], '/') == 0)
 			path = find_path(enode->av[0]);
 		else

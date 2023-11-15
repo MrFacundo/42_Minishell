@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:00 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/14 20:18:21 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/15 12:29:35 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	open_1(char *file, int flags)
 	mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 	fd = open(file, flags, mode);
 	if (fd < 0)
-		print_error(2, strerror(errno), file);
+		print_error(1, strerror(errno));
 	return (fd);
 }
 
@@ -81,7 +81,7 @@ int	pipe_1(int *p)
 
 	pipefd = pipe(p);
 	if (pipefd < 0)
-		print_error(1, strerror(errno));
+		print_error(1, "Broken pipe");
 	return (pipefd);
 }
 
