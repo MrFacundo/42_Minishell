@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 12:17:02 by facu              #+#    #+#             */
-/*   Updated: 2023/11/15 16:03:47 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/15 16:40:00 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,16 @@ int	is_builtin_helper(const char *command, const char *builtin_commands[])
 int	is_builtin(t_node *node, int nested_execution)
 {
 	t_execnode	*enode;
-	const char	*non_nested_commands[] = {"cd", "exit", 0};
 	const char	*commands[] = {"echo", "export", "unset", "cd", "exit", "pwd", 0};
-	int			is_non_nested_builtin;
+	const char	*non_nested_commands[] = {"cd", "exit", 0};
 	int			is_builtin;
+	int			is_non_nested_builtin;
 
 	if (node->type != EXEC)
 		return (0);
 	enode = (t_execnode *)node;
-	is_non_nested_builtin = is_builtin_helper(enode->av[0], non_nested_commands);
 	is_builtin = is_builtin_helper(enode->av[0], commands);
+	is_non_nested_builtin = is_builtin_helper(enode->av[0], non_nested_commands);
 	if (nested_execution)
 		if (is_non_nested_builtin)
 			exit(0);
@@ -59,7 +59,6 @@ void	run_builtin(t_node *node)
 	// 	run_pwd(enode->av);
 	// else if (ft_strcmp(enode->av[0], "unset") == 0)
 	// 	run_unset(enode->av);
-	// exit code should be set to 0 after a successful builtin run
 }
 
 int	has_alphabetic_chars(char *str)
