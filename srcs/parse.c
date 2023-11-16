@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:07:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/15 12:46:43 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/15 19:25:53 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ t_node	*parseexec(char **ptr_to_cmd)
 		token = get_token(ptr_to_cmd, &ptr_to_token, &end_of_token);
 		if (token == 0)
 			break ;
+		if (token == 'a' && ptr_to_token == end_of_token)
+			continue ;
 		exec_node->av[ac] = ptr_to_token;
 		exec_node->eav[ac] = end_of_token;
 		ac++;
