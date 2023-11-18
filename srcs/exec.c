@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:25 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/15 16:26:29 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/18 20:46:05 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	execute_command(char *path, char **av)
 		handle_file_not_found(path);
 	if (S_ISREG(file_stat.st_mode))
 	{
+		set_signal_handling(1);
 		execve(path, av, g_shell.env);
 		if (errno == EACCES)
 			handle_permission_denied(path);
@@ -84,6 +85,7 @@ void	runcmd(t_node *node)
 
 	if (node == 0)
 		exit(0);
+	set_signal_handling(2);
 	switch (node->type)
 	{
 	case EXEC:

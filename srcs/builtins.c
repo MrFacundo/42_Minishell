@@ -6,24 +6,16 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 12:17:02 by facu              #+#    #+#             */
-/*   Updated: 2023/11/15 16:40:00 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/18 20:44:13 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	is_builtin_helper(const char *command, const char *builtin_commands[])
-{
-	int	i;
-
-	i = 0;
-	while (builtin_commands[i] != 0)
-		if (!ft_strcmp(command, builtin_commands[i++]))
-			return (1);
-	return (0);
-}
-
-int	is_builtin(t_node *node, int nested_execution)
+/*	Returns 1 or 0 depending on whether the command is a builtin 
+	and whether it can be executed in a nested context or not
+*/
+int	is_builtin(t_node *node, int nested_context)
 {
 	t_execnode	*enode;
 	const char	*commands[] = {"echo", "export", "unset", "cd", "exit", "pwd", 0};
@@ -36,7 +28,7 @@ int	is_builtin(t_node *node, int nested_execution)
 	enode = (t_execnode *)node;
 	is_builtin = is_builtin_helper(enode->av[0], commands);
 	is_non_nested_builtin = is_builtin_helper(enode->av[0], non_nested_commands);
-	if (nested_execution)
+	if (nested_context)
 		if (is_non_nested_builtin)
 			exit(0);
 	return (is_builtin);
@@ -59,17 +51,6 @@ void	run_builtin(t_node *node)
 	// 	run_pwd(enode->av);
 	// else if (ft_strcmp(enode->av[0], "unset") == 0)
 	// 	run_unset(enode->av);
-}
-
-int	has_alphabetic_chars(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-		if (ft_isalpha(str[i++]))
-			return (1);
-	return (0);
 }
 
 void	run_exit(char **av)
