@@ -6,13 +6,12 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:07:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/17 00:51:50 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/18 20:46:40 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-// Recursive parse function: cmd node
 t_node	*parsecmd(char *cmd)
 {
 	t_node	*node;
@@ -57,7 +56,6 @@ t_node	*parseredirs(t_node *node, char **ptr_to_cmd)
 	return (node);
 }
 
-// Recursive parse function: exec node
 t_node	*parseexec(char **ptr_to_cmd)
 {
 	t_node *ret;

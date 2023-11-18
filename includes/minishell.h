@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/15 15:12:12 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/18 20:48:32 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,10 @@
 # include <errno.h> // errno
 # include <stdarg.h> // va_start, va_arg, va_end
 #include <sys/stat.h> // stat
+# include <signal.h>
+#include <termios.h>
+
+
 
 #define MAXARGS 10
 
@@ -66,16 +70,19 @@ typedef struct s_shell
 	int			exit_code;
 }	t_shell;
 
+typedef void	(*t_signal_handler)(int);
+
 extern t_shell	g_shell;
 
 // builtins.c
-int		is_builtin(t_node *node, int inside_recursive);
+int		is_builtin(t_node *node, int nested_context);
 void	run_builtin(t_node *node);
 void	run_exit(char **av);
 void	run_echo(char **av);
 
-// minishell.c
-int		getcmd(char **buf);
+// builtins_utils.c
+int		is_builtin_helper(const char *command, const char *commands[]);
+int		has_alphabetic_chars(char *str);
 
 // constructors.c
 t_node	*execnode(void);
@@ -98,12 +105,22 @@ void	handle_permission_denied(char *path);
 void	handle_default_error();
 void	handle_directory();
 
+// expansion.c
+void	expand_exit_status(char **ptr, char **ptr_to_token, char **end_of_token);
+void    expand_variable(char **ptr, char **ptr_to_token, char **end_of_token);
+
+// minishell.c
+int		getcmd(char **buf);
+
 // parse.c
 t_node	*parsecmd(char *cmd);
 t_node	*parsepipe(char **pointer_to_cmd);
 t_node	*parseredirs(t_node *node, char **pointer_to_cmd);
 t_node	*parseexec(char **pointer_to_cmd);
 
+// signals.c
+void	sig_handler(int sig);
+void	set_signal_handling(int executing_external);
 
 // tokenizer.c
 int get_token(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token);

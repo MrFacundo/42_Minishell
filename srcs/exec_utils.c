@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 11:18:56 by facu              #+#    #+#             */
-/*   Updated: 2023/11/15 11:19:31 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/18 20:47:42 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,16 @@ void	handle_permission_denied(char *path)
 	exit(g_shell.exit_code);
 }
 
-void	handle_default_error()
-{
-	print_error(1, strerror(errno));
-	g_shell.exit_code = errno;
-	exit(g_shell.exit_code);
-}
-
 void	handle_directory()
 {
 	print_error(1, strerror(EISDIR));
 	g_shell.exit_code = 126;
+	exit(g_shell.exit_code);
+
+}
+void	handle_default_error()
+{
+	print_error(1, strerror(errno));
+	g_shell.exit_code = errno;
 	exit(g_shell.exit_code);
 }
