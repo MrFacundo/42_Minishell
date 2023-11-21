@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:00 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/15 16:24:42 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/21 01:33:26 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,6 @@ int	peek(char **pointer_to_cmd, char *tokens)
 
 	*pointer_to_cmd += ft_strspn(*pointer_to_cmd, whitespace);
 	return (**pointer_to_cmd && ft_strchr(tokens, **pointer_to_cmd));
-}
-
-void	free_array(char **array)
-{
-	int	i;
-
-	i = 0;
-	while (array[i])
-		free(array[i++]);
-	free(array);
 }
 
 int	open_1(char *file, int flags)
@@ -109,3 +99,33 @@ void	print_error(int n, ...)
 	ft_putstr_fd("\n", 2);
 	va_end(args);
 }
+
+
+void	ft_strarrfree(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i])
+		free(array[i++]);
+	free(array);
+}
+
+char	**ft_strarrcpy(char **array)
+{
+	int		i;
+	char	**copy;
+
+	i = 0;
+	while (array[i])
+		i++;
+	copy = malloc(sizeof(char *) * (i + 1));
+	i = 0;
+	while (array[i])
+	{
+		copy[i] = ft_strdup(array[i]);
+		i++;
+	}
+	copy[i] = 0;
+	return (copy);
+}	
