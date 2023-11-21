@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/21 16:44:35 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/21 17:41:27 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,10 @@
 # include <sys/stat.h>
 # include <errno.h>
 # include <stdarg.h>
-#include <sys/stat.h>
+# include <sys/stat.h>
 # include <signal.h>
-#include <termios.h>
+# include <termios.h>
+# include <limits.h>
 
 #define MAXARGS 10
 

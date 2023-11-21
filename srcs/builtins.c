@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 12:17:02 by facu              #+#    #+#             */
-/*   Updated: 2023/11/21 16:20:07 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/21 17:43:37 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,15 @@ void	run_export(char **av)
 			++i;
 		} 
 	}
+}
+
+void	run_pwd()
+{
+	char	s[PATH_MAX];
+
+	getcwd(s, PATH_MAX);
+	ft_putstr_fd(s, 1);
+	ft_putstr_fd("\n", 1);
 }
 
 void	run_unset(char **av)
@@ -138,8 +147,8 @@ void	run_builtin(t_node *node)
 		run_export(enode->av);
 	// else if (ft_strcmp(enode->av[0], "cd") == 0)
 	// 	run_cd(enode->av);
-	// else if (ft_strcmp(enode->av[0], "pwd") == 0)
-	// 	run_pwd(enode->av);
+	else if (ft_strcmp(enode->av[0], "pwd") == 0)
+		run_pwd();
 	else if (ft_strcmp(enode->av[0], "unset") == 0)
 		run_unset(enode->av);
 }
