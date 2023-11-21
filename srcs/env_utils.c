@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 01:27:22 by facu              #+#    #+#             */
-/*   Updated: 2023/11/21 01:34:17 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/21 16:22:20 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,25 +45,40 @@ void	update_key(char *key, char *value, int i)
 	g_shell.env[i] = new_env;
 }
 
-void	add_key_to_env(char *key, char *value, int i)
+void	add_key_to_env(char *key, char *value)
 {
-	int		new_size;
+	size_t	env_size;
+	size_t	new_env_size;
+	size_t	j;
 	char	**new_env_array;
-	int		j;
 	char	*temp;
 
-	new_size = i + 2;
-	new_env_array = malloc(sizeof(char *) * new_size);
+	env_size = ft_strarrsize(g_shell.env);
+	new_env_size = env_size + 2;
+	new_env_array = malloc(sizeof(char *) * new_env_size);
 	j = 0;
-	while (j < i)
+	while (j < env_size)
 	{
 		new_env_array[j] = strdup(g_shell.env[j]);
 		j++;
 	}
 	temp = ft_strjoin(key, "=");
-	new_env_array[i] = ft_strjoin(temp, value);
+	new_env_array[env_size] = ft_strjoin(temp, value);
 	free(temp);
 	ft_strarrfree(g_shell.env);
-	new_env_array[new_size - 1] = 0;
+	new_env_array[new_env_size - 1] = 0;
 	g_shell.env = new_env_array;
+}
+
+int	is_valid_identifier(const char *str)
+{
+	if (!ft_isalpha(str[0]) && str[0] != '_')
+		return (0);
+	while (*str)
+	{
+		if (!ft_isalnum(*str) && *str != '_' && *str != '=')
+			return (0);
+		++str;
+	}
+	return (1);
 }

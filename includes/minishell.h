@@ -3,31 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/21 01:35:31 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/21 16:44:35 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL
 # define MINISHELL
 
-# include <stdio.h> // printf
-# include <readline/readline.h> // readline
+# include <stdio.h>
+# include <readline/readline.h>
 # include <readline/history.h>
 # include "../libft/libft.h"
-# include <unistd.h> // execve
-# include <sys/wait.h> // wait
-# include <fcntl.h> // open O_CREAT|O_WRONLY
-# include <sys/stat.h> // S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
-# include <errno.h> // errno
-# include <stdarg.h> // va_start, va_arg, va_end
-#include <sys/stat.h> // stat
+# include <unistd.h> 
+# include <sys/wait.h>
+# include <fcntl.h>
+# include <sys/stat.h>
+# include <errno.h>
+# include <stdarg.h>
+#include <sys/stat.h>
 # include <signal.h>
 #include <termios.h>
-
-
 
 #define MAXARGS 10
 
@@ -83,6 +81,7 @@ void	run_echo(char **av);
 // builtins_utils.c
 int		is_builtin_helper(const char *command, const char *commands[]);
 int		has_alphabetic_chars(char *str);
+void	process_export_args(char **av);
 
 // constructors.c
 t_node	*execnode(void);
@@ -95,14 +94,17 @@ void	print_token(int token);
 // env.c
 void	initialize_env(t_shell *g_shell, char **envp);
 char	*ft_get_env(char *key, char **env);
-void	update_env(char *key_value);
+void	set_env(char *key_value);
+void	unset_env(char *key);
+void	print_env();
 
 // env_utils.c
 char	*extract_key(char *key_value);
 char	*extract_value(char *key_value);
 int		key_matches(char *key, char *env);
 void	update_key(char *key, char *value, int i);
-void	add_key_to_env(char *key, char *value, int i);
+void	add_key_to_env(char *key, char *value);
+int		is_valid_identifier(const char *str);
 
 // exec.c
 void	runcmd(t_node *node);
@@ -136,11 +138,9 @@ int get_token(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token);
 // utils.c
 t_node	*nul_terminate(t_node *node);
 int		peek(char **pointer_to_cmd, char *tokens);
-void	ft_strarrfree(char **array);
 void	print_error(int n, ...);
 int		fork_1(void);
 int		open_1(char *file, int mode);
 int		pipe_1(int *p);
-char	**ft_strarrcpy(char **array);
 
 #endif

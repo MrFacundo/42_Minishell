@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:00 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/21 01:33:26 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/21 14:42:31 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,33 +99,3 @@ void	print_error(int n, ...)
 	ft_putstr_fd("\n", 2);
 	va_end(args);
 }
-
-
-void	ft_strarrfree(char **array)
-{
-	int	i;
-
-	i = 0;
-	while (array[i])
-		free(array[i++]);
-	free(array);
-}
-
-char	**ft_strarrcpy(char **array)
-{
-	int		i;
-	char	**copy;
-
-	i = 0;
-	while (array[i])
-		i++;
-	copy = malloc(sizeof(char *) * (i + 1));
-	i = 0;
-	while (array[i])
-	{
-		copy[i] = ft_strdup(array[i]);
-		i++;
-	}
-	copy[i] = 0;
-	return (copy);
-}	
