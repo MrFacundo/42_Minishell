@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 20:21:36 by facu              #+#    #+#             */
-/*   Updated: 2023/11/18 20:44:14 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/21 16:39:54 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	sig_handler(int sig)
 
 /* sets the signal handling for different contexts:
 	0: for the process running the shell
-	1: for the process running a command
+	1: for the process running an external command
 	2: for procecess waiting for a command to finish
  */
 void	set_signal_handling(int option)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:20:06 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/18 20:33:33 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/21 16:39:53 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,14 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		if (is_builtin(node, 0))
 			run_builtin(node);
-		else if (fork_1() == 0)
-			runcmd(node);
-		set_signal_handling(2);
-		wait(&status);
-		g_shell.exit_code = WEXITSTATUS(status);
+		else
+		{
+			if (fork_1() == 0)
+				runcmd(node);
+			set_signal_handling(2);
+			wait(&status);
+			g_shell.exit_code = WEXITSTATUS(status);
+		}
 	}
 	return (0);
 }

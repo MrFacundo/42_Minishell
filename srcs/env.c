@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 19:41:47 by facu              #+#    #+#             */
-/*   Updated: 2023/11/21 01:28:55 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/21 15:54:14 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	*ft_get_env(char *key, char **env)
 	return (value);
 }
 
-void	update_env(char *key_value)
+void	set_env(char *key_value)
 {
 	char	*key;
 	char	*value;
@@ -78,7 +78,53 @@ void	update_env(char *key_value)
 			i++;
 		}
 	}
-	add_key_to_env(key, value, i);
+	add_key_to_env(key, value);
 	free(key);
 	free(value);
+}
+
+void	unset_env(char *key)
+{
+	size_t	env_size;
+	size_t	new_env_size;
+	size_t	i;
+	size_t	j;
+	char	**new_env_array;
+
+	env_size = ft_strarrsize(g_shell.env);
+	new_env_size = env_size;
+	new_env_array = malloc(sizeof(char *) * new_env_size);
+	i = 0;
+	j = 0;
+	while (i < env_size)
+	{
+		if (!key_matches(key, g_shell.env[i]))
+		{
+			new_env_array[j] = strdup(g_shell.env[i]);
+			j++;
+		}
+		i++;
+	}
+	ft_strarrfree(g_shell.env);
+	new_env_array[new_env_size - 1] = 0;
+	g_shell.env = new_env_array;
+}
+
+void	print_env()
+{
+	char	**env_copy;
+	char	**current_string;
+
+	env_copy = ft_strarrcpy(g_shell.env);
+	if (env_copy == 0)
+		return ;
+	ft_strarrbsort(env_copy);
+	current_string = env_copy;
+	while (*current_string)
+	{
+		ft_putstr_fd(*current_string, 1);
+		ft_putchar_fd('\n', 1);
+		++current_string;
+	}
+	ft_strarrfree(env_copy);
 }
