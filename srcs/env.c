@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 19:41:47 by facu              #+#    #+#             */
-/*   Updated: 2023/11/15 17:13:13 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/21 01:28:55 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,35 @@ char	*ft_get_env(char *key, char **env)
 		i++;
 	}
 	return (value);
+}
+
+void	update_env(char *key_value)
+{
+	char	*key;
+	char	*value;
+	int		i;
+
+	key = extract_key(key_value);
+	value = extract_value(key_value);
+	i = 0;
+	if (!key)
+		return ;
+	if (!*value)
+	{
+		while (g_shell.env[i])
+			if (key_matches(key, g_shell.env[i++]))
+				return ;
+	}
+	else
+	{
+		while (g_shell.env[i])
+		{
+			if (key_matches(key, g_shell.env[i]))
+				return (update_key(key, value, i));
+			i++;
+		}
+	}
+	add_key_to_env(key, value, i);
+	free(key);
+	free(value);
 }

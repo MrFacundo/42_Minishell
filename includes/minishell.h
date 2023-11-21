@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/18 20:48:32 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/21 01:35:31 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,14 @@ void	print_token(int token);
 // env.c
 void	initialize_env(t_shell *g_shell, char **envp);
 char	*ft_get_env(char *key, char **env);
+void	update_env(char *key_value);
+
+// env_utils.c
+char	*extract_key(char *key_value);
+char	*extract_value(char *key_value);
+int		key_matches(char *key, char *env);
+void	update_key(char *key, char *value, int i);
+void	add_key_to_env(char *key, char *value, int i);
 
 // exec.c
 void	runcmd(t_node *node);
@@ -128,10 +136,11 @@ int get_token(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token);
 // utils.c
 t_node	*nul_terminate(t_node *node);
 int		peek(char **pointer_to_cmd, char *tokens);
-void	free_array(char **array);
+void	ft_strarrfree(char **array);
 void	print_error(int n, ...);
 int		fork_1(void);
 int		open_1(char *file, int mode);
 int		pipe_1(int *p);
+char	**ft_strarrcpy(char **array);
 
 #endif

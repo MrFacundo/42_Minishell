@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:25 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/18 20:46:05 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/21 01:33:06 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*find_path(char *cmd)
 			free(tmp2);
 		}
 	}
-	free_array(paths);
+	ft_strarrfree(paths);
 	if (!ret)
 		ret = ft_strdup(cmd);
 	return (ret);
