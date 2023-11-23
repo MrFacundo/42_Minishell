@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:20:06 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/21 16:39:53 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/23 18:08:10 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	main(int argc, char **argv, char **envp)
 	initialize_env(&g_shell, envp);
 	g_shell.exit_code = 0;
 	status = 0;
-	while (getcmd(&buf) >= 0)
+	while (read_cmd(&buf) >= 0)
 	{
 		add_history(buf);
 		node = parsecmd(buf);
@@ -45,11 +45,3 @@ int	main(int argc, char **argv, char **envp)
 	return (0);
 }
 
-int	getcmd(char **buf)
-{
-	set_signal_handling(0);
-	*buf = readline("ms > ");
-	if (*buf == 0)
-		return (-1);
-	return (0);
-}

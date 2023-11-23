@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/21 17:41:27 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/23 18:09:54 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 #define EXEC 1
 #define REDIR 2
 #define PIPE 3
+#define HEREDOC 4
 
 typedef struct	s_node
 {
@@ -55,6 +56,14 @@ typedef struct s_redirnode
 	int			mode;
 	int			fd;
 }				t_redirnode;
+
+
+typedef struct s_heredocnode
+{
+	int			type;
+	t_node		*execnode;
+	int			fd;
+}				t_heredocnode;
 
 typedef struct s_pipenode
 {
@@ -88,6 +97,7 @@ void	process_export_args(char **av);
 t_node	*execnode(void);
 t_node	*redircmd(t_node *execnode, char *file, char *efile, int mode, int fd);
 t_node	*pipenode(t_node *left, t_node *right);
+t_node	*heredoccmd(t_node *execnode, char *delimiter, char *edelimiter);
 
 // debug.c
 void	print_token(int token);
@@ -129,6 +139,10 @@ t_node	*parsepipe(char **pointer_to_cmd);
 t_node	*parseredirs(t_node *node, char **pointer_to_cmd);
 t_node	*parseexec(char **pointer_to_cmd);
 
+// read.c
+int		read_cmd(char **buf);
+void	read_heredoc(t_heredocnode *node, char *delimiter, char *edelimiter);
+
 // signals.c
 void	sig_handler(int sig);
 void	set_signal_handling(int executing_external);
@@ -143,5 +157,7 @@ void	print_error(int n, ...);
 int		fork_1(void);
 int		open_1(char *file, int mode);
 int		pipe_1(int *p);
+int		dup2_1(int oldfd, int newfd);
+
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   constructors.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:55 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/10/24 15:04:55 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/23 18:08:14 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,16 @@ t_node	*pipenode(t_node *left, t_node *right)
 	node->type = PIPE;
 	node->left = left;
 	node->right = right;
+	return ((t_node *)node);
+}
+
+t_node	*heredoccmd(t_node *execnode, char *delimiter, char *edelimiter)
+{
+	t_heredocnode	*node;
+
+	node = ft_calloc(1, sizeof(t_heredocnode));
+	node->type = HEREDOC;
+	node->execnode = execnode;
+	read_heredoc(node, delimiter, edelimiter);
 	return ((t_node *)node);
 }

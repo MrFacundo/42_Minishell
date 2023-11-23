@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:07:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/18 20:46:40 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/23 17:53:15 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,10 @@ t_node	*parseredirs(t_node *node, char **ptr_to_cmd)
 			node = redircmd(node, ptr_to_token, end_of_token, O_RDONLY, 0);
 		else if (token == '>')
 			node = redircmd(node, ptr_to_token, end_of_token, O_WRONLY | O_CREAT | O_TRUNC, 1);
-		else if (token == '+') // >>
+		else if (token == '+')
 			node = redircmd(node, ptr_to_token, end_of_token, O_WRONLY | O_CREAT | O_APPEND, 1);
+		else if (token == '-')
+			node = heredoccmd(node, ptr_to_token, end_of_token);
 	}
 	return (node);
 }
@@ -67,7 +69,7 @@ t_node	*parseexec(char **ptr_to_cmd)
 	ret = execnode();
 	exec_node = (t_execnode *)ret;
 	// ret = parseredirs(ret, ptr_to_cmd); not sure about this line
-	while (!peek(ptr_to_cmd, "|()&;"))
+	while (!peek(ptr_to_cmd, "<>|()&;"))
 	{
 		token = get_token(ptr_to_cmd, &ptr_to_token, &end_of_token);
 		if (token == 0)

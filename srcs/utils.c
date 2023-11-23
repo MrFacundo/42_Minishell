@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:00 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/21 14:42:31 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/23 18:07:46 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ t_node *nul_terminate(t_node *node)
     t_execnode	*enode;
     t_redirnode	*rnode;
     t_pipenode	*pnode;
+	t_heredocnode	*hnode;
     int			i;
 
     if (node == 0)
@@ -35,6 +36,11 @@ t_node *nul_terminate(t_node *node)
         *rnode->efile = 0;
         nul_terminate(rnode->execnode);
     }
+	else if (node->type == HEREDOC)
+	{
+		hnode = (t_heredocnode *)node;
+		nul_terminate(hnode->execnode);
+	}
     else if (node->type == PIPE)
     {
         pnode = (t_pipenode *)node;
@@ -83,6 +89,16 @@ int	fork_1(void)
 	if (pid < 0)
 		print_error(1, strerror(errno));
 	return (pid);
+}
+
+int	dup2_1(int oldfd, int newfd)
+{
+	int	ret;
+
+	ret = dup2(oldfd, newfd);
+	if (ret < 0)
+		print_error(1, strerror(errno));
+	return (ret);
 }
 
 void	print_error(int n, ...)

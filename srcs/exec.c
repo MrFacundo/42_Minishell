@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:25 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/21 01:33:06 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/23 18:18:38 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,10 @@ void	execute_command(char *path, char **av)
 // DONT DIVIDE INTO SMALLER FUNCTIONS UNTIL LOGIC IS CLEAR
 void	runcmd(t_node *node)
 {
-	t_execnode	*enode;
-	t_redirnode	*rnode;
-	t_pipenode	*pnode;
+	t_execnode		*enode;
+	t_redirnode		*rnode;
+	t_pipenode		*pnode;
+	t_heredocnode	*hnode;
 	int			p[2];
 	char		*path;
 	int			status;
@@ -112,6 +113,13 @@ void	runcmd(t_node *node)
 			exit(ENOENT);
 		runcmd(rnode->execnode);
 		break ;
+	case HEREDOC:
+		hnode = (t_heredocnode *)node;
+		if (dup2_1(hnode->fd, 0) == -1)
+			exit(errno);
+		close(hnode->fd);
+		runcmd(((t_heredocnode *)node)->execnode);
+		break ;
 	case PIPE:
 		pnode = (t_pipenode *)node;
 		if (pipe_1(p) < 0)
@@ -119,8 +127,8 @@ void	runcmd(t_node *node)
 		left_side_process = fork_1();
 		if (left_side_process == 0)
 		{
-			close(1);
-			dup(p[1]);
+			if (dup2_1(p[1], 1) == -1)
+				exit(errno);
 			close(p[0]);
 			close(p[1]);
 			runcmd(pnode->left);
@@ -129,8 +137,8 @@ void	runcmd(t_node *node)
 		rigth_side_process = fork_1();
 		if (rigth_side_process == 0)
 		{
-			close(0);
-			dup(p[0]);
+			if (dup2_1(p[0], 0) == -1)
+				exit(errno);
 			close(p[0]);
 			close(p[1]);
 			runcmd(pnode->right);
