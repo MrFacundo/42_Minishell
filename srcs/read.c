@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 18:07:29 by facu              #+#    #+#             */
-/*   Updated: 2023/11/23 18:08:07 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/23 18:16:25 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	read_heredoc(t_heredocnode *node, char *delimiter, char *edelimiter)
             free(line);
             break;
         }
-        write(fd[1], line, strlen(line));
+        write(fd[1], line, ft_strlen(line));
         write(fd[1], "\n", 1);
         free(line);
 	}

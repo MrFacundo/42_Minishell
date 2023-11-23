@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:25 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/23 17:54:08 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/23 18:18:38 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,8 @@ void	runcmd(t_node *node)
 		hnode = (t_heredocnode *)node;
 		if (dup2_1(hnode->fd, 0) == -1)
 			exit(errno);
-		runcmd(((t_heredocnode *)node)->execnode);
 		close(hnode->fd);
+		runcmd(((t_heredocnode *)node)->execnode);
 		break ;
 	case PIPE:
 		pnode = (t_pipenode *)node;
@@ -127,8 +127,8 @@ void	runcmd(t_node *node)
 		left_side_process = fork_1();
 		if (left_side_process == 0)
 		{
-			close(1);
-			dup(p[1]);
+			if (dup2_1(p[1], 1) == -1)
+				exit(errno);
 			close(p[0]);
 			close(p[1]);
 			runcmd(pnode->left);
@@ -137,8 +137,8 @@ void	runcmd(t_node *node)
 		rigth_side_process = fork_1();
 		if (rigth_side_process == 0)
 		{
-			close(0);
-			dup(p[0]);
+			if (dup2_1(p[0], 0) == -1)
+				exit(errno);
 			close(p[0]);
 			close(p[1]);
 			runcmd(pnode->right);
