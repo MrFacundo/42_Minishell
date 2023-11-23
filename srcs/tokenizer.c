@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 16:30:30 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/18 20:47:42 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/23 17:22:49 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,16 @@ int process_symbol(char **ptr, int token)
 	
 	p = *ptr;
 	p++;
-	if (*p == '>')
+	if (token == '>' && *p == '>')         
 	{
 		p++;
 		token = '+';
 	}
+    else if (token == '<' && *p == '<')
+    {
+        p++;
+        token = '-';
+    }
     *ptr = p;
     return (token);
 }

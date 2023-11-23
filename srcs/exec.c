@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:25 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/21 01:33:06 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/23 17:54:08 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,10 @@ void	execute_command(char *path, char **av)
 // DONT DIVIDE INTO SMALLER FUNCTIONS UNTIL LOGIC IS CLEAR
 void	runcmd(t_node *node)
 {
-	t_execnode	*enode;
-	t_redirnode	*rnode;
-	t_pipenode	*pnode;
+	t_execnode		*enode;
+	t_redirnode		*rnode;
+	t_pipenode		*pnode;
+	t_heredocnode	*hnode;
 	int			p[2];
 	char		*path;
 	int			status;
@@ -111,6 +112,13 @@ void	runcmd(t_node *node)
 		if (open_1(rnode->file, rnode->mode) < 0)
 			exit(ENOENT);
 		runcmd(rnode->execnode);
+		break ;
+	case HEREDOC:
+		hnode = (t_heredocnode *)node;
+		if (dup2_1(hnode->fd, 0) == -1)
+			exit(errno);
+		runcmd(((t_heredocnode *)node)->execnode);
+		close(hnode->fd);
 		break ;
 	case PIPE:
 		pnode = (t_pipenode *)node;
