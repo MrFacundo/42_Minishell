@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 16:30:30 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/23 17:22:49 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/24 22:44:34 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,25 +32,6 @@ int process_symbol(char **ptr, int token)
     return (token);
 }
 
-int process_dollar(char **ptr, char **ptr_to_token, char **end_of_token)
-{
-    char	*p;
-    int		token;
-	
-	p = *ptr;
-	token = 'a';
-    p++;
-    if (*p == '?')
-        expand_exit_status(ptr, ptr_to_token, end_of_token);
-    else if (ft_isalpha(*p))
-        expand_variable(ptr, ptr_to_token, end_of_token);
-    else
-        *end_of_token = p + ft_strcspn(p, " \t\r\n\v");
-    *ptr = p + ft_strcspn(p, " \t\r\n\v");
-    return (token);
-}
-
-
 int process_default(char **ptr, char **end_of_token, int token)
 {
     char	*p;
@@ -62,6 +43,24 @@ int process_default(char **ptr, char **end_of_token, int token)
         *end_of_token = p;
     p += ft_strspn(p, " \t\r\n\v");
     *ptr = p;
+    return (token);     
+}
+
+int process_dollar(char **ptr, char **ptr_to_token, char **end_of_token)
+{
+    char	*p;
+    int		token;
+	
+	p = *ptr;
+	token = '$';
+    p++;
+    if (*p == '?')
+        *ptr_to_token = ft_itoa(g_shell.exit_code);
+    else if (ft_isalpha(*p))
+        expand_variable(*ptr, ptr_to_token);
+    else
+        return process_default(ptr, end_of_token, token);
+    *ptr = p + ft_strcspn(p, " \t\r\n\v");
     return (token);
 }
 

@@ -3,52 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:00 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/23 18:07:46 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/24 22:43:34 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-// Replaces the chars at the end of the tokens with \0
-t_node *nul_terminate(t_node *node)
-{
-    t_execnode	*enode;
-    t_redirnode	*rnode;
-    t_pipenode	*pnode;
-	t_heredocnode	*hnode;
-    int			i;
-
-    if (node == 0)
-        return (0);
-    if (node->type == EXEC)
-    {
-        enode = (t_execnode *)node;
-        i = 0;
-        while (enode->av[i])
-            *enode->eav[i++] = 0;
-    }
-    else if (node->type == REDIR)
-    {
-        rnode = (t_redirnode *)node;
-        *rnode->efile = 0;
-        nul_terminate(rnode->execnode);
-    }
-	else if (node->type == HEREDOC)
-	{
-		hnode = (t_heredocnode *)node;
-		nul_terminate(hnode->execnode);
-	}
-    else if (node->type == PIPE)
-    {
-        pnode = (t_pipenode *)node;
-        nul_terminate(pnode->left);
-        nul_terminate(pnode->right);
-    }
-    return (node);
-}
 
 // Advances the trailing whitespace and returns 1 if the current char is in the tokens array
 int	peek(char **pointer_to_cmd, char *tokens)
@@ -96,6 +58,19 @@ int	dup2_1(int oldfd, int newfd)
 	int	ret;
 
 	ret = dup2(oldfd, newfd);
+	if (ret < 0)
+		print_error(1, strerror(errno));
+	return (ret);
+}
+
+int	close_pipe(int *p)
+{
+	int	ret;
+
+	ret = close(p[0]);
+	if (ret < 0)
+		print_error(1, strerror(errno));
+	ret = close(p[1]);
 	if (ret < 0)
 		print_error(1, strerror(errno));
 	return (ret);

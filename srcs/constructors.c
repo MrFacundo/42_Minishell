@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   constructors.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:55 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/24 16:03:54 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/24 22:23:02 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,10 @@ t_node	*redircmd(t_node *execnode, char *file, char *efile, int mode, int fd)
 	node = ft_calloc(1, sizeof(t_redirnode));
 	node->type = REDIR;
 	node->execnode = execnode;
-	node->file = file;
-	node->efile = efile;
+	if (efile)
+		node->file = ft_substr(file, 0, efile - file);
+	else
+		node->file = file;
 	node->mode = mode;
 	node->fd = fd;
 	return ((t_node *)node);
