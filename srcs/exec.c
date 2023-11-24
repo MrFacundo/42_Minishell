@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:25 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/23 18:18:38 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/24 21:27:26 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,24 @@ char	*find_path(char *cmd)
 	char	**paths;
 	int		i;
 	char	*ret;
-	char	*tmp1;
-	char	*tmp2;
+	char	*tmp;
 
 	path = ft_get_env("PATH", g_shell.env);
 	paths = ft_split(path, ':');
+	free(path);
 	i = 0;
 	ret = 0;
-	while (paths[i] && !ret)
+	while (paths[i])
 	{
-		tmp1 = ft_strjoin(paths[i++], "/");
-		tmp2 = ft_strjoin(tmp1, cmd);
-		if (access(tmp2, F_OK | X_OK) == 0)
-		{
-			ret = tmp2;
-			free(tmp1);
-		}
+		tmp = ft_strjoin(paths[i++], "/");
+		ret = ft_strjoin(tmp, cmd);
+		free(tmp);
+		if (access(ret, F_OK | X_OK) == 0)
+			break ;
 		else
 		{
-			free(tmp1);
-			free(tmp2);
+			free(ret);
+			ret = 0;
 		}
 	}
 	ft_strarrfree(paths);
@@ -50,7 +48,7 @@ void	execute_command(char *path, char **av)
 {
 	struct stat	file_stat;
 
-	if (stat(path, &file_stat) == -1)
+	if (stat(path, &file_stat) < 0)
 		handle_file_not_found(path);
 	if (S_ISREG(file_stat.st_mode))
 	{
@@ -105,6 +103,7 @@ void	runcmd(t_node *node)
 		if (fork_1() == 0)
 			execute_command(path, enode->av);
 		wait(&status);
+		free(path);
 		break ;
 	case REDIR:
 		rnode = (t_redirnode *)node;
@@ -115,7 +114,7 @@ void	runcmd(t_node *node)
 		break ;
 	case HEREDOC:
 		hnode = (t_heredocnode *)node;
-		if (dup2_1(hnode->fd, 0) == -1)
+		if (dup2_1(hnode->fd, 0) < 0)
 			exit(errno);
 		close(hnode->fd);
 		runcmd(((t_heredocnode *)node)->execnode);
@@ -125,22 +124,26 @@ void	runcmd(t_node *node)
 		if (pipe_1(p) < 0)
 			exit(1);
 		left_side_process = fork_1();
+		if (left_side_process < 0)
+			exit(errno);
 		if (left_side_process == 0)
 		{
-			if (dup2_1(p[1], 1) == -1)
+			if (dup2_1(p[1], 1) < 0)
 				exit(errno);
-			close(p[0]);
-			close(p[1]);
+			if (close_pipe(p) < 0)
+				exit(errno);
 			runcmd(pnode->left);
 			break ;
 		}
 		rigth_side_process = fork_1();
+		if (rigth_side_process < 0)
+			exit(errno);
 		if (rigth_side_process == 0)
 		{
-			if (dup2_1(p[0], 0) == -1)
+			if (dup2_1(p[0], 0) < 0)
 				exit(errno);
-			close(p[0]);
-			close(p[1]);
+			if (close_pipe(p) < 0)
+				exit(errno);
 			runcmd(pnode->right);
 			break ;
 		}

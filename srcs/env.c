@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 19:41:47 by facu              #+#    #+#             */
-/*   Updated: 2023/11/24 16:43:07 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/24 17:35:47 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,12 @@ void	initialize_env(t_shell *g_shell, char **envp)
 	size = 0;
 	while (envp[size])
 		size++;
-	g_shell->env = malloc(sizeof(char *) * (size + 1));
+	g_shell->env = ft_calloc((size + 1), sizeof(char *));
 	while (envp[i])
 	{
 		g_shell->env[i] = ft_strdup(envp[i]);
 		i++;
 	}
-	g_shell->env[i] = 0;
 }
 
 char	*ft_get_env(char *key, char **env)
@@ -93,7 +92,7 @@ void	unset_env(char *key)
 
 	env_size = ft_strarrsize(g_shell.env);
 	new_env_size = env_size;
-	new_env_array = malloc(sizeof(char *) * new_env_size);
+	new_env_array = ft_calloc((new_env_size + 1), sizeof(char *));
 	i = 0;
 	j = 0;
 	while (i < env_size)
@@ -106,7 +105,6 @@ void	unset_env(char *key)
 		i++;
 	}
 	ft_strarrfree(g_shell.env);
-	new_env_array[new_env_size - 1] = 0;
 	g_shell.env = new_env_array;
 }
 

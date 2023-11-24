@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/24 16:50:07 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/24 22:28:25 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ typedef struct	s_execnode
 {
 	int			type;
 	char		*av[MAXARGS];
-	char		*eav[MAXARGS];
 }				t_execnode;
 
 typedef struct s_redirnode
@@ -52,7 +51,6 @@ typedef struct s_redirnode
 	int			type;
 	t_node		*execnode;
 	char		*file;
-	char		*efile;
 	int			mode;
 	int			fd;
 }				t_redirnode;
@@ -127,8 +125,7 @@ void	handle_default_error();
 void	handle_directory();
 
 // expansion.c
-void	expand_exit_status(char **ptr, char **ptr_to_token, char **end_of_token);
-void    expand_variable(char **ptr, char **ptr_to_token, char **end_of_token);
+void    expand_variable(char *ptr, char **ptr_to_token);
 
 // minishell.c
 int		getcmd(char **buf);
@@ -151,13 +148,12 @@ void	set_signal_handling(int executing_external);
 int get_token(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token);
 
 // utils.c
-t_node	*nul_terminate(t_node *node);
 int		peek(char **pointer_to_cmd, char *tokens);
 void	print_error(int n, ...);
 int		fork_1(void);
 int		open_1(char *file, int mode);
 int		pipe_1(int *p);
 int		dup2_1(int oldfd, int newfd);
-
+int		close_pipe(int *p);
 
 #endif
