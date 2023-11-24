@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:20:06 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/23 18:08:10 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/24 15:50:23 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	main(int argc, char **argv, char **envp)
 	initialize_env(&g_shell, envp);
 	g_shell.exit_code = 0;
 	status = 0;
-	while (read_cmd(&buf) >= 0)
+	while (prompt(&buf, 0) >= 0)
 	{
 		add_history(buf);
 		node = parsecmd(buf);

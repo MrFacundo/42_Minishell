@@ -6,32 +6,32 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 18:07:29 by facu              #+#    #+#             */
-/*   Updated: 2023/11/23 18:16:25 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/24 16:04:33 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	read_cmd(char **buf)
+int	prompt(char **buf, char *prompt)
 {
+	if (prompt == 0)
+		prompt = "ms > ";
 	set_signal_handling(0);
-	*buf = readline("ms > ");
+	*buf = readline(prompt);
 	if (*buf == 0)
 		return (-1);
 	return (0);
 }
 
-void	read_heredoc(t_heredocnode *node, char *delimiter, char *edelimiter)
+int	read_heredoc(char *delimiter, char *edelimiter)
 {
 	char	*line;
 	int		fd[2];
 
 	if (pipe_1(fd) == -1)
-		return ;
-	node->fd = fd[0];
-	while (1)
+		return (-1);
+	while (prompt(&line, "ms - heredoc > ") >= 0)
 	{
-        line = readline("> ");
         if (ft_strncmp(line, delimiter, edelimiter - delimiter) == 0) {
             free(line);
             break;
@@ -41,4 +41,5 @@ void	read_heredoc(t_heredocnode *node, char *delimiter, char *edelimiter)
         free(line);
 	}
 	close(fd[1]);
+	return (fd[0]);
 }
