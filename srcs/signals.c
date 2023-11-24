@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 20:21:36 by facu              #+#    #+#             */
-/*   Updated: 2023/11/21 16:39:54 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/24 15:51:37 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,16 @@ void	sig_handler(int sig)
 }
 
 /* sets the signal handling for different contexts:
-	0: for the process running the shell
-	1: for the process running an external command
-	2: for procecess waiting for a command to finish
+	0: the main process running the shell
+	1: processes running an external commands
+	2: procecess waiting for a command to finish
  */
 void	set_signal_handling(int option)
 {
 	t_signal_handler handlers[][3] = {
 		{sig_handler, SIG_IGN, SIG_IGN},
 		{SIG_DFL, SIG_DFL, SIG_DFL},
-		{SIG_IGN, SIG_IGN, SIG_IGN}
+		{SIG_IGN, SIG_IGN, SIG_IGN},
 	};
 	rl_catch_signals = 0;
 	if (signal(SIGINT, handlers[option][0]) == SIG_ERR ||

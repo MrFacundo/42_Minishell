@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:55 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/23 18:08:14 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/24 16:03:54 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,6 @@ t_node	*heredoccmd(t_node *execnode, char *delimiter, char *edelimiter)
 	node = ft_calloc(1, sizeof(t_heredocnode));
 	node->type = HEREDOC;
 	node->execnode = execnode;
-	read_heredoc(node, delimiter, edelimiter);
+	node->fd = read_heredoc(delimiter, edelimiter);
 	return ((t_node *)node);
 }

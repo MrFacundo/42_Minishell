@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/23 18:09:54 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/24 15:59:33 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,8 +140,8 @@ t_node	*parseredirs(t_node *node, char **pointer_to_cmd);
 t_node	*parseexec(char **pointer_to_cmd);
 
 // read.c
-int		read_cmd(char **buf);
-void	read_heredoc(t_heredocnode *node, char *delimiter, char *edelimiter);
+int		prompt(char **buf, char *prompt);
+int		read_heredoc(char *delimiter, char *edelimiter);
 
 // signals.c
 void	sig_handler(int sig);
