@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 12:17:02 by facu              #+#    #+#             */
-/*   Updated: 2023/11/21 17:43:37 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/24 16:50:16 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,17 @@
 int	is_builtin(t_node *node, int nested_context)
 {
 	t_execnode	*enode;
-	const char	*commands[] = {"echo", "export", "unset", "cd", "exit", "pwd",
+	char	*commands[] = {"echo", "export", "unset", "cd", "exit", "pwd",
 			0};
-	const char	*non_nested_commands[] = {"cd", "exit", 0};
+	char	*non_nested_commands[] = {"cd", "exit", 0};
 	int			is_builtin;
 	int			is_non_nested_builtin;
 
 	if (node->type != EXEC)
 		return (0);
 	enode = (t_execnode *)node;
-	is_builtin = is_builtin_helper(enode->av[0], commands);
-	is_non_nested_builtin = is_builtin_helper(enode->av[0],
-			non_nested_commands);
+	is_builtin = ft_strarrfind(commands, enode->av[0]);
+	is_non_nested_builtin = ft_strarrfind(non_nested_commands, enode->av[0]);
 	if (nested_context)
 		if (is_non_nested_builtin)
 			exit(0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 01:27:22 by facu              #+#    #+#             */
-/*   Updated: 2023/11/21 16:22:20 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/24 16:44:38 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	add_key_to_env(char *key, char *value)
 	j = 0;
 	while (j < env_size)
 	{
-		new_env_array[j] = strdup(g_shell.env[j]);
+		new_env_array[j] = ft_strdup(g_shell.env[j]);
 		j++;
 	}
 	temp = ft_strjoin(key, "=");

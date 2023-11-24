@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/24 15:59:33 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/24 16:50:07 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	run_exit(char **av);
 void	run_echo(char **av);
 
 // builtins_utils.c
-int		is_builtin_helper(const char *command, const char *commands[]);
+int		ft_strarrfind(char **array, char *str);
 int		has_alphabetic_chars(char *str);
 void	process_export_args(char **av);
 

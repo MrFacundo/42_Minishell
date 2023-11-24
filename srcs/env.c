@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 19:41:47 by facu              #+#    #+#             */
-/*   Updated: 2023/11/21 15:54:14 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/24 16:43:07 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	unset_env(char *key)
 	{
 		if (!key_matches(key, g_shell.env[i]))
 		{
-			new_env_array[j] = strdup(g_shell.env[i]);
+			new_env_array[j] = ft_strdup(g_shell.env[i]);
 			j++;
 		}
 		i++;
