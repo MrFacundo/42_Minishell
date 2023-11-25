@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/24 22:28:25 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/25 20:04:03 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,14 +115,19 @@ void	update_key(char *key, char *value, int i);
 void	add_key_to_env(char *key, char *value);
 int		is_valid_identifier(const char *str);
 
-// exec.c
-void	runcmd(t_node *node);
-
 // exec_utils.c
+char	*find_path(char *cmd);
+void	handle_child_process(int *pipe, int direction, t_node *node);
+void	execute_command(char *path, char **av);
+
+// exec_error_handlung.c
 void	handle_file_not_found(char *path);
 void	handle_permission_denied(char *path);
 void	handle_default_error();
 void	handle_directory();
+
+// execution.c
+void	run_cmd(t_node *node);
 
 // expansion.c
 void    expand_variable(char *ptr, char **ptr_to_token);
