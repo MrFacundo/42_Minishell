@@ -1,52 +1,78 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/15 11:18:56 by facu              #+#    #+#             */
-/*   Updated: 2023/11/18 20:47:42 by facu             ###   ########.fr       */
+/*   Created: 2023/10/22 17:19:25 by ftroiter          #+#    #+#             */
+/*   Updated: 2023/11/25 19:55:17 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	handle_file_not_found(char *path)
+char	*find_path(char *cmd)
 {
-	if (ft_strchr(path, '/') != 0)
-		print_error(1, strerror(errno));
-	else
-		print_error(1, "command not found");
-	g_shell.exit_code = 127;
-	exit(g_shell.exit_code);
-}
+	char	*path;
+	char	**paths;
+	int		i;
+	char	*ret;
+	char	*tmp;
 
-void	handle_permission_denied(char *path)
-{
-	if (ft_strchr(path, '/') != 0)
+	path = ft_get_env("PATH", g_shell.env);
+	paths = ft_split(path, ':');
+	free(path);
+	i = 0;
+	ret = 0;
+	while (paths[i])
 	{
-		print_error(1, strerror(errno));
-		g_shell.exit_code = 126;
+		tmp = ft_strjoin(paths[i++], "/");
+		ret = ft_strjoin(tmp, cmd);
+		free(tmp);
+		if (access(ret, F_OK | X_OK) == 0)
+			break ;
+		else
+		{
+			free(ret);
+			ret = 0;
+		}
 	}
-	else
+	ft_strarrfree(paths);
+	if (!ret)
+		ret = ft_strdup(cmd);
+	return (ret);
+}
+
+void	execute_command(char *path, char **av)
+{
+	struct stat	file_stat;
+
+	if (stat(path, &file_stat) < 0)
+		handle_file_not_found(path);
+	if (S_ISREG(file_stat.st_mode))
 	{
-		print_error(1, "command not found");
-		g_shell.exit_code = 127;
+		set_signal_handling(1);
+		execve(path, av, g_shell.env);
+		if (errno == EACCES)
+			handle_permission_denied(path);
+		else
+			handle_default_error();
 	}
-	exit(g_shell.exit_code);
+	else if (S_ISDIR(file_stat.st_mode))
+	{
+		if (ft_strchr(path, '/') != 0)
+			handle_directory();
+		else
+			handle_file_not_found(path);
+	}
 }
 
-void	handle_directory()
+void	handle_child_process(int *pipe, int direction, t_node *node)
 {
-	print_error(1, strerror(EISDIR));
-	g_shell.exit_code = 126;
-	exit(g_shell.exit_code);
-
-}
-void	handle_default_error()
-{
-	print_error(1, strerror(errno));
-	g_shell.exit_code = errno;
-	exit(g_shell.exit_code);
+	if (dup2_1(pipe[direction], direction) < 0)
+		exit(errno);
+	if (close_pipe(pipe) < 0)
+		exit(errno);
+	run_cmd(node);
 }

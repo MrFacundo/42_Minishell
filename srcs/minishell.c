@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:20:06 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/24 22:25:06 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/25 16:17:33 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	main(int argc, char **argv, char **envp)
 		else
 		{
 			if (fork_1() == 0)
-				runcmd(node);
+				run_cmd(node);
 			set_signal_handling(2);
 			wait(&status);
 			g_shell.exit_code = WEXITSTATUS(status);
