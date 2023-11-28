@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 16:30:30 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/24 22:44:34 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/28 22:20:18 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int process_default(char **ptr, char **end_of_token, int token)
 	
 	p = *ptr;
 	token = 'a';
-    p += ft_strcspn(p, " \t\r\n\v<|>&;()");
+    p += ft_strcspn(p, " \t\r\n\v<|>&;()\"\'");
     if (end_of_token)
         *end_of_token = p;
     p += ft_strspn(p, " \t\r\n\v");
@@ -64,6 +64,29 @@ int process_dollar(char **ptr, char **ptr_to_token, char **end_of_token)
     return (token);
 }
 
+int process_quotes(char **ptr, char **ptr_to_token, char **end_of_token)
+{
+    char	*p;
+    char    quote;
+
+    p = *ptr;
+    quote = *p;
+    p++;
+    p += ft_strcspn(p, &quote);
+    if (*p == quote)
+    {
+        *end_of_token = p;
+        *ptr_to_token = *ptr + 1;
+        *ptr = p + 1;
+        return ('a');
+    }
+    else
+    {
+        g_shell.exit_code = 1;
+		return print_error(1, "Unclosed quote"), 0;
+    }
+}
+
 int get_token(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token)
 {
     char	*p;
@@ -81,6 +104,8 @@ int get_token(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token)
 		token = process_symbol(&p, token);
 	else if (*p == '$')
 		token = process_dollar(&p, ptr_to_token, end_of_token);
+    else if (*p == '\'' || *p == '\"')
+        token = process_quotes(&p, ptr_to_token, end_of_token);
 	else
 		token = process_default(&p, end_of_token, token);
     *ptr_to_cmd = p;
