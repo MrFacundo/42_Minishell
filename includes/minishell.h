@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/30 13:03:40 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/30 17:48:34 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ typedef struct s_pipenode
 typedef struct s_shell
 {
 	char		**env;
-	int			exit_code;
+	int			exit_status;
+	int			parsing_error;
 }	t_shell;
 
 typedef void	(*t_signal_handler)(int);
@@ -162,5 +163,7 @@ int		open_1(char *file, int mode);
 int		pipe_1(int *p);
 int		dup2_1(int oldfd, int newfd);
 int		close_pipe(int *p);
+void	free_tree(t_node *node);
+
 
 #endif

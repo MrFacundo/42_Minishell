@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:00 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/24 22:43:34 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/30 16:11:24 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,36 @@ void	print_error(int n, ...)
 	}
 	ft_putstr_fd("\n", 2);
 	va_end(args);
+}
+
+void	free_tree(t_node *node)
+{
+	int	i;
+
+	i = 0;
+	if (node == 0)
+		return ;
+	if (node->type == EXEC)
+	{
+		while (((t_execnode *)node)->av[i])
+			free(((t_execnode *)node)->av[i++]);
+		free(node);
+	}
+	else if (node->type == REDIR)
+	{
+		free_tree(((t_redirnode *)node)->execnode);
+		free(((t_redirnode *)node)->file);
+		free(node);
+	}
+	else if (node->type == PIPE)
+	{
+		free_tree(((t_pipenode *)node)->left);
+		free_tree(((t_pipenode *)node)->right);
+		free(node);
+	}
+	else if (node->type == HEREDOC)
+	{
+		free_tree(((t_heredocnode *)node)->execnode);
+		free(node);
+	}
 }

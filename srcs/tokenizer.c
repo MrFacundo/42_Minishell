@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 16:30:30 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/30 14:06:17 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/30 17:48:34 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,7 @@ int calculate_token_length(char *ptr)
         len++;
     }
     if (quote)
-    {
-        print_error(1, "unclosed quote");
-        g_shell.exit_code = TOKEN_ERROR;
         return (-1);
-    }
     return (len);
 }
 
@@ -120,7 +116,7 @@ int process_dollar(char **ptr, char **ptr_to_token, char **end_of_token)
 	token = '$';
     p++;
     if (*p == '?')
-        *ptr_to_token = ft_itoa(g_shell.exit_code);
+        *ptr_to_token = ft_itoa(g_shell.exit_status);
     else if (ft_isalpha(*p))
         expand_variable(*ptr, ptr_to_token);
     else
