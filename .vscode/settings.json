@@ -8,6 +8,8 @@
 		"stat.h": "c",
 		"unistd.h": "c",
 		"libft.h": "c",
-		"signal.h": "c"
+		"signal.h": "c",
+		"stdio.h": "c",
+		"readline.h": "c"
 	}
 }

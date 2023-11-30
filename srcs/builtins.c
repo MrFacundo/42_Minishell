@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 12:17:02 by facu              #+#    #+#             */
-/*   Updated: 2023/11/30 13:41:41 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/30 17:48:34 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	run_export(char **av)
 	if (av[1] == 0)
 	{
 		print_env();
-		g_shell.exit_code = EXIT_SUCCESS;
+		g_shell.exit_status = EXIT_SUCCESS;
 	}
 	else
 	{
@@ -51,14 +51,14 @@ void	run_export(char **av)
 			if (!is_valid_identifier(av[i]))
 			{
 				print_error(2, "export", "not a valid identifier");
-				g_shell.exit_code = 1;
+				g_shell.exit_status = 1;
 				return ;
 			}
 			else
 				set_env(av[i]);
 			++i;
 		}
-		g_shell.exit_code = EXIT_SUCCESS;
+		g_shell.exit_status = EXIT_SUCCESS;
 	}
 }
 
@@ -80,7 +80,7 @@ void	run_unset(char **av)
 	if (av[1] == 0)
 	{
 		print_error(2, "unset", "not enough arguments");
-		g_shell.exit_code = 0;
+		g_shell.exit_status = 0;
 	}
 	while (av[i])
 	{
@@ -100,7 +100,7 @@ void	run_unset(char **av)
 		else
 		{
 			print_error(2, "unset", "not a valid identifier");
-			g_shell.exit_code = 1;
+			g_shell.exit_status = 1;
 		}
 		i++;
 	}
@@ -111,16 +111,16 @@ void	run_exit(char **av)
 	if (av[2])
 	{
 		print_error(2, "exit", "too many arguments");
-		g_shell.exit_code = 1;
+		g_shell.exit_status = 1;
 	}
 	else if (has_alphabetic_chars(av[1]))
 	{
 		print_error(2, "exit", "numeric argument required");
-		g_shell.exit_code = 2;
+		g_shell.exit_status = 2;
 	}
 	else if (av[1])
-		g_shell.exit_code = ft_atoi(av[1]);
-	exit(g_shell.exit_code);
+		g_shell.exit_status = ft_atoi(av[1]);
+	exit(g_shell.exit_status);
 }
 
 void	run_echo(char **av)
@@ -136,7 +136,7 @@ void	run_echo(char **av)
 		i++;
 	}
 	ft_putchar_fd('\n', STDOUT_FILENO);
-	g_shell.exit_code = EXIT_SUCCESS;
+	g_shell.exit_status = EXIT_SUCCESS;
 
 }
 

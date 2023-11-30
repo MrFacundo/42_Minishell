@@ -86,8 +86,8 @@ void	run_cmd(t_node *node)
 	else if (node->type == PIPE)
 		run_pipe(node, &status);
 	if (WIFEXITED(status))
-		g_shell.exit_code = WEXITSTATUS(status);
+		g_shell.exit_status = WEXITSTATUS(status);
 	else
-		g_shell.exit_code = 0;
-	exit(g_shell.exit_code);
+		g_shell.exit_status = 0;
+	exit(g_shell.exit_status);
 }
