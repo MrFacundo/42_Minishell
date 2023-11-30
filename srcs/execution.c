@@ -87,7 +87,7 @@ void	run_cmd(t_node *node)
 		run_pipe(node, &status);
 	if (WIFEXITED(status))
 		g_shell.exit_status = WEXITSTATUS(status);
-	else
-		g_shell.exit_status = 0;
+	else if (WIFSIGNALED(status))
+		g_shell.exit_status = WTERMSIG(status) + 128;
 	exit(g_shell.exit_status);
 }

@@ -57,7 +57,7 @@ struct			backcmd
 
 int	fork1(void); // Fork but panics on failure.
 void			panic(char *);
-struct cmd		*parsecmd(char *);
+struct cmd		*parse_cmd(char *);
 
 // Execute cmd.  Never returns.
 void	runcmd(struct cmd *cmd)
@@ -169,7 +169,7 @@ int	main(void)
 			continue ;
 		}
 		if (fork1() == 0)
-			runcmd(parsecmd(buf));
+			runcmd(parse_cmd(buf));
 		wait();
 	}
 	exit();
@@ -321,7 +321,7 @@ struct cmd		*parsepipe(char **, char *);
 struct cmd		*parseexec(char **, char *);
 struct cmd		*nulterminate(struct cmd *);
 
-struct cmd	*parsecmd(char *s)
+struct cmd	*parse_cmd(char *s)
 {
 	char		*es;
 	struct cmd	*cmd;
