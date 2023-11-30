@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 12:17:02 by facu              #+#    #+#             */
-/*   Updated: 2023/11/24 16:50:16 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/30 13:41:41 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,10 @@ void	run_export(char **av)
 
 	i = 1;
 	if (av[1] == 0)
+	{
 		print_env();
+		g_shell.exit_code = EXIT_SUCCESS;
+	}
 	else
 	{
 		while (av[i])
@@ -49,11 +52,13 @@ void	run_export(char **av)
 			{
 				print_error(2, "export", "not a valid identifier");
 				g_shell.exit_code = 1;
+				return ;
 			}
 			else
 				set_env(av[i]);
 			++i;
-		} 
+		}
+		g_shell.exit_code = EXIT_SUCCESS;
 	}
 }
 
@@ -75,7 +80,7 @@ void	run_unset(char **av)
 	if (av[1] == 0)
 	{
 		print_error(2, "unset", "not enough arguments");
-		g_shell.exit_code = 1;
+		g_shell.exit_code = 0;
 	}
 	while (av[i])
 	{
@@ -131,6 +136,8 @@ void	run_echo(char **av)
 		i++;
 	}
 	ft_putchar_fd('\n', STDOUT_FILENO);
+	g_shell.exit_code = EXIT_SUCCESS;
+
 }
 
 void	run_builtin(t_node *node)
