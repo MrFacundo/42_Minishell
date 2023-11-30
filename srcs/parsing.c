@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:07:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/24 22:43:35 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/11/30 13:45:58 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ t_node	*parseexec(char **ptr_to_cmd)
 		token = get_token(ptr_to_cmd, &ptr_to_token, &end_of_token);
 		if (token == 0)
 			break ;
+		if (token == 'e')
+			return (0);
 		if (token == '$')
 			exec_node->av[ac] = ptr_to_token;
 		else

@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/25 20:04:03 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/30 13:03:40 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@
 #define REDIR 2
 #define PIPE 3
 #define HEREDOC 4
+
+#define TOKEN_ERROR 1
 
 typedef struct	s_node
 {
