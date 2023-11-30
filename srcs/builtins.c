@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 12:17:02 by facu              #+#    #+#             */
-/*   Updated: 2023/11/30 17:48:34 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/30 18:48:43 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	run_pwd()
 	getcwd(s, PATH_MAX);
 	ft_putstr_fd(s, 1);
 	ft_putstr_fd("\n", 1);
+	g_shell.exit_status = EXIT_SUCCESS;
 }
 
 void	run_unset(char **av)
@@ -80,8 +81,8 @@ void	run_unset(char **av)
 	if (av[1] == 0)
 	{
 		print_error(2, "unset", "not enough arguments");
-		g_shell.exit_status = 0;
 	}
+	g_shell.exit_status = EXIT_SUCCESS;
 	while (av[i])
 	{
 		if (is_valid_identifier(av[i]))

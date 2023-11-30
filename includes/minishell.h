@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/30 17:48:34 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/30 18:18:21 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ void    expand_variable(char *ptr, char **ptr_to_token);
 int		getcmd(char **buf);
 
 // parse.c
-t_node	*parsecmd(char *cmd);
+t_node	*parse_cmd(char *cmd);
 t_node	*parsepipe(char **pointer_to_cmd);
 t_node	*parseredirs(t_node *node, char **pointer_to_cmd);
 t_node	*parseexec(char **pointer_to_cmd);

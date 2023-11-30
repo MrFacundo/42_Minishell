@@ -6,13 +6,13 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:07:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/30 18:04:04 by facu             ###   ########.fr       */
+/*   Updated: 2023/11/30 18:18:21 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-t_node	*parsecmd(char *cmd)
+t_node	*parse_cmd(char *cmd)
 {
 	t_node	*node;
 
