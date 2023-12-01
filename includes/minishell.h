@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/30 18:18:21 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/01 16:27:35 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,19 +75,16 @@ typedef struct s_pipenode
 typedef struct s_shell
 {
 	char		**env;
-	int			exit_status;
 	int			parsing_error;
 }	t_shell;
 
 typedef void	(*t_signal_handler)(int);
 
-extern t_shell	g_shell;
+extern	int		g_exit_status;
 
 // builtins.c
 int		is_builtin(t_node *node, int nested_context);
-void	run_builtin(t_node *node);
-void	run_exit(char **av);
-void	run_echo(char **av);
+void	run_builtin(t_node *node, t_shell *shell);
 
 // builtins_utils.c
 int		ft_strarrfind(char **array, char *str);
@@ -104,24 +101,24 @@ t_node	*heredoccmd(t_node *execnode, char *delimiter, char *edelimiter);
 void	print_token(int token);
 
 // env.c
-void	initialize_env(t_shell *g_shell, char **envp);
+char	**initialize_env(char **envp);
 char	*ft_get_env(char *key, char **env);
-void	set_env(char *key_value);
-void	unset_env(char *key);
-void	print_env();
+void	set_env(char *key_value, t_shell *shell);
+void	unset_env(char *key, t_shell *shell);
+void	print_env(char **env);
 
 // env_utils.c
 char	*extract_key(char *key_value);
 char	*extract_value(char *key_value);
 int		key_matches(char *key, char *env);
-void	update_key(char *key, char *value, int i);
-void	add_key_to_env(char *key, char *value);
+void	update_key(char *key, char *value, int i, t_shell *shell);
+void	add_key_to_env(char *key, char *value, t_shell *shell);
 int		is_valid_identifier(const char *str);
 
 // exec_utils.c
-char	*find_path(char *cmd);
-void	handle_child_process(int *pipe, int direction, t_node *node);
-void	execute_command(char *path, char **av);
+char	*find_path(char *cmd, t_shell *shell);
+void	handle_child_process(int *pipe, int direction, t_node *node, t_shell *shell);
+void	execute_command(char *path, char **av, t_shell *shell);
 
 // exec_error_handlung.c
 void	handle_file_not_found(char *path);
@@ -130,19 +127,16 @@ void	handle_default_error();
 void	handle_directory();
 
 // execution.c
-void	run_cmd(t_node *node);
+void	run_cmd(t_node *node, t_shell *shell);
 
 // expansion.c
-void    expand_variable(char *ptr, char **ptr_to_token);
-
-// minishell.c
-int		getcmd(char **buf);
+void    expand_variable(char *ptr, char **ptr_to_token, t_shell *shell);
 
 // parse.c
-t_node	*parse_cmd(char *cmd);
-t_node	*parsepipe(char **pointer_to_cmd);
-t_node	*parseredirs(t_node *node, char **pointer_to_cmd);
-t_node	*parseexec(char **pointer_to_cmd);
+t_node	*parse_cmd(char *cmd, t_shell *shell);
+t_node	*parsepipe(char **pointer_to_cmd, t_shell *shell);
+t_node	*parseredirs(t_node *node, char **pointer_to_cmd, t_shell *shell);
+t_node	*parseexec(char **pointer_to_cmd, t_shell *shell);
 
 // read.c
 int		prompt(char **buf, char *prompt);
@@ -153,7 +147,7 @@ void	sig_handler(int sig);
 void	set_signal_handling(int executing_external);
 
 // tokenizer.c
-int get_token(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token);
+int get_token(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token, t_shell *shell);
 
 // utils.c
 int		peek(char **pointer_to_cmd, char *tokens);

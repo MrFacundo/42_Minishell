@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 11:18:56 by facu              #+#    #+#             */
-/*   Updated: 2023/11/30 17:48:34 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/01 15:55:59 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void	handle_file_not_found(char *path)
 		print_error(1, strerror(errno));
 	else
 		print_error(1, "command not found");
-	g_shell.exit_status = 127;
-	exit(g_shell.exit_status);
+	g_exit_status= 127;
+	exit(g_exit_status);
 }
 
 void	handle_permission_denied(char *path)
@@ -27,26 +27,26 @@ void	handle_permission_denied(char *path)
 	if (ft_strchr(path, '/') != 0)
 	{
 		print_error(1, strerror(errno));
-		g_shell.exit_status = 126;
+		g_exit_status= 126;
 	}
 	else
 	{
 		print_error(1, "command not found");
-		g_shell.exit_status = 127;
+		g_exit_status= 127;
 	}
-	exit(g_shell.exit_status);
+	exit(g_exit_status);
 }
 
 void	handle_directory()
 {
 	print_error(1, strerror(EISDIR));
-	g_shell.exit_status = 126;
-	exit(g_shell.exit_status);
+	g_exit_status= 126;
+	exit(g_exit_status);
 
 }
 void	handle_default_error()
 {
 	print_error(1, strerror(errno));
-	g_shell.exit_status = errno;
-	exit(g_shell.exit_status);
+	g_exit_status= errno;
+	exit(g_exit_status);
 }

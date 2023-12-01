@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 01:27:22 by facu              #+#    #+#             */
-/*   Updated: 2023/11/24 17:35:44 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/12/01 15:55:18 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	key_matches(char *key, char *env)
 	return (0);
 }
 
-void	update_key(char *key, char *value, int i)
+void	update_key(char *key, char *value, int i, t_shell *shell)
 {
 	char	*temp;
 	char	*new_env;
@@ -41,11 +41,11 @@ void	update_key(char *key, char *value, int i)
 	temp = ft_strjoin(key, "=");
 	new_env = ft_strjoin(temp, value);
 	free(temp);
-	free(g_shell.env[i]);
-	g_shell.env[i] = new_env;
+	free(shell->env[i]);
+	shell->env[i] = new_env;
 }
 
-void	add_key_to_env(char *key, char *value)
+void	add_key_to_env(char *key, char *value, t_shell *shell)
 {
 	size_t	env_size;
 	size_t	new_env_size;
@@ -53,20 +53,20 @@ void	add_key_to_env(char *key, char *value)
 	char	**new_env_array;
 	char	*temp;
 
-	env_size = ft_strarrsize(g_shell.env);
+	env_size = ft_strarrsize(shell->env);
 	new_env_size = env_size + 2;
 	new_env_array = ft_calloc((new_env_size + 1), sizeof(char *));
 	j = 0;
 	while (j < env_size)
 	{
-		new_env_array[j] = ft_strdup(g_shell.env[j]);
+		new_env_array[j] = ft_strdup(shell->env[j]);
 		j++;
 	}
 	temp = ft_strjoin(key, "=");
 	new_env_array[env_size] = ft_strjoin(temp, value);
 	free(temp);
-	ft_strarrfree(g_shell.env);
-	g_shell.env = new_env_array;
+	ft_strarrfree(shell->env);
+	shell->env = new_env_array;
 }
 
 int	is_valid_identifier(const char *str)

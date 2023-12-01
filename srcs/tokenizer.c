@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 16:30:30 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/30 17:48:34 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/01 16:04:47 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int process_symbol(char **ptr, int token)
     *ptr = p;
     return (token);
 }
-
 
 int calculate_token_length(char *ptr)
 {
@@ -107,7 +106,7 @@ int process_default(char **ptr, char **ptr_of_token, char **end_of_token)
     return ('a');
 }
 
-int process_dollar(char **ptr, char **ptr_to_token, char **end_of_token)
+int process_dollar(char **ptr, char **ptr_to_token, char **end_of_token, t_shell *shell)
 {
     char	*p;
     int		token;
@@ -116,16 +115,16 @@ int process_dollar(char **ptr, char **ptr_to_token, char **end_of_token)
 	token = '$';
     p++;
     if (*p == '?')
-        *ptr_to_token = ft_itoa(g_shell.exit_status);
+        *ptr_to_token = ft_itoa(g_exit_status);
     else if (ft_isalpha(*p))
-        expand_variable(*ptr, ptr_to_token);
+        expand_variable(*ptr, ptr_to_token, shell);
     else
         return process_default(ptr, ptr_to_token, end_of_token);
     *ptr = p + ft_strcspn(p, " \t\r\n\v");
     return (token);
 }
 
-int get_token(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token)
+int get_token(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token, t_shell *shell)
 {
     char	*p;
     int		token;
@@ -141,7 +140,7 @@ int get_token(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token)
 	else if (*p == '|' || *p == '<' || *p == '>')
 		token = process_symbol(&p, token);
 	else if (*p == '$')
-		token = process_dollar(&p, ptr_to_token, end_of_token);
+		token = process_dollar(&p, ptr_to_token, end_of_token, shell);
 	else
 		token = process_default(&p, ptr_to_token, end_of_token);
     *ptr_to_cmd = p;
