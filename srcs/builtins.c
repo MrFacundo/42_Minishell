@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 12:17:02 by facu              #+#    #+#             */
-/*   Updated: 2023/11/30 18:48:43 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/01 16:05:12 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,15 @@ int	is_builtin(t_node *node, int nested_context)
 	return (is_builtin);
 }
 
-void	run_export(char **av)
+void	run_export(char **av, t_shell *shell)
 {
 	int	i;
 
 	i = 1;
 	if (av[1] == 0)
 	{
-		print_env();
-		g_shell.exit_status = EXIT_SUCCESS;
+		print_env(shell->env);
+		g_exit_status= EXIT_SUCCESS;
 	}
 	else
 	{
@@ -51,14 +51,14 @@ void	run_export(char **av)
 			if (!is_valid_identifier(av[i]))
 			{
 				print_error(2, "export", "not a valid identifier");
-				g_shell.exit_status = 1;
+				g_exit_status= 1;
 				return ;
 			}
 			else
-				set_env(av[i]);
+				set_env(av[i], shell);
 			++i;
 		}
-		g_shell.exit_status = EXIT_SUCCESS;
+		g_exit_status= EXIT_SUCCESS;
 	}
 }
 
@@ -69,10 +69,10 @@ void	run_pwd()
 	getcwd(s, PATH_MAX);
 	ft_putstr_fd(s, 1);
 	ft_putstr_fd("\n", 1);
-	g_shell.exit_status = EXIT_SUCCESS;
+	g_exit_status= EXIT_SUCCESS;
 }
 
-void	run_unset(char **av)
+void	run_unset(char **av, t_shell *shell)
 {
 	int	i;
 	int	j;
@@ -82,17 +82,17 @@ void	run_unset(char **av)
 	{
 		print_error(2, "unset", "not enough arguments");
 	}
-	g_shell.exit_status = EXIT_SUCCESS;
+	g_exit_status= EXIT_SUCCESS;
 	while (av[i])
 	{
 		if (is_valid_identifier(av[i]))
 		{
 			j = 0;
-			while(g_shell.env[j])
+			while(shell->env[j])
 			{
-				if (key_matches(av[i], g_shell.env[j]))
+				if (key_matches(av[i], shell->env[j]))
 				{
-					unset_env(av[i]);
+					unset_env(av[i], shell);
 					break ;
 				}
 				j++;
@@ -101,7 +101,7 @@ void	run_unset(char **av)
 		else
 		{
 			print_error(2, "unset", "not a valid identifier");
-			g_shell.exit_status = 1;
+			g_exit_status= 1;
 		}
 		i++;
 	}
@@ -112,16 +112,16 @@ void	run_exit(char **av)
 	if (av[2])
 	{
 		print_error(2, "exit", "too many arguments");
-		g_shell.exit_status = 1;
+		g_exit_status= 1;
 	}
 	else if (has_alphabetic_chars(av[1]))
 	{
 		print_error(2, "exit", "numeric argument required");
-		g_shell.exit_status = 2;
+		g_exit_status= 2;
 	}
 	else if (av[1])
-		g_shell.exit_status = ft_atoi(av[1]);
-	exit(g_shell.exit_status);
+		g_exit_status= ft_atoi(av[1]);
+	exit(g_exit_status);
 }
 
 void	run_echo(char **av)
@@ -137,11 +137,11 @@ void	run_echo(char **av)
 		i++;
 	}
 	ft_putchar_fd('\n', STDOUT_FILENO);
-	g_shell.exit_status = EXIT_SUCCESS;
+	g_exit_status= EXIT_SUCCESS;
 
 }
 
-void	run_builtin(t_node *node)
+void	run_builtin(t_node *node, t_shell *shell)
 {
 	t_execnode	*enode;
 
@@ -151,11 +151,13 @@ void	run_builtin(t_node *node)
 	else if (ft_strcmp(enode->av[0], "echo") == 0)
 		run_echo(enode->av);
 	else if (ft_strcmp(enode->av[0], "export") == 0)
-		run_export(enode->av);
-	// else if (ft_strcmp(enode->av[0], "cd") == 0)
-	// 	run_cd(enode->av);
+		run_export(enode->av, shell);
 	else if (ft_strcmp(enode->av[0], "pwd") == 0)
 		run_pwd();
 	else if (ft_strcmp(enode->av[0], "unset") == 0)
-		run_unset(enode->av);
+		run_unset(enode->av, shell);
+	// else if (ft_strcmp(enode->av[0], "cd") == 0)
+	// 	run_cd(enode->av);
+	// else if (ft_strcmp(enode->av[0], "env") == 0)
+	// 	run_env(enode->av);
 }

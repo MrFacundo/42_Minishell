@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-void	run_exec(t_node *node, int *status)
+void	run_exec(t_node *node, int *status, t_shell *shell)
 {
 	t_execnode	*enode;
 	char		*path;
@@ -9,16 +9,16 @@ void	run_exec(t_node *node, int *status)
 	if (enode->av[0] == 0)
 		exit(0);
 	if (ft_strchr(enode->av[0], '/') == 0)
-		path = find_path(enode->av[0]);
+		path = find_path(enode->av[0], shell);
 	else
 		path = ft_strdup(enode->av[0]);
 	if (fork_1() == 0)
-		execute_command(path, enode->av);
+		execute_command(path, enode->av, shell);
 	wait(status);
 	free(path);
 }
 
-void	run_redir(t_node *node)
+void	run_redir(t_node *node, t_shell *shell)
 {
 	t_redirnode	*rnode;
 
@@ -26,10 +26,10 @@ void	run_redir(t_node *node)
 	close(rnode->fd);
 	if (open_1(rnode->file, rnode->mode) < 0)
 		exit(ENOENT);
-	run_cmd(rnode->execnode);
+	run_cmd(rnode->execnode, shell);
 }
 
-void	run_heredoc(t_node *node)
+void	run_heredoc(t_node *node, t_shell *shell)
 {
 	t_heredocnode	*hnode;
 
@@ -37,10 +37,10 @@ void	run_heredoc(t_node *node)
 	if (dup2_1(hnode->fd, 0) < 0)
 		exit(errno);
 	close(hnode->fd);
-	run_cmd(((t_heredocnode *)node)->execnode);
+	run_cmd(((t_heredocnode *)node)->execnode, shell);
 }
 
-void	run_pipe(t_node *node, int *status)
+void	run_pipe(t_node *node, int *status, t_shell *shell)
 {
 	t_pipenode	*pnode;
 	int			p[2];
@@ -54,18 +54,18 @@ void	run_pipe(t_node *node, int *status)
 	if (left_side_process < 0)
 		exit(errno);
 	if (left_side_process == 0)
-		return (handle_child_process(p, 1, pnode->left));
+		return (handle_child_process(p, 1, pnode->left, shell));
 	right_side_process = fork_1();
 	if (right_side_process < 0)
 		exit(errno);
 	if (right_side_process == 0)
-		return (handle_child_process(p, 0, pnode->right));
+		return (handle_child_process(p, 0, pnode->right, shell));
 	if (close_pipe(p) < 0)
 		exit(errno);
 	wait(status);
 }
 
-void	run_cmd(t_node *node)
+void	run_cmd(t_node *node, t_shell *shell)
 {
 	int status;
 
@@ -75,19 +75,19 @@ void	run_cmd(t_node *node)
 	if (node->type == EXEC)
 	{
 		if (is_builtin(node, 1))
-			run_builtin(node);
+			run_builtin(node, shell);
 		else
-			run_exec(node, &status);
+			run_exec(node, &status, shell);
 	}
 	else if (node->type == REDIR)
-		run_redir(node);
+		run_redir(node, shell);
 	else if (node->type == HEREDOC)
-		run_heredoc(node);
+		run_heredoc(node, shell);
 	else if (node->type == PIPE)
-		run_pipe(node, &status);
+		run_pipe(node, &status, shell);
 	if (WIFEXITED(status))
-		g_shell.exit_status = WEXITSTATUS(status);
+		g_exit_status= WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
-		g_shell.exit_status = WTERMSIG(status) + 128;
-	exit(g_shell.exit_status);
+		g_exit_status= WTERMSIG(status) + 128;
+	exit(g_exit_status);
 }

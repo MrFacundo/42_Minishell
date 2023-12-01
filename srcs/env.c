@@ -3,30 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 19:41:47 by facu              #+#    #+#             */
-/*   Updated: 2023/11/24 17:35:47 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/12/01 15:54:51 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	initialize_env(t_shell *g_shell, char **envp)
+char	**initialize_env(char **envp)
 {
 	int	i;
 	int	size;
-
+	char	**env;
 	i = 0;
 	size = 0;
 	while (envp[size])
 		size++;
-	g_shell->env = ft_calloc((size + 1), sizeof(char *));
+	env = ft_calloc((size + 1), sizeof(char *));
 	while (envp[i])
 	{
-		g_shell->env[i] = ft_strdup(envp[i]);
+		env[i] = ft_strdup(envp[i]);
 		i++;
 	}
+	return (env);
 }
 
 char	*ft_get_env(char *key, char **env)
@@ -51,7 +52,7 @@ char	*ft_get_env(char *key, char **env)
 	return (value);
 }
 
-void	set_env(char *key_value)
+void	set_env(char *key_value, t_shell *shell)
 {
 	char	*key;
 	char	*value;
@@ -64,25 +65,25 @@ void	set_env(char *key_value)
 		return ;
 	if (!*value)
 	{
-		while (g_shell.env[i])
-			if (key_matches(key, g_shell.env[i++]))
+		while (shell->env[i])
+			if (key_matches(key, shell->env[i++]))
 				return ;
 	}
 	else
 	{
-		while (g_shell.env[i])
+		while (shell->env[i])
 		{
-			if (key_matches(key, g_shell.env[i]))
-				return (update_key(key, value, i));
+			if (key_matches(key, shell->env[i]))
+				return (update_key(key, value, i, shell));
 			i++;
 		}
 	}
-	add_key_to_env(key, value);
+	add_key_to_env(key, value, shell);
 	free(key);
 	free(value);
 }
 
-void	unset_env(char *key)
+void	unset_env(char *key, t_shell *shell)
 {
 	size_t	env_size;
 	size_t	new_env_size;
@@ -90,30 +91,30 @@ void	unset_env(char *key)
 	size_t	j;
 	char	**new_env_array;
 
-	env_size = ft_strarrsize(g_shell.env);
+	env_size = ft_strarrsize(shell->env);
 	new_env_size = env_size;
 	new_env_array = ft_calloc((new_env_size + 1), sizeof(char *));
 	i = 0;
 	j = 0;
 	while (i < env_size)
 	{
-		if (!key_matches(key, g_shell.env[i]))
+		if (!key_matches(key, shell->env[i]))
 		{
-			new_env_array[j] = ft_strdup(g_shell.env[i]);
+			new_env_array[j] = ft_strdup(shell->env[i]);
 			j++;
 		}
 		i++;
 	}
-	ft_strarrfree(g_shell.env);
-	g_shell.env = new_env_array;
+	ft_strarrfree(shell->env);
+	shell->env = new_env_array;
 }
 
-void	print_env()
+void	print_env(char **env)
 {
 	char	**env_copy;
 	char	**current_string;
 
-	env_copy = ft_strarrcpy(g_shell.env);
+	env_copy = ft_strarrcpy(env);
 	if (env_copy == 0)
 		return ;
 	ft_strarrbsort(env_copy);

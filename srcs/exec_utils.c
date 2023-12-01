@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:25 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/25 19:55:17 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/01 16:06:04 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	*find_path(char *cmd)
+char	*find_path(char *cmd, t_shell *shell)
 {
 	char	*path;
 	char	**paths;
@@ -20,7 +20,7 @@ char	*find_path(char *cmd)
 	char	*ret;
 	char	*tmp;
 
-	path = ft_get_env("PATH", g_shell.env);
+	path = ft_get_env("PATH", shell->env);
 	paths = ft_split(path, ':');
 	free(path);
 	i = 0;
@@ -44,7 +44,7 @@ char	*find_path(char *cmd)
 	return (ret);
 }
 
-void	execute_command(char *path, char **av)
+void	execute_command(char *path, char **av, t_shell *shell)
 {
 	struct stat	file_stat;
 
@@ -53,7 +53,7 @@ void	execute_command(char *path, char **av)
 	if (S_ISREG(file_stat.st_mode))
 	{
 		set_signal_handling(1);
-		execve(path, av, g_shell.env);
+		execve(path, av, shell->env);
 		if (errno == EACCES)
 			handle_permission_denied(path);
 		else
@@ -68,11 +68,11 @@ void	execute_command(char *path, char **av)
 	}
 }
 
-void	handle_child_process(int *pipe, int direction, t_node *node)
+void	handle_child_process(int *pipe, int direction, t_node *node, t_shell *shell)
 {
 	if (dup2_1(pipe[direction], direction) < 0)
 		exit(errno);
 	if (close_pipe(pipe) < 0)
 		exit(errno);
-	run_cmd(node);
+	run_cmd(node, shell);
 }
