@@ -10,6 +10,7 @@
 		"libft.h": "c",
 		"signal.h": "c",
 		"stdio.h": "c",
-		"readline.h": "c"
+		"readline.h": "c",
+		"limits.h": "c"
 	}
 }
