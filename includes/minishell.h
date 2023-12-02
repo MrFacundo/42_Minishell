@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/01 16:27:35 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/02 18:54:41 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # include <limits.h>
 
 #define MAXARGS 10
-
+#define MAXTOKENSIZE 100
 #define EXEC 1
 #define REDIR 2
 #define PIPE 3
@@ -93,9 +93,9 @@ void	process_export_args(char **av);
 
 // constructors.c
 t_node	*execnode(void);
-t_node	*redircmd(t_node *execnode, char *file, char *efile, int mode, int fd);
+t_node	*redircmd(t_node *execnode, char *file, int mode, int fd);
 t_node	*pipenode(t_node *left, t_node *right);
-t_node	*heredoccmd(t_node *execnode, char *delimiter, char *edelimiter);
+t_node	*heredoccmd(t_node *execnode, char *delimiter);
 
 // debug.c
 void	print_token(int token);
@@ -140,14 +140,20 @@ t_node	*parseexec(char **pointer_to_cmd, t_shell *shell);
 
 // read.c
 int		prompt(char **buf, char *prompt);
-int		read_heredoc(char *delimiter, char *edelimiter);
+int		read_heredoc(char *delimiter);
 
 // signals.c
 void	sig_handler(int sig);
 void	set_signal_handling(int executing_external);
 
+// token_utils.c
+int	calculate_token_length(char *ptr, t_shell *shell);
+
+// token_utils_2.c
+char	*extract_token(char **ptr, int len, t_shell *shell);
+
 // tokenizer.c
-int get_token(char **ptr_to_cmd, char **ptr_to_token, char **end_of_token, t_shell *shell);
+int get_token(char **ptr_to_cmd, char **ptr_to_token, t_shell *shell);
 
 // utils.c
 int		peek(char **pointer_to_cmd, char *tokens);

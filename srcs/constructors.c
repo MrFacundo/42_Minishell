@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   constructors.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:55 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/11/24 22:23:02 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/12/02 18:53:44 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,14 @@ t_node	*execnode(void)
 	return ((t_node *)node);
 }
 
-t_node	*redircmd(t_node *execnode, char *file, char *efile, int mode, int fd)
+t_node	*redircmd(t_node *execnode, char *file, int mode, int fd)
 {
 	t_redirnode	*node;
 
 	node = ft_calloc(1, sizeof(t_redirnode));
 	node->type = REDIR;
 	node->execnode = execnode;
-	if (efile)
-		node->file = ft_substr(file, 0, efile - file);
-	else
-		node->file = file;
+	node->file = file;
 	node->mode = mode;
 	node->fd = fd;
 	return ((t_node *)node);
@@ -48,13 +45,13 @@ t_node	*pipenode(t_node *left, t_node *right)
 	return ((t_node *)node);
 }
 
-t_node	*heredoccmd(t_node *execnode, char *delimiter, char *edelimiter)
+t_node	*heredoccmd(t_node *execnode, char *delimiter)
 {
 	t_heredocnode	*node;
 
 	node = ft_calloc(1, sizeof(t_heredocnode));
 	node->type = HEREDOC;
 	node->execnode = execnode;
-	node->fd = read_heredoc(delimiter, edelimiter);
+	node->fd = read_heredoc(delimiter);
 	return ((t_node *)node);
 }
