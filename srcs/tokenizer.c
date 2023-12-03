@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 16:30:30 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/02 18:58:04 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/03 01:23:06 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ int	get_token(char **ptr_to_cmd, char **ptr_to_token, t_shell *shell)
 	char *p;
 	int token;
 
-	token = 0;
 	p = *ptr_to_cmd;
 	p += ft_strspn(p, " \t\r\n\v");
 	if (ptr_to_token)

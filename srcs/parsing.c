@@ -6,11 +6,18 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:07:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/02 19:01:02 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/03 01:07:29 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+t_node	*handle_parse_error(t_node *ret, const char *error_message, t_shell *shell)
+{
+    shell->parsing_error = TOKEN_ERROR;
+    print_error(1, error_message);
+    return ret;
+}
 
 t_node	*parse_cmd(char *cmd, t_shell *shell)
 {
@@ -32,11 +39,7 @@ t_node	*parsepipe(char **ptr_to_cmd, t_shell *shell)
 	{
 		get_token(ptr_to_cmd, 0, shell);
 		if (**ptr_to_cmd == '\0' || peek(ptr_to_cmd, "|()&;<>"))
-		{
-			shell->parsing_error = TOKEN_ERROR;
-			print_error(1, "Parse error near pipe");
-			return (0);
-		}
+			return handle_parse_error(left, "Parse error near pipe", shell);
 		return (pipenode(left, parsepipe(ptr_to_cmd, shell)));
 	}
 	return (left);
@@ -53,11 +56,7 @@ t_node	*parseredirs(t_node *node, char **ptr_to_cmd, t_shell *shell)
 		token = get_token(ptr_to_cmd, 0, shell);
 		file_token = get_token(ptr_to_cmd, &ptr_to_token, shell);
 		if (file_token != 'a')
-		{
-			shell->parsing_error = TOKEN_ERROR;
-			print_error(1, "Parse error near redirection");
-			return (node);
-		}
+			return handle_parse_error(node, "Parse error near redirection", shell);
 		if (token == '<')
 			node = redircmd(node, ptr_to_token, O_RDONLY, 0);
 		else if (token == '>')
@@ -72,39 +71,26 @@ t_node	*parseredirs(t_node *node, char **ptr_to_cmd, t_shell *shell)
 
 t_node	*parseexec(char **ptr_to_cmd, t_shell *shell)
 {
-	t_node *ret;
-	t_execnode *exec_node;
-	char *ptr_to_token;
-	int token, ac;
+	t_node		*ret;
+	t_execnode	*exec_node;
+	char		*ptr_to_token;
+	int 		token;
 
-	ac = 0;
 	ret = execnode();
 	exec_node = (t_execnode *)ret;
-	// ret = parseredirs(ret, ptr_to_cmd); not sure about this line
 	while (!peek(ptr_to_cmd, "<>|()&;"))
 	{
 		token = get_token(ptr_to_cmd, &ptr_to_token, shell);
 		if (token == 0)
-		{
 			break ;
-		}
 		else if (token == 'e')
-		{
-			shell->parsing_error = TOKEN_ERROR;
-			print_error(1, "Parse error near quotes");
-			return (ret);
-		}
+			return handle_parse_error(ret, "Parse error near quotes", shell);
 		else if (token == 'a')
-			exec_node->av[ac] = ptr_to_token;
-		ac++;
-		if (ac >= MAXARGS)
-		{
-			shell->parsing_error = TOKEN_ERROR;
-			print_error(1, "Max arguments exceeded");
-			return (ret);
-		}
+			exec_node->av[exec_node->ac++] = ptr_to_token;
+		if (exec_node->ac >= MAXARGS - 1)
+			return handle_parse_error(ret, "Max arguments exceeded", shell);
 		ret = parseredirs(ret, ptr_to_cmd, shell);
 	}
-	exec_node->av[ac] = 0;
+	exec_node->av[exec_node->ac] = 0;
 	return (ret);
 }

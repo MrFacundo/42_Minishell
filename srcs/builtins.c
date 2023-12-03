@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 12:17:02 by facu              #+#    #+#             */
-/*   Updated: 2023/12/01 16:05:12 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/03 02:03:21 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,6 @@ void	run_unset(char **av, t_shell *shell)
 	int	j;
 
 	i = 1;
-	if (av[1] == 0)
-	{
-		print_error(2, "unset", "not enough arguments");
-	}
-	g_exit_status= EXIT_SUCCESS;
 	while (av[i])
 	{
 		if (is_valid_identifier(av[i]))
