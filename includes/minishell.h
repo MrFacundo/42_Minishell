@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/03 01:49:14 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/03 15:23:38 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,8 @@ int		is_valid_identifier(const char *str);
 char	*find_path(char *cmd, t_shell *shell);
 void	handle_child_process(int *pipe, int direction, t_node *node, t_shell *shell);
 void	execute_command(char *path, char **av, t_shell *shell);
+void	update_exit_status(int status);
+
 
 // exec_error_handlung.c
 void	handle_file_not_found(char *path);

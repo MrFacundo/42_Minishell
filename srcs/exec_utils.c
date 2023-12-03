@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:25 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/01 16:06:04 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/03 15:23:26 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,12 @@ void	handle_child_process(int *pipe, int direction, t_node *node, t_shell *shell
 	if (close_pipe(pipe) < 0)
 		exit(errno);
 	run_cmd(node, shell);
+}
+
+void	update_exit_status(int status)
+{
+	if (WIFEXITED(status))
+		g_exit_status= WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		g_exit_status= WTERMSIG(status) + 128;
 }
