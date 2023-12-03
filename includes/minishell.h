@@ -133,7 +133,7 @@ void	handle_directory();
 void	run_cmd(t_node *node, t_shell *shell);
 
 // expansion.c
-void    expand_variable(char *ptr, char **ptr_to_token, t_shell *shell);
+void    expand_variable(char *ptr, char **tkn_ptr, t_shell *shell);
 
 // parse.c
 t_node	*parse_cmd(char *cmd, t_shell *shell);
@@ -160,7 +160,7 @@ void	extract_exit_status(char **ptr, char **ret);
 void	extract_alpha_variable(char **ptr, char **ret, t_shell *shell);
 
 // tokenizer.c
-int get_token(char **ptr_to_cmd, char **ptr_to_token, t_shell *shell);
+int get_token(char **cmd_ptr, char **tkn_ptr, t_shell *shell);
 
 // utils.c
 int		peek(char **pointer_to_cmd, char *tokens);
