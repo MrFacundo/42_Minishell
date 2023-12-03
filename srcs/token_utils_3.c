@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 01:46:59 by facu              #+#    #+#             */
-/*   Updated: 2023/12/03 01:47:38 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/03 15:09:34 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,21 +25,21 @@ void	copy_expansion(char **ret, char *expansion)
 	}
 }
 
-void	extract_exit_status(char **ptr, char **ret)
+void	extract_exit_status(char **cmd_ptr, char **ret)
 {
 	char	*expansion;
 
 	expansion = ft_itoa(g_exit_status);
 	copy_expansion(ret, expansion);
-	(*ptr)++;
+	(*cmd_ptr)++;
 }
 
-void	extract_alpha_variable(char **ptr, char **ret, t_shell *shell)
+void	extract_alpha_variable(char **cmd_ptr, char **ret, t_shell *shell)
 {
 	char	*expansion;
 
 	expansion = NULL;
-	expand_variable(*ptr, &expansion, shell);
+	expand_variable(*cmd_ptr, &expansion, shell);
 	copy_expansion(ret, expansion);
-	(*ptr) += ft_strcspn(*ptr, "\" \t\r\n\v");
+	(*cmd_ptr) += ft_strcspn(*cmd_ptr, "\" \t\r\n\v");
 }

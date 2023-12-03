@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 12:17:02 by facu              #+#    #+#             */
-/*   Updated: 2023/12/03 02:03:21 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/03 15:06:54 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 int	is_builtin(t_node *node, int nested_context)
 {
 	t_execnode	*enode;
-	char	*commands[] = {"echo", "export", "unset", "cd", "exit", "pwd",
+	char	*commands[] = {"echo", "export", "unset", "cd", "exit", "pwd", "env",
 			0};
 	char	*non_nested_commands[] = {"cd", "exit", 0};
 	int			is_builtin;
@@ -101,21 +101,36 @@ void	run_unset(char **av, t_shell *shell)
 		i++;
 	}
 }
+void	run_env(t_shell *shell)
+{
+	int		i;
+	char	*env_var;
+
+	i = 0;
+	while ((env_var = shell->env[i++]))
+	{
+		if (env_var[ft_strlen(env_var) - 1] == '=')
+			continue ;
+		ft_putstr_fd(env_var, STDOUT_FILENO);
+		ft_putchar_fd('\n', STDOUT_FILENO);
+	}
+	g_exit_status = EXIT_SUCCESS;
+}
 
 void	run_exit(char **av)
 {
 	if (av[2])
 	{
 		print_error(2, "exit", "too many arguments");
-		g_exit_status= 1;
+		g_exit_status = 1;
 	}
 	else if (has_alphabetic_chars(av[1]))
 	{
 		print_error(2, "exit", "numeric argument required");
-		g_exit_status= 2;
+		g_exit_status = 2;
 	}
 	else if (av[1])
-		g_exit_status= ft_atoi(av[1]);
+		g_exit_status = ft_atoi(av[1]);
 	exit(g_exit_status);
 }
 
@@ -132,13 +147,12 @@ void	run_echo(char **av)
 		i++;
 	}
 	ft_putchar_fd('\n', STDOUT_FILENO);
-	g_exit_status= EXIT_SUCCESS;
-
+	g_exit_status = EXIT_SUCCESS;
 }
 
 void	run_builtin(t_node *node, t_shell *shell)
 {
-	t_execnode	*enode;
+	t_execnode *enode;
 
 	enode = (t_execnode *)node;
 	if (ft_strcmp(enode->av[0], "exit") == 0)
@@ -153,6 +167,6 @@ void	run_builtin(t_node *node, t_shell *shell)
 		run_unset(enode->av, shell);
 	// else if (ft_strcmp(enode->av[0], "cd") == 0)
 	// 	run_cd(enode->av);
-	// else if (ft_strcmp(enode->av[0], "env") == 0)
-	// 	run_env(enode->av);
+	else if (ft_strcmp(enode->av[0], "env") == 0)
+		run_env(shell);
 }
