@@ -62,7 +62,8 @@ void	run_pipe(t_node *node, int *status, t_shell *shell)
 		return (handle_child_process(p, 0, pnode->right, shell));
 	if (close_pipe(p) < 0)
 		exit(errno);
-	wait(status);
+	waitpid(left_side_process, NULL, 0);
+    waitpid(right_side_process, status, 0);
 }
 
 void	run_cmd(t_node *node, t_shell *shell)
@@ -85,9 +86,6 @@ void	run_cmd(t_node *node, t_shell *shell)
 		run_heredoc(node, shell);
 	else if (node->type == PIPE)
 		run_pipe(node, &status, shell);
-	if (WIFEXITED(status))
-		g_exit_status= WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		g_exit_status= WTERMSIG(status) + 128;
+	update_exit_status(status);
 	exit(g_exit_status);
 }
