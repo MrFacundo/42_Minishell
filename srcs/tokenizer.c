@@ -6,17 +6,17 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 16:30:30 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/03 01:23:06 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/03 15:08:37 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	process_symbol(char **ptr, int token)
+int	process_symbol(char **cmd_ptr, int token)
 {
 	char	*p;
 
-	p = *ptr;
+	p = *cmd_ptr;
 	p++;
 	if (token == '>' && *p == '>')
 	{
@@ -28,43 +28,43 @@ int	process_symbol(char **ptr, int token)
 		p++;
 		token = '-';
 	}
-	*ptr = p;
+	*cmd_ptr = p;
 	return (token);
 }
 
-int	process_default(char **ptr, char **ptr_of_token, t_shell *shell)
+int	process_default(char **cmd_ptr, char **tkn_ptr, t_shell *shell)
 {
 	char	*p;
 	int		len;
 	char	*a_token;
 
-	p = *ptr;
+	p = *cmd_ptr;
 	len = calculate_token_length(p, shell);
 	if (len == -1)
 		return ('e');
 	a_token = extract_token(&p, len, shell);
-	*ptr_of_token = a_token;
-	*ptr = p;
+	*tkn_ptr = a_token;
+	*cmd_ptr = p;
 	return ('a');
 }
 
-int	get_token(char **ptr_to_cmd, char **ptr_to_token, t_shell *shell)
+int	get_token(char **cmd_ptr, char **tkn_ptr, t_shell *shell)
 {
 	char *p;
 	int token;
 
-	p = *ptr_to_cmd;
+	p = *cmd_ptr;
 	p += ft_strspn(p, " \t\r\n\v");
-	if (ptr_to_token)
-		*ptr_to_token = p;
+	if (tkn_ptr)
+		*tkn_ptr = p;
 	token = *p;
 	if (*p == 0)
 		;
 	else if (*p == '|' || *p == '<' || *p == '>')
 		token = process_symbol(&p, token);
 	else
-		token = process_default(&p, ptr_to_token, shell);
-	*ptr_to_cmd = p;
+		token = process_default(&p, tkn_ptr, shell);
+	*cmd_ptr = p;
 	// print_token(token);
 	return (token);
 }
