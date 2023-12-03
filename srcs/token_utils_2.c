@@ -6,41 +6,11 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 16:54:06 by facu              #+#    #+#             */
-/*   Updated: 2023/12/02 18:59:14 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/03 01:47:42 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	extract_exit_status(char **ptr, char **ret)
-{
-	char	*expansion;
-
-	expansion = 0;
-	expansion = ft_itoa(g_exit_status);
-	if (expansion)
-	{
-		ft_strlcpy(*ret, expansion, ft_strlen(expansion) + 1);
-		*ret += ft_strlen(expansion);
-		free(expansion);
-	}
-	(*ptr)++;
-}
-
-void	extract_alpha_variable(char **ptr, char **ret, t_shell *shell)
-{
-	char	*expansion;
-
-	expansion = 0;
-	expand_variable(*ptr, &expansion, shell);
-	if (expansion)
-	{
-		ft_strlcpy(*ret, expansion, ft_strlen(expansion) + 1);
-		*ret += ft_strlen(expansion);
-		free(expansion);
-	}
-	(*ptr) += ft_strcspn(*ptr, "\" \t\r\n\v");
-}
 
 void	handle_question_mark(char **ret)
 {

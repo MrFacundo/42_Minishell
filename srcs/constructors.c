@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:55 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/02 18:53:44 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/03 01:06:32 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,14 @@
 t_node	*execnode(void)
 {
 	t_execnode	*node;
+	int			i;
 
+	i = 0;
 	node = ft_calloc(1, sizeof(t_execnode));
 	node->type = EXEC;
+	node->ac = 0;
+	while (i < MAXARGS)
+		node->av[i++] = 0;
 	return ((t_node *)node);
 }
 
