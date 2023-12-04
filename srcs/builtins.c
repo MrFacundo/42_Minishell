@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 12:17:02 by facu              #+#    #+#             */
-/*   Updated: 2023/12/03 15:06:54 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/04 22:40:07 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,16 +137,25 @@ void	run_exit(char **av)
 void	run_echo(char **av)
 {
 	int	i;
-
+	int	print_newline;
+	
 	i = 1;
+	print_newline = 1;
 	while (av[i])
 	{
+		if (ft_strcmp(av[i], "-n") == 0)
+		{
+			print_newline = 0;
+			i++;
+			continue ;
+		}
 		ft_putstr_fd(av[i], STDOUT_FILENO);
 		if (av[i + 1])
 			ft_putchar_fd(' ', STDOUT_FILENO);
 		i++;
 	}
-	ft_putchar_fd('\n', STDOUT_FILENO);
+	if (print_newline)
+		ft_putchar_fd('\n', STDOUT_FILENO);
 	g_exit_status = EXIT_SUCCESS;
 }
 
