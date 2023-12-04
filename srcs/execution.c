@@ -1,23 +1,20 @@
 #include "../includes/minishell.h"
 
+/* Handles the execution of an exec node. If the command is a builtin, runs
+	the builtin and exits, otherwise, runs the command in a child process. */
 void	run_exec(t_node *node, int *status, t_shell *shell)
 {
-	t_execnode	*enode;
-	char		*path;
-
-	enode = (t_execnode *)node;
-	if (enode->av[0] == 0)
-		exit(0);
-	if (ft_strchr(enode->av[0], '/') == 0)
-		path = find_path(enode->av[0], shell);
+	if (is_builtin(node, 1))
+	{
+		run_builtin(node, shell);
+		exit(g_exit_status);
+	}
 	else
-		path = ft_strdup(enode->av[0]);
-	if (fork_1() == 0)
-		execute_command(path, enode->av, shell);
-	wait(status);
-	free(path);
+		run_external(node, status, shell);
 }
 
+/* Handles the execution of a redirection node. Closes the file descriptor
+	and opens the redirection file. */
 void	run_redir(t_node *node, t_shell *shell)
 {
 	t_redirnode	*rnode;
@@ -29,17 +26,21 @@ void	run_redir(t_node *node, t_shell *shell)
 	run_cmd(rnode->node, shell);
 }
 
+/* Handles the execution of a heredoc node. Duplicates the file descriptor
+	of the heredoc file to stdin. */
 void	run_heredoc(t_node *node, t_shell *shell)
 {
 	t_heredocnode	*hnode;
 
 	hnode = (t_heredocnode *)node;
-	if (dup2_1(hnode->fd, 0) < 0)
+	if (dup2_1(hnode->fd, STDIN_FILENO) < 0)
 		exit(errno);
 	close(hnode->fd);
 	run_cmd(((t_heredocnode *)node)->execnode, shell);
 }
 
+/* Handles the execution of a pipe node. Creates a pipe, forks two child
+	processes. Closes the pipe and waits for the child processes to finish. */
 void	run_pipe(t_node *node, int *status, t_shell *shell)
 {
 	t_pipenode	*pnode;
@@ -66,6 +67,8 @@ void	run_pipe(t_node *node, int *status, t_shell *shell)
     waitpid(right_side_process, status, 0);
 }
 
+/* Starts the execution. Executes the command tree and 
+	sets the exit status to the status of the last command */
 void	run_cmd(t_node *node, t_shell *shell)
 {
 	int status;
@@ -73,15 +76,7 @@ void	run_cmd(t_node *node, t_shell *shell)
 		return ;
 	set_signal_handling(2);
 	if (node->type == EXEC)
-	{
-		if (is_builtin(node, 1))
-		{
-			run_builtin(node, shell);
-			exit(g_exit_status);
-		}
-		else
-			run_exec(node, &status, shell);
-	}
+		run_exec(node, &status, shell);
 	else if (node->type == REDIR)
 		run_redir(node, shell);
 	else if (node->type == HEREDOC)
