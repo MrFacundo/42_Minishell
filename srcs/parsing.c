@@ -6,12 +6,12 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:07:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/04 03:53:41 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/04 11:17:36 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
+/* Sets parsing error status, prints errorm returns unnmodified node */
 t_node	*handle_parse_error(t_node *ret, const char *error_message,
 		t_shell *shell)
 {
@@ -20,6 +20,7 @@ t_node	*handle_parse_error(t_node *ret, const char *error_message,
 	return (ret);
 }
 
+/* Initializes parsing error status, sets root node */
 t_node	*parse_cmd(char *cmd, t_shell *shell)
 {
 	t_node	*node;
@@ -31,6 +32,8 @@ t_node	*parse_cmd(char *cmd, t_shell *shell)
 	return (node);
 }
 
+/* Returns an EXEC node if the command contains no pipes,
+	otherwise returns a PIPE node */
 t_node	*parsepipe(char **cmd_ptr, t_shell *shell)
 {
 	t_node	*left;
@@ -46,6 +49,7 @@ t_node	*parsepipe(char **cmd_ptr, t_shell *shell)
 	return (left);
 }
 
+/* Reverses the order of redirection nodes, returns the new REDIR root node  */
 t_node	*reverse_redir_nodes_help(t_node *root)
 {
 	t_node	*prev;
@@ -57,14 +61,17 @@ t_node	*reverse_redir_nodes_help(t_node *root)
 	next = 0;
 	while (current->type == REDIR)
 	{
-		next = ((t_redirnode *)current)->execnode;
-		((t_redirnode *)current)->execnode = prev;
+		next = ((t_redirnode *)current)->node;
+		((t_redirnode *)current)->node = prev;
 		prev = current;
 		current = next;
 	}
 	return (prev);
 }
 
+/* Reverses the order of REDIR nodes,
+	sets the first redirection node to point to the EXEC node,
+	returns the new REDIR root node */
 t_node	*reverse_redir_nodes(t_node *node)
 {
 	t_node	*new_root;
@@ -72,12 +79,13 @@ t_node	*reverse_redir_nodes(t_node *node)
 
 	exec_node = node;
 	while (exec_node->type == REDIR)
-		exec_node = ((t_redirnode *)exec_node)->execnode;
+		exec_node = ((t_redirnode *)exec_node)->node;
 	new_root = reverse_redir_nodes_help(node);
-	((t_redirnode *)node)->execnode = exec_node;
+	((t_redirnode *)node)->node = exec_node;
 	return (new_root);
 }
-
+/* Parses redirections and heredocs, returns the REDIR root node if any,
+	otherwise returns the EXEC node */
 t_node	*parseredirs(t_node *node, char **cmd_ptr, t_shell *shell)
 {
 	int		token;
@@ -104,6 +112,8 @@ t_node	*parseredirs(t_node *node, char **cmd_ptr, t_shell *shell)
 	return (node);
 }
 
+/* Parses the command and its arguments and checks for redirections,
+	returns a REDIR node if any, otherwise returns an EXEC node */
 t_node	*parseexec(char **cmd_ptr, t_shell *shell)
 {
 	t_node *ret;

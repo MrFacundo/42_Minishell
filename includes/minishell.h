@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/03 17:36:44 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/04 10:53:46 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef struct	s_execnode
 typedef struct s_redirnode
 {
 	int			type;
-	t_node		*execnode;
+	t_node		*node;
 	char		*file;
 	int			mode;
 	int			fd;
