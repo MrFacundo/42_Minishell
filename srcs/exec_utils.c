@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:25 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/03 18:49:24 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/04 12:58:57 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@ char	*find_path(char *cmd, t_shell *shell)
 	char	*ret;
 	char	*tmp;
 
+	ret = 0;
 	path = ft_get_env("PATH", shell->env);
+	if (!path)
+		return (ft_strdup(cmd));
 	paths = ft_split(path, ':');
 	free(path);
 	i = 0;
-	ret = 0;
 	while (paths[i])
 	{
 		tmp = ft_strjoin(paths[i++], "/");
@@ -66,6 +68,24 @@ void	execute_command(char *path, char **av, t_shell *shell)
 		else
 			handle_file_not_found(path);
 	}
+}
+
+void	run_external(t_node *node, int *status, t_shell *shell)
+{
+	t_execnode	*enode;
+	char		*path;
+
+	enode = (t_execnode *)node;
+	if (enode->av[0] == 0)
+		exit(0);
+	if (ft_strchr(enode->av[0], '/') == 0)
+		path = find_path(enode->av[0], shell);
+	else
+		path = ft_strdup(enode->av[0]);
+	if (fork_1() == 0)
+		execute_command(path, enode->av, shell);
+	wait(status);
+	free(path);
 }
 
 void	handle_child_process(int *pipe, int direction, t_node *node, t_shell *shell)
