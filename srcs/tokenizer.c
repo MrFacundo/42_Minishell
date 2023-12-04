@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 16:30:30 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/03 15:08:37 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/04 03:13:46 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,6 @@ int	get_token(char **cmd_ptr, char **tkn_ptr, t_shell *shell)
 	else
 		token = process_default(&p, tkn_ptr, shell);
 	*cmd_ptr = p;
-	// print_token(token);
+	//print_token(token);
 	return (token);
 }

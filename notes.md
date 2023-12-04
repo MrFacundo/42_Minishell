@@ -1,0 +1,4 @@
+tests
+
+./tester redirects
+

@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 16:35:54 by facu              #+#    #+#             */
-/*   Updated: 2023/12/03 15:08:49 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/03 20:37:49 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,16 @@ int	s_quoted_segment_len(char **cmd_ptr, int *len)
 		if (**cmd_ptr == '\'')
 		{
 			(*cmd_ptr)++;
-			return (0);
+			if (**cmd_ptr == '\'')
+				(*cmd_ptr)++;
+			else
+				return (0);
 		}
-		(*len)++;
-		(*cmd_ptr)++;
+		else
+		{
+			(*len)++;
+			(*cmd_ptr)++;
+		}
 	}
 	return (-1);
 }
@@ -64,10 +70,16 @@ int	d_quoted_segment_len(char **cmd_ptr, t_shell *shell, int *len)
 			if (**cmd_ptr == '\"')
 			{
 				(*cmd_ptr)++;
-				return (0);
+				if (**cmd_ptr == '\"')
+					(*cmd_ptr)++;
+				else
+					return (0);
 			}
-			(*len)++;
-			(*cmd_ptr)++;
+			else
+			{
+				(*len)++;
+				(*cmd_ptr)++;
+			}
 		}
 	}
 	return (-1);
@@ -82,7 +94,8 @@ int	calculate_token_length(char *cmd_ptr, t_shell *shell)
 	{
 		if (*cmd_ptr == '\'' && s_quoted_segment_len(&cmd_ptr, &len) == -1)
 			return (-1);
-		else if (*cmd_ptr == '\"' && d_quoted_segment_len(&cmd_ptr, shell, &len) == -1)
+		else if (*cmd_ptr == '\"' && d_quoted_segment_len(&cmd_ptr, shell,
+				&len) == -1)
 			return (-1);
 		else if (*cmd_ptr == '$')
 			expansion_len(&cmd_ptr, &len, shell);
