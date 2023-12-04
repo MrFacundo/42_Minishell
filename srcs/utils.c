@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:00 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/03 01:07:07 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/04 10:55:10 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	free_tree(t_node *node)
 	}
 	else if (node->type == REDIR)
 	{
-		free_tree(((t_redirnode *)node)->execnode);
+		free_tree(((t_redirnode *)node)->node);
 		free(((t_redirnode *)node)->file);
 		free(node);
 	}

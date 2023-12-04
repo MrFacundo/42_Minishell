@@ -6,14 +6,16 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:20:06 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/03 17:50:44 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/04 11:28:26 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 int	g_exit_status = 0;
-
+/* If the command is belongs to a set of builtins, runs the builtin in the main
+	process, otherwise, runs the command in a child process.
+	Handles signals and waits for the child process to finish */
 void	run_node(t_node *node, t_shell *shell)
 {
 	int	status;
@@ -30,6 +32,8 @@ void	run_node(t_node *node, t_shell *shell)
 	}
 }
 
+/* Initializes the shell environment, runs the prompt loop, frees allocated
+	memory */
 int	main(int argc, char **argv, char **envp)
 {
 	char	*buf;
@@ -38,7 +42,6 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	shell.parsing_error = 0;
 	shell.env = initialize_env(envp);
 	while (prompt(&buf, 0) >= 0)
 	{

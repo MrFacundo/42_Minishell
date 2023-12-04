@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:55 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/03 01:06:32 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/04 10:55:10 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_node	*redircmd(t_node *execnode, char *file, int mode, int fd)
 
 	node = ft_calloc(1, sizeof(t_redirnode));
 	node->type = REDIR;
-	node->execnode = execnode;
+	node->node = execnode;
 	node->file = file;
 	node->mode = mode;
 	node->fd = fd;

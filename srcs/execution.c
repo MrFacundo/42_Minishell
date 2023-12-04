@@ -26,7 +26,7 @@ void	run_redir(t_node *node, t_shell *shell)
 	close(rnode->fd);
 	if (open_1(rnode->file, rnode->mode) < 0)
 		exit(1);
-	run_cmd(rnode->execnode, shell);
+	run_cmd(rnode->node, shell);
 }
 
 void	run_heredoc(t_node *node, t_shell *shell)
