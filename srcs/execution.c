@@ -55,12 +55,12 @@ void	run_pipe(t_node *node, int *status, t_shell *shell)
 	if (left_side_process < 0)
 		exit(errno);
 	if (left_side_process == 0)
-		return (handle_child_process(p, 1, pnode->left, shell));
+		return (handle_child_process(p, STDOUT_FILENO, pnode->left, shell));
 	right_side_process = fork_1();
 	if (right_side_process < 0)
 		exit(errno);
 	if (right_side_process == 0)
-		return (handle_child_process(p, 0, pnode->right, shell));
+		return (handle_child_process(p, STDIN_FILENO, pnode->right, shell));
 	if (close_pipe(p) < 0)
 		exit(errno);
 	waitpid(left_side_process, NULL, 0);

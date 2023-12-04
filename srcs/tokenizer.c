@@ -6,14 +6,14 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 16:30:30 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/04 11:23:10 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/04 19:02:44 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 /* Handles pipes and redirection symbols.
-	Sets the token pointer to the token,
+	Sets the pointer to the token,
 	returns the token type,
 	Advances the command pointer to the next token */
 int	process_symbol(char **cmd_ptr, int token)
@@ -37,7 +37,7 @@ int	process_symbol(char **cmd_ptr, int token)
 }
 
 /* Handles all alphanumeric tokens, including quotes and expansions.
-	Sets the token pointer to the token, returns the token type,
+	Sets the pointer to the token, returns the token type,
 	Advances the command pointer to the next token */
 int	process_default(char **cmd_ptr, char **tkn_ptr, t_shell *shell)
 {

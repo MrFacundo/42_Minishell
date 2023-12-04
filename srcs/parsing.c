@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:07:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/04 11:17:36 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/04 14:07:38 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,11 +99,11 @@ t_node	*parseredirs(t_node *node, char **cmd_ptr, t_shell *shell)
 		if (file_token != 'a')
 			return (handle_parse_error(node, "Parse error near redirection", shell));
 		if (token == '<')
-			node = redircmd(node, tkn_ptr, O_RDONLY, 0);
+			node = redircmd(node, tkn_ptr, O_RDONLY, STDIN_FILENO);
 		else if (token == '>')
-			node = redircmd(node, tkn_ptr, O_WRONLY | O_CREAT | O_TRUNC, 1);
+			node = redircmd(node, tkn_ptr, O_WRONLY | O_CREAT | O_TRUNC, STDOUT_FILENO);
 		else if (token == '+')
-			node = redircmd(node, tkn_ptr, O_WRONLY | O_CREAT | O_APPEND, 1);
+			node = redircmd(node, tkn_ptr, O_WRONLY | O_CREAT | O_APPEND, STDOUT_FILENO);
 		else if (token == '-')
 			node = heredoccmd(node, tkn_ptr);
 	}
