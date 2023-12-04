@@ -25,7 +25,7 @@ void	run_redir(t_node *node, t_shell *shell)
 	rnode = (t_redirnode *)node;
 	close(rnode->fd);
 	if (open_1(rnode->file, rnode->mode) < 0)
-		exit(ENOENT);
+		exit(1);
 	run_cmd(rnode->execnode, shell);
 }
 
@@ -69,14 +69,16 @@ void	run_pipe(t_node *node, int *status, t_shell *shell)
 void	run_cmd(t_node *node, t_shell *shell)
 {
 	int status;
-
 	if (node == 0)
 		return ;
 	set_signal_handling(2);
 	if (node->type == EXEC)
 	{
 		if (is_builtin(node, 1))
+		{
 			run_builtin(node, shell);
+			exit(g_exit_status);
+		}
 		else
 			run_exec(node, &status, shell);
 	}

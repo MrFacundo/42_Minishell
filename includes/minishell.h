@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/03 15:23:38 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/03 17:36:44 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ typedef struct s_redirnode
 	int			mode;
 	int			fd;
 }				t_redirnode;
-
 
 typedef struct s_heredocnode
 {
