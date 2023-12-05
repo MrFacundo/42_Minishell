@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/04 13:09:18 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/05 00:17:23 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,6 @@ void	add_key_to_env(char *key, char *value, t_shell *shell);
 int		is_valid_identifier(const char *str);
 
 // exec_utils.c
-char	*find_path(char *cmd, t_shell *shell);
 void	handle_child_process(int *pipe, int direction, t_node *node, t_shell *shell);
 void	execute_command(char *path, char **av, t_shell *shell);
 void	update_exit_status(int status);
@@ -127,6 +126,9 @@ void	handle_file_not_found(char *path);
 void	handle_permission_denied(char *path);
 void	handle_default_error();
 void	handle_directory();
+
+// exec_path_finding.c
+char	*find_path(char *cmd, t_shell *shell);
 
 // execution.c
 void	run_cmd(t_node *node, t_shell *shell);
@@ -170,6 +172,5 @@ int		pipe_1(int *p);
 int		dup2_1(int oldfd, int newfd);
 int		close_pipe(int *p);
 void	free_tree(t_node *node);
-
 
 #endif

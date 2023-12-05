@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:00 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/04 22:36:55 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/05 00:13:10 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,13 +81,13 @@ void	print_error(int n, ...)
 	va_list	args;
 
 	va_start(args, n);
-	ft_putstr_fd("minishell", 2);
+	ft_putstr_fd("minishell", STDERR_FILENO);
 	while (n--)
 	{
-		ft_putstr_fd(": ", 2);
-		ft_putstr_fd(va_arg(args, char *), 2);
+		ft_putstr_fd(": ", STDERR_FILENO);
+		ft_putstr_fd(va_arg(args, char *), STDERR_FILENO);
 	}
-	ft_putstr_fd("\n", 2);
+	ft_putstr_fd("\n", STDERR_FILENO);
 	va_end(args);
 }
 
