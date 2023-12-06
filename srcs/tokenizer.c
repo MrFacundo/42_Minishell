@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 16:30:30 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/04 19:02:44 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/06 02:20:03 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	process_symbol(char **cmd_ptr, int token)
 		p++;
 		token = '-';
 	}
+	if (peek(&p,"<>|"))
+		return ('e');
 	*cmd_ptr = p;
 	return (token);
 }

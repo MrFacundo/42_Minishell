@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:07:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/04 14:07:38 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/06 02:19:18 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ t_node	*handle_parse_error(t_node *ret, const char *error_message,
 		t_shell *shell)
 {
 	shell->parsing_error = TOKEN_ERROR;
-	print_error(1, error_message);
+	if (error_message)
+		print_error(1, error_message);
 	return (ret);
 }
 
@@ -59,7 +60,7 @@ t_node	*reverse_redir_nodes_help(t_node *root)
 	prev = 0;
 	current = root;
 	next = 0;
-	while (current->type == REDIR)
+	while (current->type == REDIR || current->type == HEREDOC)
 	{
 		next = ((t_redirnode *)current)->node;
 		((t_redirnode *)current)->node = prev;
@@ -78,7 +79,7 @@ t_node	*reverse_redir_nodes(t_node *node)
 	t_node	*exec_node;
 
 	exec_node = node;
-	while (exec_node->type == REDIR)
+	while (exec_node->type == REDIR || exec_node->type == HEREDOC)
 		exec_node = ((t_redirnode *)exec_node)->node;
 	new_root = reverse_redir_nodes_help(node);
 	((t_redirnode *)node)->node = exec_node;
@@ -105,9 +106,12 @@ t_node	*parseredirs(t_node *node, char **cmd_ptr, t_shell *shell)
 		else if (token == '+')
 			node = redircmd(node, tkn_ptr, O_WRONLY | O_CREAT | O_APPEND, STDOUT_FILENO);
 		else if (token == '-')
+		{
 			node = heredoccmd(node, tkn_ptr);
+			break ;
+		}
 	}
-	if (node->type == REDIR)
+	if (node->type == REDIR || node->type == HEREDOC)
 		return (reverse_redir_nodes(node));
 	return (node);
 }
@@ -123,6 +127,8 @@ t_node	*parseexec(char **cmd_ptr, t_shell *shell)
 
 	ret = execnode();
 	exec_node = (t_execnode *)ret;
+	if (peek(cmd_ptr, "<>"))
+		return (handle_parse_error(ret, "Parse error near redirection", shell));
 	while (!peek(cmd_ptr, "<>|()&;"))
 	{
 		token = get_token(cmd_ptr, &tkn_ptr, shell);
