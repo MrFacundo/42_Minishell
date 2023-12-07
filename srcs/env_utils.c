@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 01:27:22 by facu              #+#    #+#             */
-/*   Updated: 2023/12/01 15:55:18 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/06 13:25:47 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	is_valid_identifier(const char *str)
 {
 	if (!ft_isalpha(str[0]) && str[0] != '_')
 		return (0);
-	while (*str)
+	while (*str && *str != '=')
 	{
 		if (!ft_isalnum(*str) && *str != '_' && *str != '=')
 			return (0);

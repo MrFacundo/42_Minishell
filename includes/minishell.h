@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/05 00:17:23 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/06 12:06:13 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 #define HEREDOC 4
 
 #define TOKEN_ERROR 1
+#define NO_EXECUTABLE 2
 
 typedef struct	s_node
 {
@@ -75,7 +76,7 @@ typedef struct s_pipenode
 typedef struct s_shell
 {
 	char		**env;
-	int			parsing_error;
+	int			parsing_status;
 }	t_shell;
 
 typedef void	(*t_signal_handler)(int);

@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:07:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/06 02:19:18 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/06 12:41:57 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 t_node	*handle_parse_error(t_node *ret, const char *error_message,
 		t_shell *shell)
 {
-	shell->parsing_error = TOKEN_ERROR;
+	shell->parsing_status = TOKEN_ERROR;
 	if (error_message)
 		print_error(1, error_message);
 	return (ret);
@@ -26,9 +26,11 @@ t_node	*parse_cmd(char *cmd, t_shell *shell)
 {
 	t_node	*node;
 
-	shell->parsing_error = 0;
+	shell->parsing_status = 0;
 	node = parsepipe(&cmd, shell);
-	if (shell->parsing_error == TOKEN_ERROR)
+	if (node->type == EXEC && ((t_execnode *)node)->ac == 0)
+		shell->parsing_status = NO_EXECUTABLE;
+	if (shell->parsing_status == TOKEN_ERROR)
 		g_exit_status = TOKEN_ERROR;
 	return (node);
 }
@@ -40,7 +42,7 @@ t_node	*parsepipe(char **cmd_ptr, t_shell *shell)
 	t_node	*left;
 
 	left = parseexec(cmd_ptr, shell);
-	if (shell->parsing_error != TOKEN_ERROR && peek(cmd_ptr, "|"))
+	if (shell->parsing_status == 0 && peek(cmd_ptr, "|"))
 	{
 		get_token(cmd_ptr, 0, shell);
 		if (**cmd_ptr == '\0' || peek(cmd_ptr, "|()&;<>"))
@@ -127,13 +129,13 @@ t_node	*parseexec(char **cmd_ptr, t_shell *shell)
 
 	ret = execnode();
 	exec_node = (t_execnode *)ret;
-	if (peek(cmd_ptr, "<>"))
-		return (handle_parse_error(ret, "Parse error near redirection", shell));
 	while (!peek(cmd_ptr, "<>|()&;"))
 	{
 		token = get_token(cmd_ptr, &tkn_ptr, shell);
 		if (token == 0)
 			break ;
+		else if (token == '_')
+			continue ;
 		else if (token == 'e')
 			return (handle_parse_error(ret, "Parse error near quotes", shell));
 		else if (token == 'a')
