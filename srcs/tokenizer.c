@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 16:30:30 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/06 02:20:03 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/06 13:02:30 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,11 @@ int	process_default(char **cmd_ptr, char **tkn_ptr, t_shell *shell)
 	a_token = extract_token(&p, len, shell);
 	*tkn_ptr = a_token;
 	*cmd_ptr = p;
+	if (len == 0)
+	{
+		free(a_token);
+		return ('_');
+	}
 	return ('a');
 }
 
