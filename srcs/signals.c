@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 20:21:36 by facu              #+#    #+#             */
-/*   Updated: 2023/12/01 15:15:34 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/11 17:16:15 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	sig_handler(int sig)
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
-	g_exit_status= 130;
+	g_exit_status = 130;
 }
 
 /* sets the signal handling for different contexts:

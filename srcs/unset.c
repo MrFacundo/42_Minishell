@@ -1,24 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expansion.c                                        :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/18 20:47:26 by facu              #+#    #+#             */
-/*   Updated: 2023/12/07 15:42:17 by facu             ###   ########.fr       */
+/*   Created: 2023/12/11 17:28:33 by facu              #+#    #+#             */
+/*   Updated: 2023/12/11 17:28:48 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void    expand_variable(char *cmd_ptr, char **tkn_ptr, t_shell *shell)
+void	run_unset(char **av, t_shell *shell)
 {
-    char	*key;
-    char	*value;
-    
-    key = ft_substr(cmd_ptr, 0, ft_strcspn(cmd_ptr, "\" \t\r\n\v"));
-    value = ft_get_env(key, shell->env);
-    free(key);
-    *tkn_ptr = value;
+	int	i;
+	int	j;
+
+	i = 1;
+	while (av[i])
+	{
+		if (is_valid_identifier(av[i]))
+		{
+			j = 0;
+			while(shell->env[j])
+			{
+				if (key_matches(av[i], shell->env[j]))
+				{
+					unset_env(av[i], shell);
+					break ;
+				}
+				j++;
+			}
+		}
+		else
+		{
+			print_error(2, "unset", "not a valid identifier");
+			g_exit_status = EXIT_FAILURE;
+		}
+		i++;
+	}
 }

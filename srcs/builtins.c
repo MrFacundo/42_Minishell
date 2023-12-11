@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 12:17:02 by facu              #+#    #+#             */
-/*   Updated: 2023/12/06 13:27:17 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/11 17:30:04 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,73 +34,6 @@ int	is_builtin(t_node *node, int nested_context)
 	return (is_builtin);
 }
 
-void	run_export(char **av, t_shell *shell)
-{
-	int	i;
-
-	i = 1;
-	if (av[1] == 0)
-	{
-		print_env(shell->env);
-		g_exit_status= EXIT_SUCCESS;
-	}
-	else
-	{
-		while (av[i])
-		{
-			if (!is_valid_identifier(av[i]))
-			{
-				print_error(2, "export", "not a valid identifier");
-				g_exit_status= 1;
-				return ;
-			}
-			else
-				set_env(av[i], shell);
-			++i;
-		}
-		g_exit_status= EXIT_SUCCESS;
-	}
-}
-
-void	run_pwd()
-{
-	char	s[PATH_MAX];
-
-	getcwd(s, PATH_MAX);
-	ft_putstr_fd(s, 1);
-	ft_putstr_fd("\n", 1);
-	g_exit_status= EXIT_SUCCESS;
-}
-
-void	run_unset(char **av, t_shell *shell)
-{
-	int	i;
-	int	j;
-
-	i = 1;
-	while (av[i])
-	{
-		if (is_valid_identifier(av[i]))
-		{
-			j = 0;
-			while(shell->env[j])
-			{
-				if (key_matches(av[i], shell->env[j]))
-				{
-					unset_env(av[i], shell);
-					break ;
-				}
-				j++;
-			}
-		}
-		else
-		{
-			print_error(2, "unset", "not a valid identifier");
-			g_exit_status= 1;
-		}
-		i++;
-	}
-}
 void	run_env(t_shell *shell)
 {
 	int		i;
@@ -114,48 +47,6 @@ void	run_env(t_shell *shell)
 		ft_putstr_fd(env_var, STDOUT_FILENO);
 		ft_putchar_fd('\n', STDOUT_FILENO);
 	}
-	g_exit_status = EXIT_SUCCESS;
-}
-
-void	run_exit(char **av)
-{
-	if (av[2])
-	{
-		print_error(2, "exit", "too many arguments");
-		g_exit_status = 1;
-	}
-	else if (has_alphabetic_chars(av[1]))
-	{
-		print_error(2, "exit", "numeric argument required");
-		g_exit_status = 2;
-	}
-	else if (av[1])
-		g_exit_status = ft_atoi(av[1]);
-	exit(g_exit_status);
-}
-
-void	run_echo(char **av)
-{
-	int	i;
-	int	print_newline;
-	
-	i = 1;
-	print_newline = 1;
-	while (av[i])
-	{
-		if (ft_strcmp(av[i], "-n") == 0)
-		{
-			print_newline = 0;
-			i++;
-			continue ;
-		}
-		ft_putstr_fd(av[i], STDOUT_FILENO);
-		if (av[i + 1])
-			ft_putchar_fd(' ', STDOUT_FILENO);
-		i++;
-	}
-	if (print_newline)
-		ft_putchar_fd('\n', STDOUT_FILENO);
 	g_exit_status = EXIT_SUCCESS;
 }
 
@@ -174,8 +65,8 @@ void	run_builtin(t_node *node, t_shell *shell)
 		run_pwd();
 	else if (ft_strcmp(enode->av[0], "unset") == 0)
 		run_unset(enode->av, shell);
-	// else if (ft_strcmp(enode->av[0], "cd") == 0)
-	// 	run_cd(enode->av);
+	else if (ft_strcmp(enode->av[0], "cd") == 0)
+		run_cd(enode->av, shell);
 	else if (ft_strcmp(enode->av[0], "env") == 0)
 		run_env(shell);
 }
