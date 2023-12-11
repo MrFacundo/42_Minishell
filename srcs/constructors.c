@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   constructors.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:55 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/04 10:55:10 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/10 18:32:59 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,6 @@ t_node	*heredoccmd(t_node *execnode, char *delimiter)
 	node->type = HEREDOC;
 	node->execnode = execnode;
 	node->fd = read_heredoc(delimiter);
+	free(delimiter);
 	return ((t_node *)node);
 }
