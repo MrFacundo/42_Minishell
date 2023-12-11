@@ -1,24 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expansion.c                                        :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/18 20:47:26 by facu              #+#    #+#             */
-/*   Updated: 2023/12/07 15:42:17 by facu             ###   ########.fr       */
+/*   Created: 2023/12/11 17:29:49 by facu              #+#    #+#             */
+/*   Updated: 2023/12/11 17:30:00 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void    expand_variable(char *cmd_ptr, char **tkn_ptr, t_shell *shell)
+void	run_echo(char **av)
 {
-    char	*key;
-    char	*value;
-    
-    key = ft_substr(cmd_ptr, 0, ft_strcspn(cmd_ptr, "\" \t\r\n\v"));
-    value = ft_get_env(key, shell->env);
-    free(key);
-    *tkn_ptr = value;
+	int	i;
+	int	print_newline;
+	
+	i = 1;
+	print_newline = 1;
+	while (av[i])
+	{
+		if (ft_strcmp(av[i], "-n") == 0)
+		{
+			print_newline = 0;
+			i++;
+			continue ;
+		}
+		ft_putstr_fd(av[i], STDOUT_FILENO);
+		if (av[i + 1])
+			ft_putchar_fd(' ', STDOUT_FILENO);
+		i++;
+	}
+	if (print_newline)
+		ft_putchar_fd('\n', STDOUT_FILENO);
+	g_exit_status = EXIT_SUCCESS;
 }

@@ -12,6 +12,8 @@
 		"stdio.h": "c",
 		"readline.h": "c",
 		"limits.h": "c",
-		"stdarg.h": "c"
+		"stdarg.h": "c",
+		"cerrno": "c",
+		"cstdlib": "c"
 	}
 }

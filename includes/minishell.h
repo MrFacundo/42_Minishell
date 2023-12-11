@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/06 12:06:13 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/11 17:31:52 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,11 @@ int		ft_strarrfind(char **array, char *str);
 int		has_alphabetic_chars(char *str);
 void	process_export_args(char **av);
 
+
+//cd.c
+
+void	run_cd(char **av, t_shell *shell);
+
 // constructors.c
 t_node	*execnode(void);
 t_node	*redircmd(t_node *execnode, char *file, int mode, int fd);
@@ -107,6 +112,9 @@ char	*ft_get_env(char *key, char **env);
 void	set_env(char *key_value, t_shell *shell);
 void	unset_env(char *key, t_shell *shell);
 void	print_env(char **env);
+
+// echo.c
+void	run_echo(char **av);
 
 // env_utils.c
 char	*extract_key(char *key_value);
@@ -134,14 +142,23 @@ char	*find_path(char *cmd, t_shell *shell);
 // execution.c
 void	run_cmd(t_node *node, t_shell *shell);
 
+// exit.c
+void	run_exit(char **av);
+
 // expansion.c
 void    expand_variable(char *ptr, char **tkn_ptr, t_shell *shell);
+
+// export.c
+void	run_export(char **av, t_shell *shell);
 
 // parse.c
 t_node	*parse_cmd(char *cmd, t_shell *shell);
 t_node	*parsepipe(char **pointer_to_cmd, t_shell *shell);
 t_node	*parseredirs(t_node *node, char **pointer_to_cmd, t_shell *shell);
 t_node	*parseexec(char **pointer_to_cmd, t_shell *shell);
+
+// pwd.c
+void	run_pwd(void);
 
 // read.c
 int		prompt(char **buf, char *prompt);
@@ -163,6 +180,9 @@ void	extract_alpha_variable(char **ptr, char **ret, t_shell *shell);
 
 // tokenizer.c
 int get_token(char **cmd_ptr, char **tkn_ptr, t_shell *shell);
+
+// unset.c
+void	run_unset(char **av, t_shell *shell);
 
 // utils.c
 int		peek(char **pointer_to_cmd, char *tokens);

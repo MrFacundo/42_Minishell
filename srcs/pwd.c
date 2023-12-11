@@ -1,24 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expansion.c                                        :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/18 20:47:26 by facu              #+#    #+#             */
-/*   Updated: 2023/12/07 15:42:17 by facu             ###   ########.fr       */
+/*   Created: 2023/12/11 17:28:18 by facu              #+#    #+#             */
+/*   Updated: 2023/12/11 17:28:24 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void    expand_variable(char *cmd_ptr, char **tkn_ptr, t_shell *shell)
+void	run_pwd()
 {
-    char	*key;
-    char	*value;
-    
-    key = ft_substr(cmd_ptr, 0, ft_strcspn(cmd_ptr, "\" \t\r\n\v"));
-    value = ft_get_env(key, shell->env);
-    free(key);
-    *tkn_ptr = value;
+	char	s[PATH_MAX];
+
+	getcwd(s, PATH_MAX);
+	ft_putstr_fd(s, 1);
+	ft_putstr_fd("\n", 1);
+	g_exit_status = EXIT_SUCCESS;
 }
