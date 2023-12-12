@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:20:06 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/11 18:49:13 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/12 19:00:17 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ void	run_node(t_node *node, t_shell *shell)
 	}
 }
 
-/* Initializes the shell environment, runs the prompt loop, frees allocated
-	memory */
+/* Initializes the shell environment, runs the prompt loop,
+	frees allocated memory */
 int	main(int argc, char **argv, char **envp)
 {
 	char	*buf;
@@ -52,7 +52,7 @@ int	main(int argc, char **argv, char **envp)
 		node = parse_cmd(buf, &shell);
 		if (shell.parsing_status == 0)
 			run_node(node, &shell);
-		free_tree(node);
+		free_node(node);
 		free(buf);
 	}
 	ft_strarrfree(shell.env);

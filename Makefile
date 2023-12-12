@@ -33,7 +33,7 @@ SOURCES		=	srcs/builtins/export.c \
 
 LIBFT_DIR  = ./libft
 CC		 = gcc
-CFLAGS	 = -g -Wall -Wextra -Werror
+CFLAGS	 = -Wall -Wextra -Werror
 LDFLAGS = -L$(LIBFT_DIR) -lft -lreadline
 OBJECTS	= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SOURCES))
 
@@ -72,8 +72,11 @@ fclean: 	clean
 restart:	all 
 			./minishell
 
-valgrind: all
-	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all -s ./minishell
+readline.supp:
+			wget https://raw.githubusercontent.com/benjaminbrassart/minishell/master/readline.supp
+
+valgrind:$(NAME) readline.supp
+			valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=readline.supp ./$(NAME)
 
 re: fclean all
 
