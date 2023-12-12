@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:20:06 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/12 19:00:17 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/12 19:06:01 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	main(int argc, char **argv, char **envp)
 		node = parse_cmd(buf, &shell);
 		if (shell.parsing_status == 0)
 			run_node(node, &shell);
-		free_node(node);
+		free_tree(node);
 		free(buf);
 	}
 	ft_strarrfree(shell.env);
