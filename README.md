@@ -7,5 +7,4 @@
 ### Branches
 
 - A branch must be created per feature or fix 
-- Code must be cross reviewed before being merged into main
 - Pushing code directly to main is forbidden

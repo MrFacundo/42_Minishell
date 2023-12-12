@@ -1,0 +1,21 @@
+{
+    leak readline
+    Memcheck:Leak
+    ...
+    fun:readline
+}
+{
+    leak add_history
+    Memcheck:Leak
+    ...
+    fun:add_history
+}
+{
+   reachable-block-in-readline
+   Memcheck:Leak
+   ...
+   fun:xmalloc
+   fun:rl_redisplay
+   fun:readline_internal_setup
+   fun:readline
+}
