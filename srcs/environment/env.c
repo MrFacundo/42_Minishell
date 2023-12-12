@@ -6,17 +6,18 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 19:41:47 by facu              #+#    #+#             */
-/*   Updated: 2023/12/01 15:54:51 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/12 00:31:41 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 char	**initialize_env(char **envp)
 {
-	int	i;
-	int	size;
+	int		i;
+	int		size;
 	char	**env;
+
 	i = 0;
 	size = 0;
 	while (envp[size])
@@ -56,31 +57,22 @@ void	set_env(char *key_value, t_shell *shell)
 {
 	char	*key;
 	char	*value;
-	int		i;
+	int		key_index;
 
 	key = extract_key(key_value);
 	value = extract_value(key_value);
-	i = 0;
 	if (!key)
-		return ;
-	if (!*value)
+		return (free_strings(key, value, 0));
+	key_index = find_key_index(key, shell);
+	if (key_index != -1)
 	{
-		while (shell->env[i])
-			if (key_matches(key, shell->env[i++]))
-				return ;
-	}
-	else
-	{
-		while (shell->env[i])
-		{
-			if (key_matches(key, shell->env[i]))
-				return (update_key(key, value, i, shell));
-			i++;
-		}
+		if (!*value)
+			return (free_strings(key, value, 0));
+		update_key(key, value, key_index, shell);
+		return (free_strings(key, value, 0));
 	}
 	add_key_to_env(key, value, shell);
-	free(key);
-	free(value);
+	free_strings(key, value, 0);
 }
 
 void	unset_env(char *key, t_shell *shell)

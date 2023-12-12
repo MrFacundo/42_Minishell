@@ -6,11 +6,11 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 16:30:30 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/06 13:02:30 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/12 00:31:41 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 /* Handles pipes and redirection symbols.
 	Sets the pointer to the token,
@@ -32,7 +32,7 @@ int	process_symbol(char **cmd_ptr, int token)
 		p++;
 		token = '-';
 	}
-	if (peek(&p,"<>|"))
+	if (peek(&p, "<>|"))
 		return ('e');
 	*cmd_ptr = p;
 	return (token);
@@ -67,11 +67,11 @@ int	process_default(char **cmd_ptr, char **tkn_ptr, t_shell *shell)
 	Advances the command pointer to the next token */
 int	get_token(char **cmd_ptr, char **tkn_ptr, t_shell *shell)
 {
-	char *p;
-	int token;
+	char	*p;
+	int		token;
 
 	p = *cmd_ptr;
-	p += ft_strspn(p, " \t\r\n\v");
+	p += ft_strspn(p, WHITESPACE);
 	if (tkn_ptr)
 		*tkn_ptr = p;
 	token = *p;
@@ -82,6 +82,5 @@ int	get_token(char **cmd_ptr, char **tkn_ptr, t_shell *shell)
 	else
 		token = process_default(&p, tkn_ptr, shell);
 	*cmd_ptr = p;
-	//print_token(token);
 	return (token);
 }

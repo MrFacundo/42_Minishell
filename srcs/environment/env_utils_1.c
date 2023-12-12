@@ -1,27 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_utils.c                                        :+:      :+:    :+:   */
+/*   env_utils_1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 01:27:22 by facu              #+#    #+#             */
-/*   Updated: 2023/12/06 13:25:47 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/12 00:31:41 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-
-char	*extract_key(char *key_value)
-{
-	return (ft_substr(key_value, 0, ft_strchr(key_value, '=') - key_value));
-}
-
-char	*extract_value(char *key_value)
-{
-	return (ft_substr(key_value, ft_strchr(key_value, '=') - key_value + 1,
-			ft_strlen(key_value)));
-}
+#include "../../includes/minishell.h"
 
 int	key_matches(char *key, char *env)
 {

@@ -1,38 +1,49 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/11 17:29:49 by facu              #+#    #+#             */
-/*   Updated: 2023/12/11 17:30:00 by facu             ###   ########.fr       */
+/*   Created: 2023/12/11 17:28:33 by facu              #+#    #+#             */
+/*   Updated: 2023/12/12 00:31:41 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-void	run_echo(char **av)
+void	unset_argumet(char *arg, t_shell *shell)
+{
+	int	j;
+
+	if (is_valid_identifier(arg))
+	{
+		j = 0;
+		while (shell->env[j])
+		{
+			if (key_matches(arg, shell->env[j]))
+			{
+				unset_env(arg, shell);
+				return ;
+			}
+			j++;
+		}
+	}
+	else
+	{
+		print_error(2, "unset", "not a valid identifier");
+		g_exit_status = EXIT_FAILURE;
+	}
+}
+
+void	run_unset(char **av, t_shell *shell)
 {
 	int	i;
-	int	print_newline;
-	
+
 	i = 1;
-	print_newline = 1;
 	while (av[i])
 	{
-		if (ft_strcmp(av[i], "-n") == 0)
-		{
-			print_newline = 0;
-			i++;
-			continue ;
-		}
-		ft_putstr_fd(av[i], STDOUT_FILENO);
-		if (av[i + 1])
-			ft_putchar_fd(' ', STDOUT_FILENO);
+		unset_argumet(av[i], shell);
 		i++;
 	}
-	if (print_newline)
-		ft_putchar_fd('\n', STDOUT_FILENO);
-	g_exit_status = EXIT_SUCCESS;
 }

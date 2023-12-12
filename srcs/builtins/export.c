@@ -1,43 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/11 17:28:33 by facu              #+#    #+#             */
-/*   Updated: 2023/12/11 17:28:48 by facu             ###   ########.fr       */
+/*   Created: 2023/12/11 17:27:52 by facu              #+#    #+#             */
+/*   Updated: 2023/12/12 00:31:41 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-void	run_unset(char **av, t_shell *shell)
+void	run_export(char **av, t_shell *shell)
 {
 	int	i;
-	int	j;
 
 	i = 1;
-	while (av[i])
+	if (av[1] == 0)
 	{
-		if (is_valid_identifier(av[i]))
+		print_env(shell->env);
+		g_exit_status = EXIT_SUCCESS;
+	}
+	else
+	{
+		while (av[i])
 		{
-			j = 0;
-			while(shell->env[j])
+			if (!is_valid_identifier(av[i]))
 			{
-				if (key_matches(av[i], shell->env[j]))
-				{
-					unset_env(av[i], shell);
-					break ;
-				}
-				j++;
+				print_error(2, "export", "not a valid identifier");
+				g_exit_status = EXIT_FAILURE;
+				return ;
 			}
+			else
+				set_env(av[i], shell);
+			++i;
 		}
-		else
-		{
-			print_error(2, "unset", "not a valid identifier");
-			g_exit_status = EXIT_FAILURE;
-		}
-		i++;
+		g_exit_status = EXIT_SUCCESS;
 	}
 }

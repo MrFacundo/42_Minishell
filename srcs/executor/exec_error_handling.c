@@ -6,11 +6,11 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 11:18:56 by facu              #+#    #+#             */
-/*   Updated: 2023/12/11 17:16:10 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/12 00:31:41 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 void	handle_file_not_found(char *path)
 {
@@ -37,14 +37,14 @@ void	handle_permission_denied(char *path)
 	exit(g_exit_status);
 }
 
-void	handle_directory()
+void	handle_directory(void)
 {
 	print_error(1, strerror(EISDIR));
 	g_exit_status = 126;
 	exit(g_exit_status);
-
 }
-void	handle_default_error()
+
+void	handle_default_error(void)
 {
 	print_error(1, strerror(errno));
 	g_exit_status = errno;

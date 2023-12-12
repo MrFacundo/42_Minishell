@@ -1,4 +1,16 @@
-#include "../includes/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execution.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/11 18:47:40 by facu              #+#    #+#             */
+/*   Updated: 2023/12/12 00:31:41 by facu             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/minishell.h"
 
 /* Handles the execution of an exec node. If the command is a builtin, runs
 	the builtin and exits, otherwise, runs the command in a child process. */
@@ -64,14 +76,15 @@ void	run_pipe(t_node *node, int *status, t_shell *shell)
 	if (close_pipe(p) < 0)
 		exit(errno);
 	waitpid(left_side_process, NULL, 0);
-    waitpid(right_side_process, status, 0);
+	waitpid(right_side_process, status, 0);
 }
 
 /* Starts the execution. Executes the command tree and 
 	sets the exit status to the status of the last command */
 void	run_cmd(t_node *node, t_shell *shell)
 {
-	int status;
+	int	status;
+
 	if (node == 0)
 		return ;
 	set_signal_handling(2);

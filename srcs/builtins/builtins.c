@@ -6,23 +6,25 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 12:17:02 by facu              #+#    #+#             */
-/*   Updated: 2023/12/11 17:30:04 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/12 00:31:41 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 /*	Returns 1 or 0 depending on whether the command is a builtin
 	and whether it can be executed in a nested context or not */
 int	is_builtin(t_node *node, int nested_context)
 {
 	t_execnode	*enode;
-	char	*commands[] = {"echo", "export", "unset", "cd", "exit", "pwd", "env",
-			0};
-	char	*non_nested_commands[] = {"cd", "exit", 0};
+	char		**commands;
+	char		**non_nested_commands;
 	int			is_builtin;
 	int			is_non_nested_builtin;
 
+	commands = (char *[]){"echo", "export", "unset", "cd", "exit", "pwd", "env",
+		0};
+	non_nested_commands = (char *[]){"exit", 0};
 	if (node->type != EXEC)
 		return (0);
 	enode = (t_execnode *)node;
@@ -40,8 +42,9 @@ void	run_env(t_shell *shell)
 	char	*env_var;
 
 	i = 0;
-	while ((env_var = shell->env[i++]))
+	while ((shell->env[i]))
 	{
+		env_var = shell->env[i++];
 		if (env_var[ft_strlen(env_var) - 1] == '=')
 			continue ;
 		ft_putstr_fd(env_var, STDOUT_FILENO);
@@ -52,7 +55,7 @@ void	run_env(t_shell *shell)
 
 void	run_builtin(t_node *node, t_shell *shell)
 {
-	t_execnode *enode;
+	t_execnode	*enode;
 
 	enode = (t_execnode *)node;
 	if (ft_strcmp(enode->av[0], "exit") == 0)

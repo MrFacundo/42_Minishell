@@ -6,13 +6,14 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:20:06 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/06 12:06:27 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/11 18:49:13 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 int	g_exit_status = 0;
+
 /* If the command is belongs to a set of builtins, runs the builtin in the main
 	process, otherwise, runs the command in a child process.
 	Handles signals and waits for the child process to finish */

@@ -6,82 +6,14 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/11 17:31:52 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/12 01:50:59 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL
-# define MINISHELL
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
-# include <stdio.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include "../libft/libft.h"
-# include <unistd.h> 
-# include <sys/wait.h>
-# include <fcntl.h>
-# include <sys/stat.h>
-# include <errno.h>
-# include <stdarg.h>
-# include <sys/stat.h>
-# include <signal.h>
-# include <termios.h>
-# include <limits.h>
-
-#define MAXARGS 10
-#define MAXTOKENSIZE 100
-#define EXEC 1
-#define REDIR 2
-#define PIPE 3
-#define HEREDOC 4
-
-#define TOKEN_ERROR 1
-#define NO_EXECUTABLE 2
-
-typedef struct	s_node
-{
-	int			type;
-}				t_node;
-
-typedef struct	s_execnode
-{
-	int			type;
-	char		*av[MAXARGS];
-	int			ac;
-}				t_execnode;
-
-typedef struct s_redirnode
-{
-	int			type;
-	t_node		*node;
-	char		*file;
-	int			mode;
-	int			fd;
-}				t_redirnode;
-
-typedef struct s_heredocnode
-{
-	int			type;
-	t_node		*execnode;
-	int			fd;
-}				t_heredocnode;
-
-typedef struct s_pipenode
-{
-	int			type;
-	t_node		*left;
-	t_node		*right;
-}				t_pipenode;
-
-typedef struct s_shell
-{
-	char		**env;
-	int			parsing_status;
-}	t_shell;
-
-typedef void	(*t_signal_handler)(int);
-
-extern	int		g_exit_status;
+# include "minishell_defines.h"
 
 // builtins.c
 int		is_builtin(t_node *node, int nested_context);
@@ -91,7 +23,6 @@ void	run_builtin(t_node *node, t_shell *shell);
 int		ft_strarrfind(char **array, char *str);
 int		has_alphabetic_chars(char *str);
 void	process_export_args(char **av);
-
 
 //cd.c
 
@@ -116,16 +47,21 @@ void	print_env(char **env);
 // echo.c
 void	run_echo(char **av);
 
-// env_utils.c
-char	*extract_key(char *key_value);
-char	*extract_value(char *key_value);
+// env_utils_1.c
+
 int		key_matches(char *key, char *env);
 void	update_key(char *key, char *value, int i, t_shell *shell);
 void	add_key_to_env(char *key, char *value, t_shell *shell);
 int		is_valid_identifier(const char *str);
 
+// env_utils_2.c
+char	*extract_key(char *key_value);
+char	*extract_value(char *key_value);
+int		find_key_index(char *key, t_shell *shell);
+
 // exec_utils.c
-void	handle_child_process(int *pipe, int direction, t_node *node, t_shell *shell);
+void	handle_child_process(int *pipe, int direction, t_node *node,
+			t_shell *shell);
 void	execute_command(char *path, char **av, t_shell *shell);
 void	update_exit_status(int status);
 void	run_external(t_node *node, int *status, t_shell *shell);
@@ -133,8 +69,8 @@ void	run_external(t_node *node, int *status, t_shell *shell);
 // exec_error_handlung.c
 void	handle_file_not_found(char *path);
 void	handle_permission_denied(char *path);
-void	handle_default_error();
-void	handle_directory();
+void	handle_default_error(void);
+void	handle_directory(void);
 
 // exec_path_finding.c
 char	*find_path(char *cmd, t_shell *shell);
@@ -145,8 +81,7 @@ void	run_cmd(t_node *node, t_shell *shell);
 // exit.c
 void	run_exit(char **av);
 
-// expansion.c
-void    expand_variable(char *ptr, char **tkn_ptr, t_shell *shell);
+void	expand_variable(char *ptr, char **tkn_ptr, t_shell *shell);
 
 // export.c
 void	run_export(char **av, t_shell *shell);
@@ -156,6 +91,12 @@ t_node	*parse_cmd(char *cmd, t_shell *shell);
 t_node	*parsepipe(char **pointer_to_cmd, t_shell *shell);
 t_node	*parseredirs(t_node *node, char **pointer_to_cmd, t_shell *shell);
 t_node	*parseexec(char **pointer_to_cmd, t_shell *shell);
+
+// parsing_utils.c
+t_node	*handle_parse_error(t_node *ret, const char *error_message,
+			t_shell *shell);
+t_node	*reverse_redir_nodes_help(t_node *root);
+t_node	*parseredirs_help(t_node *node, char **tkn_ptr, int token);
 
 // pwd.c
 void	run_pwd(void);
@@ -179,7 +120,7 @@ void	extract_exit_status(char **ptr, char **ret);
 void	extract_alpha_variable(char **ptr, char **ret, t_shell *shell);
 
 // tokenizer.c
-int get_token(char **cmd_ptr, char **tkn_ptr, t_shell *shell);
+int		get_token(char **cmd_ptr, char **tkn_ptr, t_shell *shell);
 
 // unset.c
 void	run_unset(char **av, t_shell *shell);
@@ -193,5 +134,6 @@ int		pipe_1(int *p);
 int		dup2_1(int oldfd, int newfd);
 int		close_pipe(int *p);
 void	free_tree(t_node *node);
+void	free_strings(char *str, ...);
 
 #endif

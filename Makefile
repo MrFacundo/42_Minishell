@@ -1,10 +1,41 @@
 NAME	= minishell
-SOURCES	= $(wildcard srcs/*.c)
-OBJECTS	= $(patsubst srcs/%.c,objects/%.o,$(SOURCES))
+SRC_DIR = srcs
+OBJ_DIR = objects
+SOURCES		=	srcs/builtins/export.c \
+				srcs/builtins/builtins_utils.c \
+				srcs/builtins/cd.c \
+				srcs/builtins/builtins.c \
+				srcs/builtins/pwd.c \
+				srcs/builtins/exit.c \
+				srcs/builtins/unset.c \
+				srcs/builtins/echo.c \
+				srcs/environment/env_utils_2.c \
+				srcs/environment/env_utils_1.c \
+				srcs/environment/env.c \
+				srcs/executor/execution.c \
+				srcs/executor/exec_path_finding.c \
+				srcs/executor/exec_utils.c \
+				srcs/executor/exec_error_handling.c \
+				srcs/parser/parsing_utils.c \
+				srcs/parser/parsing.c \
+				srcs/tokenizer/token_utils_2.c \
+				srcs/tokenizer/tokenizer.c \
+				srcs/tokenizer/token_utils_3.c \
+				srcs/tokenizer/token_utils.c \
+				srcs/utils/utils.c \
+				srcs/utils/utils_2.c \
+				srcs/utils/free.c \
+				srcs/constructors.c \
+				srcs/debug.c \
+				srcs/main.c \
+				srcs/read.c \
+				srcs/signals.c \
+
 LIBFT_DIR  = ./libft
 CC		 = gcc
 CFLAGS	 = -g -Wall -Wextra -Werror
 LDFLAGS = -L$(LIBFT_DIR) -lft -lreadline
+OBJECTS	= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SOURCES))
 
 # --- COLORS ---
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 18:07:29 by facu              #+#    #+#             */
-/*   Updated: 2023/12/10 18:34:38 by amak             ###   ########.fr       */
+/*   Updated: 2023/12/12 01:56:13 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,10 @@ int	read_heredoc(char *delimiter)
 		return (-1);
 	while (prompt(&line, "ms - heredoc > ") >= 0)
 	{
-        if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0)
-            break;
-        write(fd[1], line, ft_strlen(line));
-        write(fd[1], "\n", 1);
-		free(line);
+		if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0)
+			break ;
+		write(fd[1], line, ft_strlen(line));
+		write(fd[1], "\n", 1);
 	}
 	free(line);
 	close(fd[1]);
