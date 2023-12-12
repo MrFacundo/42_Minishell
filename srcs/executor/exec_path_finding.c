@@ -6,11 +6,11 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 00:13:55 by facu              #+#    #+#             */
-/*   Updated: 2023/12/05 00:16:05 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/12 00:31:41 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 char	*build_full_path(const char *directory, const char *cmd)
 {

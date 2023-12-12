@@ -6,11 +6,11 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 17:19:25 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/06 13:03:19 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/12 00:31:41 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 void	execute_command(char *path, char **av, t_shell *shell)
 {

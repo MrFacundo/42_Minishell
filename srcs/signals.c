@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 20:21:36 by facu              #+#    #+#             */
-/*   Updated: 2023/12/11 17:16:15 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/11 23:31:28 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,22 @@ void	sig_handler(int sig)
  */
 void	set_signal_handling(int option)
 {
-	t_signal_handler handlers[][3] = {
-		{sig_handler, SIG_IGN, SIG_IGN},
-		{SIG_DFL, SIG_DFL, SIG_DFL},
-		{SIG_IGN, SIG_IGN, SIG_IGN},
-	};
+	t_signal_handler(*handlers)[3] = malloc(sizeof(t_signal_handler[3]) * 3);
+	if (handlers == 0)
+		return (print_error(1, "malloc", strerror(errno)));
+	handlers[0][0] = sig_handler;
+	handlers[0][1] = SIG_IGN;
+	handlers[0][2] = SIG_IGN;
+	handlers[1][0] = SIG_DFL;
+	handlers[1][1] = SIG_DFL;
+	handlers[1][2] = SIG_DFL;
+	handlers[2][0] = SIG_IGN;
+	handlers[2][1] = SIG_IGN;
+	handlers[2][2] = SIG_IGN;
 	rl_catch_signals = 0;
-	if (signal(SIGINT, handlers[option][0]) == SIG_ERR ||
-			signal(SIGQUIT, handlers[option][1]) == SIG_ERR ||
-			signal(SIGTSTP, handlers[option][2]) == SIG_ERR)
-				return (print_error(2, "signal", strerror(errno)));
+	if (signal(SIGINT, handlers[option][0]) == SIG_ERR
+		|| signal(SIGQUIT, handlers[option][1]) == SIG_ERR
+		|| signal(SIGTSTP, handlers[option][2]) == SIG_ERR)
+		print_error(2, "signal", strerror(errno));
+	free(handlers);
 }

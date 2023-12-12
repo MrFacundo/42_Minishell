@@ -6,11 +6,11 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 17:05:37 by facu              #+#    #+#             */
-/*   Updated: 2023/12/11 17:16:46 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/12 00:31:41 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 void	print_cd_error(const char *message)
 {
@@ -47,10 +47,7 @@ void	run_cd(char **av, t_shell *shell)
 	char	*path;
 
 	if (av[1] && av[2])
-	{
-		print_cd_error("too many arguments");
-		return ;
-	}
+		return (print_cd_error("too many arguments"));
 	oldpwd = getcwd(NULL, 0);
 	path = get_target_path(av, shell);
 	if (!path)
