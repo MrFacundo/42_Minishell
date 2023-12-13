@@ -1,6 +1,6 @@
-NAME	= minishell
-SRC_DIR = srcs
-OBJ_DIR = objects
+NAME		=	minishell
+SRC_DIR 	=	srcs
+OBJ_DIR 	=	objects
 SOURCES		=	srcs/builtins/export.c \
 				srcs/builtins/builtins_utils.c \
 				srcs/builtins/cd.c \
@@ -31,11 +31,11 @@ SOURCES		=	srcs/builtins/export.c \
 				srcs/read.c \
 				srcs/signals.c \
 
-LIBFT_DIR  = ./libft
-CC		 = gcc
-CFLAGS	 = -Wall -Wextra -Werror
-LDFLAGS = -L$(LIBFT_DIR) -lft -lreadline
-OBJECTS	= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SOURCES))
+LIBFT_DIR	=	./libft
+CC		 	=	gcc
+CFLAGS		=	-Wall -Wextra -Werror
+LDFLAGS 	=	-L$(LIBFT_DIR) -lft -lreadline
+OBJECTS		=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SOURCES))
 
 # --- COLORS ---
 
@@ -75,7 +75,7 @@ restart:	all
 readline.supp:
 			wget https://raw.githubusercontent.com/MrFacundo/42_Minishell/main/readline.supp
 
-valgrind:$(NAME) readline.supp
+valgrind:	$(NAME) readline.supp
 			valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=readline.supp ./$(NAME)
 
 re: fclean all

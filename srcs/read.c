@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 18:07:29 by facu              #+#    #+#             */
-/*   Updated: 2023/12/12 01:56:13 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/13 15:08:40 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	prompt(char **buf, char *prompt)
 {
 	if (prompt == 0)
-		prompt = "ms > ";
+		prompt = "🐚 ";
 	set_signal_handling(0);
 	*buf = readline(prompt);
 	if (*buf == 0)
@@ -30,7 +30,7 @@ int	read_heredoc(char *delimiter)
 
 	if (pipe_1(fd) == -1)
 		return (-1);
-	while (prompt(&line, "ms - heredoc > ") >= 0)
+	while (prompt(&line, "🐚 hdoc ") >= 0)
 	{
 		if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0)
 			break ;

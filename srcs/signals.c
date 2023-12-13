@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 20:21:36 by facu              #+#    #+#             */
-/*   Updated: 2023/12/11 23:31:28 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/13 01:48:01 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	sig_handler(int sig)
 
 /* sets the signal handling for different contexts:
 	0: the main process running the shell
-	1: processes running an external commands
+	1: processes running external commands
 	2: procecess waiting for a command to finish
  */
 void	set_signal_handling(int option)
