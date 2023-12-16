@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 17:28:33 by facu              #+#    #+#             */
-/*   Updated: 2023/12/12 00:31:41 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/16 18:44:11 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	unset_argumet(char *arg, t_shell *shell)
+void	unset_argument(char *arg, t_shell *shell)
 {
 	int	j;
 
@@ -29,11 +29,6 @@ void	unset_argumet(char *arg, t_shell *shell)
 			j++;
 		}
 	}
-	else
-	{
-		print_error(2, "unset", "not a valid identifier");
-		g_exit_status = EXIT_FAILURE;
-	}
 }
 
 void	run_unset(char **av, t_shell *shell)
@@ -43,7 +38,8 @@ void	run_unset(char **av, t_shell *shell)
 	i = 1;
 	while (av[i])
 	{
-		unset_argumet(av[i], shell);
+		unset_argument(av[i], shell);
 		i++;
 	}
+	g_exit_status = EXIT_SUCCESS;
 }
