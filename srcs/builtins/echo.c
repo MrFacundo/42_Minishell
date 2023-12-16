@@ -6,7 +6,7 @@
 /*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 17:29:49 by facu              #+#    #+#             */
-/*   Updated: 2023/12/16 19:16:03 by amak             ###   ########.fr       */
+/*   Updated: 2023/12/16 21:26:59 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,22 @@ void	run_echo(char **av)
 {
 	int	i;
 	int	print_newline;
+	int printable;
 
 	i = 1;
 	print_newline = 1;
+	printable = 0;
 	while (av[i])
 	{
-		if (check_flagn(av[i]) == 1)
-		{
+		if (check_flagn(av[i]) == 1 && printable == 0)
 			print_newline = 0;
-			i++;
-			continue ;
+		else
+		{
+			printable = 1;
+			ft_putstr_fd(av[i], STDOUT_FILENO);
+			if (av[i + 1])
+				ft_putchar_fd(' ', STDOUT_FILENO);
 		}
-		ft_putstr_fd(av[i], STDOUT_FILENO);
-		if (av[i + 1])
-			ft_putchar_fd(' ', STDOUT_FILENO);
 		i++;
 	}
 	if (print_newline)
