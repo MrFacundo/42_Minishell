@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:07:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/16 16:34:59 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/16 17:39:12 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ t_node	*parse_cmd(char *cmd, t_shell *shell)
 
 	shell->parsing_status = 0;
 	node = parsepipe(&cmd, shell);
-	if (node->type == EXEC && ((t_execnode *)node)->ac == 0)
-		shell->parsing_status = NO_EXECUTABLE;
 	if (shell->parsing_status == TOKEN_ERROR)
 		g_exit_status = TOKEN_ERROR;
 	return (node);
@@ -36,7 +34,9 @@ t_node	*parsepipe(char **cmd_ptr, t_shell *shell)
 	if (shell->parsing_status == 0 && peek(cmd_ptr, "|"))
 	{
 		get_token(cmd_ptr, 0, shell);
-		if (**cmd_ptr == '\0' || peek(cmd_ptr, "|()&;<>"))
+		if ((left->type == EXEC && ((t_execnode *)left)->ac == 0)
+			|| **cmd_ptr == '\0'
+			|| peek(cmd_ptr, "|()&;<>"))
 			return (handle_parse_error(left, "Parse error near pipe", shell));
 		return (pipenode(left, parsepipe(cmd_ptr, shell)));
 	}
