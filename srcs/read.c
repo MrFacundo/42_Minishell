@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 18:07:29 by facu              #+#    #+#             */
-/*   Updated: 2023/12/13 15:08:40 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/16 19:33:48 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	read_heredoc(char *delimiter)
 			break ;
 		write(fd[1], line, ft_strlen(line));
 		write(fd[1], "\n", 1);
+		free(line);
 	}
 	free(line);
 	close(fd[1]);
