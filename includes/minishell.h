@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/12 01:50:59 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/19 20:28:15 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void	sig_handler(int sig);
 void	set_signal_handling(int executing_external);
 
 // token_utils.c
-int		calculate_token_length(char *ptr, t_shell *shell);
+int		calculate_token_length(char *ptr, t_shell *shell, int *has_quotes);
 
 // token_utils_2.c
 char	*extract_token(char **ptr, int len, t_shell *shell);

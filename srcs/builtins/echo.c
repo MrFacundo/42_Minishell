@@ -3,19 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 17:29:49 by facu              #+#    #+#             */
-/*   Updated: 2023/12/16 21:26:59 by amak             ###   ########.fr       */
+/*   Updated: 2023/12/19 19:26:47 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-
-static int check_flagn(const char *str)
+static int	check_flagn(const char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!*str)
@@ -27,7 +26,7 @@ static int check_flagn(const char *str)
 			if (str[i] != 'n')
 				return (0);
 			i++;
-		}		
+		}
 		return (1);
 	}
 	return (0);
@@ -37,7 +36,7 @@ void	run_echo(char **av)
 {
 	int	i;
 	int	print_newline;
-	int printable;
+	int	printable;
 
 	i = 1;
 	print_newline = 1;

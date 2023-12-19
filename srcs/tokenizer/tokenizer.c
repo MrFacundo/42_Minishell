@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 16:30:30 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/12 00:31:41 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/19 20:31:39 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,15 +46,17 @@ int	process_default(char **cmd_ptr, char **tkn_ptr, t_shell *shell)
 	char	*p;
 	int		len;
 	char	*a_token;
+	int		has_quotes;
 
+	has_quotes = 0;
 	p = *cmd_ptr;
-	len = calculate_token_length(p, shell);
+	len = calculate_token_length(p, shell, &has_quotes);
 	if (len == -1)
 		return ('e');
 	a_token = extract_token(&p, len, shell);
 	*tkn_ptr = a_token;
 	*cmd_ptr = p;
-	if (len == 0)
+	if (len == 0 && !has_quotes)
 	{
 		free(a_token);
 		return ('_');

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 19:41:47 by facu              #+#    #+#             */
-/*   Updated: 2023/12/12 00:31:41 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/19 20:06:26 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,14 @@ char	**initialize_env(char **envp)
 	int		size;
 	char	**env;
 
+
+	// print_env(envp);
+
+	if (!envp[0])
+	{
+		print_error(1, "Error: no environment variables found");
+		return (0);
+	}
 	i = 0;
 	size = 0;
 	while (envp[size])
