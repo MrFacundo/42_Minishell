@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 16:35:54 by facu              #+#    #+#             */
-/*   Updated: 2023/12/16 16:52:12 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/19 20:31:06 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,9 @@ void	expansion_len(char **cmd_ptr, int *len, t_shell *shell)
 	free(expansion);
 }
 
-int	s_quoted_segment_len(char **cmd_ptr, int *len)
+int	s_quoted_segment_len(char **cmd_ptr, int *len, int *has_quotes)
 {
+	*has_quotes = 1;
 	(*cmd_ptr)++;
 	while (**cmd_ptr)
 	{
@@ -57,8 +58,9 @@ int	s_quoted_segment_len(char **cmd_ptr, int *len)
 	return (-1);
 }
 
-int	d_quoted_segment_len(char **cmd_ptr, t_shell *shell, int *len)
+int	d_quoted_segment_len(char **cmd_ptr, t_shell *shell, int *len, int *has_quotes)
 {
+	*has_quotes = 1;
 	(*cmd_ptr)++;
 	while (**cmd_ptr)
 	{
@@ -86,17 +88,17 @@ int	d_quoted_segment_len(char **cmd_ptr, t_shell *shell, int *len)
 	return (-1);
 }
 
-int	calculate_token_length(char *cmd_ptr, t_shell *shell)
+int	calculate_token_length(char *cmd_ptr, t_shell *shell, int *has_quotes)
 {
 	int	len;
 
 	len = 0;
 	while (*cmd_ptr)
 	{
-		if (*cmd_ptr == '\'' && s_quoted_segment_len(&cmd_ptr, &len) == -1)
+		if (*cmd_ptr == '\'' && s_quoted_segment_len(&cmd_ptr, &len, has_quotes) == -1)
 			return (-1);
 		else if (*cmd_ptr == '\"' && d_quoted_segment_len(&cmd_ptr, shell,
-				&len) == -1)
+				&len, has_quotes) == -1)
 			return (-1);
 		else if (*cmd_ptr == '$')
 			expansion_len(&cmd_ptr, &len, shell);

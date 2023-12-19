@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 17:05:37 by facu              #+#    #+#             */
-/*   Updated: 2023/12/16 18:30:39 by amak             ###   ########.fr       */
+/*   Updated: 2023/12/19 19:36:35 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,10 @@ void	update_env_paths(char *pwd, char *oldpwd, t_shell *shell)
 	free(temp);
 }
 
-void	run_cd(char **av, t_shell *shell)
+void	run_cd_helper(char *path, char *oldpwd, char **av, t_shell *shell)
 {
 	char	*pwd;
-	char	*oldpwd;
-	char	*path;
 
-	if (av[1] && av[2])
-		return (print_cd_error("too many arguments"));
-	oldpwd = getcwd(NULL, 0);
-	path = get_target_path(av, shell);
 	if (!path)
 	{
 		print_cd_error("Failed to get path");
@@ -67,5 +61,17 @@ void	run_cd(char **av, t_shell *shell)
 				free(path);
 		}
 	}
+}
+
+void	run_cd(char **av, t_shell *shell)
+{
+	char	*oldpwd;
+	char	*path;
+
+	if (av[1] && av[2])
+		return (print_cd_error("too many arguments"));
+	oldpwd = getcwd(NULL, 0);
+	path = get_target_path(av, shell);
+	run_cd_helper(path, oldpwd, av, shell);
 	free(oldpwd);
 }
