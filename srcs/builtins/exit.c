@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 17:29:20 by facu              #+#    #+#             */
-/*   Updated: 2023/12/19 21:40:38 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/12/19 21:55:00 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,11 @@ long long	ft_atoll(const char *str)
 	while (ft_isspace(*str))
 		++str;
 	if (*str == '+' || *str == '-')
-		sign = (*str++ == '-') ? -1 : 1;
+	{
+		if (*str == '-')
+			sign = -1;
+		++str;
+	}
 	while (ft_isdigit(*str))
 	{
 		digit = *str - '0';
@@ -33,7 +37,7 @@ long long	ft_atoll(const char *str)
 	return (ret);
 }
 
-void run_exit(char **av)
+void	run_exit(char **av)
 {
 	long long	arg_value;
 
@@ -41,12 +45,15 @@ void run_exit(char **av)
 	{
 		print_error(2, "exit", "too many arguments");
 		g_exit_status = EXIT_FAILURE;
-		return;
+		return ;
 	}
 	else if (av[1])
 	{
 		arg_value = ft_atoll(av[1]);
-		if (has_alphabetic_chars(av[1]) || !(arg_value >= -9223372036854775807 && arg_value <= 9223372036854775807))
+		if (ft_strlen(av[1]) > 19
+			|| has_alphabetic_chars(av[1])
+			|| !(arg_value >= -9223372036854775807 \
+			&& arg_value <= 9223372036854775807))
 		{
 			print_error(2, "exit", "numeric argument required");
 			g_exit_status = 2;
