@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_defines.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 01:47:22 by facu              #+#    #+#             */
-/*   Updated: 2023/12/16 18:33:32 by amak             ###   ########.fr       */
+/*   Updated: 2023/12/17 23:30:07 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@
 # include <limits.h>
 
 # define MAXARGS 100
-# define MAXTOKENSIZE 100
 # define EXEC 1
 # define REDIR 2
 # define PIPE 3

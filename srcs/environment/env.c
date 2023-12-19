@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 19:41:47 by facu              #+#    #+#             */
-/*   Updated: 2023/12/19 20:06:26 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/12/19 21:44:21 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,6 @@ char	**initialize_env(char **envp)
 	int		i;
 	int		size;
 	char	**env;
-
-
-	// print_env(envp);
 
 	if (!envp[0])
 	{
