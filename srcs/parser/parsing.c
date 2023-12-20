@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:07:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/16 17:39:12 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/20 11:21:35 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,6 @@ t_node	*parseexec(char **cmd_ptr, t_shell *shell)
 		token = get_token(cmd_ptr, &tkn_ptr, shell);
 		if (token == 0)
 			break ;
-		else if (token == '_')
-			continue ;
 		else if (token == 'e')
 			return (handle_parse_error(ret, "Parse error near quotes", shell));
 		else if (token == 'a')
@@ -111,5 +109,7 @@ t_node	*parseexec(char **cmd_ptr, t_shell *shell)
 		ret = parseredirs(ret, cmd_ptr, shell);
 	}
 	exec_node->av[exec_node->ac] = 0;
+	if (exec_node->av[0] == 0)
+	ret = parseredirs(ret, cmd_ptr, shell);
 	return (ret);
 }
