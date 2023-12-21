@@ -15,7 +15,10 @@
 
 ## Summary
 
-A shell program capable of running simple commands and including the following features:
+https://github.com/marcpaq/shellancestry
+https://en.wikipedia.org/wiki/Comparison_of_command_shells
+
+A CLI shell program that features a set of basic functionalities, including:
 
 - Pipes
 - Redirections

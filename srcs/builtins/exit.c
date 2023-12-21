@@ -6,36 +6,11 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 17:29:20 by facu              #+#    #+#             */
-/*   Updated: 2023/12/19 21:55:00 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/21 17:44:57 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-long long	ft_atoll(const char *str)
-{
-	int			sign;
-	long long	ret;
-	int			digit;
-
-	sign = 1;
-	ret = 0;
-	while (ft_isspace(*str))
-		++str;
-	if (*str == '+' || *str == '-')
-	{
-		if (*str == '-')
-			sign = -1;
-		++str;
-	}
-	while (ft_isdigit(*str))
-	{
-		digit = *str - '0';
-		ret = ret * 10 + sign * digit;
-		++str;
-	}
-	return (ret);
-}
 
 void	run_exit(char **av)
 {
