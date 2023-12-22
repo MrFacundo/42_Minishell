@@ -15,8 +15,9 @@
 
 ## Summary
 
-https://github.com/marcpaq/shellancestry
-https://en.wikipedia.org/wiki/Comparison_of_command_shells
+- [Shell ancestry](https://github.com/marcpaq/shellancestry)
+- [Comparison of Command Shells](https://en.wikipedia.org/wiki/Comparison_of_command_shells)
+- [Introduction to Command Shells](https://softpanorama.org/People/Shell_giants/introduction.shtml)
 
 A CLI shell program that features a set of basic functionalities, including:
 
@@ -42,5 +43,5 @@ A CLI shell program that features a set of basic functionalities, including:
 
 
 ## Submodules 
-- Run `git submodule update --init --recursive` to get submodules
-- To update the submodules run `git submodule update --remote --merge`
+- Get:  `git submodule update --init --recursive` 
+- Update: `git submodule update --remote --merge`
