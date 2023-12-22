@@ -13,10 +13,11 @@
 	<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/MrFacundo/42_Minishell?color=green" />
 </p>
 
-## Summary
 
-https://github.com/marcpaq/shellancestry
-https://en.wikipedia.org/wiki/Comparison_of_command_shells
+
+
+
+## Summary
 
 A CLI shell program that features a set of basic functionalities, including:
 
@@ -37,10 +38,18 @@ A CLI shell program that features a set of basic functionalities, including:
   - env
   - exit
 
+## Our implementation
+![📊️](diagram.png)
+
 ## Subject
 [📗️](en.subject.pdf) 
 
 
 ## Submodules 
-- Run `git submodule update --init --recursive` to get submodules
-- To update the submodules run `git submodule update --remote --merge`
+- Get:  `git submodule update --init --recursive` 
+- Update: `git submodule update --remote --merge`
+
+## Resources
+- [Shell ancestry](https://github.com/marcpaq/shellancestry)
+- [Comparison of Command Shells](https://en.wikipedia.org/wiki/Comparison_of_command_shells)
+- [Introduction to Command Shells](https://softpanorama.org/People/Shell_giants/introduction.shtml)
