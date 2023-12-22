@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/19 20:28:15 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/12/22 15:43:44 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "minishell_defines.h"
 
 // builtins.c
-int		is_builtin(t_node *node, int nested_context);
+int		is_builtin(t_node *node);
 void	run_builtin(t_node *node, t_shell *shell);
 
 // builtins_utils.c

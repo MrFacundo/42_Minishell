@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:20:06 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/19 20:03:34 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/12/22 15:43:44 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	run_node(t_node *node, t_shell *shell)
 {
 	int	status;
 
-	if (is_builtin(node, 0))
+	if (is_builtin(node))
 		run_builtin(node, shell);
 	else if (fork_1() == 0)
 		run_cmd(node, shell);
