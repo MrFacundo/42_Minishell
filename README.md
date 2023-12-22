@@ -41,9 +41,6 @@ A CLI shell program that features a set of basic functionalities, including:
 ## Subject
 [📗️](en.subject.pdf) 
 
-## Flowchart
-![📊️](diagram.png)
-
 ## Submodules 
 - Get:  `git submodule update --init --recursive` 
 - Update: `git submodule update --remote --merge`
