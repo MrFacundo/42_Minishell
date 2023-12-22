@@ -6,7 +6,7 @@
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:47:40 by facu              #+#    #+#             */
-/*   Updated: 2023/12/12 18:54:18 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/22 15:46:42 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 	the builtin and exits, otherwise, runs the command in a child process. */
 void	run_exec(t_node *node, int *status, t_shell *shell)
 {
-	if (is_builtin(node, 1))
+	if (is_builtin(node))
 	{
 		run_builtin(node, shell);
 		exit(g_exit_status);
