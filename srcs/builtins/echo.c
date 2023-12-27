@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 17:29:49 by facu              #+#    #+#             */
-/*   Updated: 2023/12/19 19:26:47 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/12/26 16:23:43 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@ static int	check_flagn(const char *str)
 	i = 0;
 	if (!*str)
 		return (0);
-	if (str[i++] == '-')
+	if ((str[i] == '-') && (str[i + 1] != 0))
 	{
+		i++; 
 		while (str[i])
 		{
 			if (str[i] != 'n')

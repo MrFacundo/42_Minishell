@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:21:40 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/12/22 15:43:44 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/26 17:05:15 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ int		is_valid_identifier(const char *str);
 char	*extract_key(char *key_value);
 char	*extract_value(char *key_value);
 int		find_key_index(char *key, t_shell *shell);
+char	*ft_strdup_env(char *str);
+char	**ft_strarrcpy_env(char **array);
 
 // exec_utils.c
 void	handle_child_process(int *pipe, int direction, t_node *node,

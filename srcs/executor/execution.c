@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:47:40 by facu              #+#    #+#             */
-/*   Updated: 2023/12/22 15:46:42 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/26 16:12:02 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void	run_cmd(t_node *node, t_shell *shell)
 {
 	int	status;
 
+	status = 0;
 	if (node == 0)
 		return ;
 	set_signal_handling(2);

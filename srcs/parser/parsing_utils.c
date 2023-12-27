@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:51:28 by facu              #+#    #+#             */
-/*   Updated: 2023/12/12 00:31:41 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/26 16:19:53 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ t_node	*parseredirs_help(t_node *node, char **tkn_ptr, int token)
 {
 	t_node	*ret;
 
+	ret = NULL;
 	if (token == '<')
 		ret = redircmd(node, *tkn_ptr, O_RDONLY, STDIN_FILENO);
 	else if (token == '>')

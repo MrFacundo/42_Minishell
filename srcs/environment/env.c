@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 19:41:47 by facu              #+#    #+#             */
-/*   Updated: 2023/12/19 21:44:21 by facu             ###   ########.fr       */
+/*   Updated: 2023/12/26 16:52:23 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,13 +111,14 @@ void	print_env(char **env)
 	char	**env_copy;
 	char	**current_string;
 
-	env_copy = ft_strarrcpy(env);
+	env_copy = ft_strarrcpy_env(env);
 	if (env_copy == 0)
 		return ;
 	ft_strarrbsort(env_copy);
 	current_string = env_copy;
 	while (*current_string)
 	{
+		ft_putstr_fd("declare -x ", 1);
 		ft_putstr_fd(*current_string, 1);
 		ft_putchar_fd('\n', 1);
 		++current_string;

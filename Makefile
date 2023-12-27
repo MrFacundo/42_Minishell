@@ -32,7 +32,7 @@ SOURCES		=	srcs/builtins/export.c \
 				srcs/signals.c \
 
 LIBFT_DIR	=	./libft
-CC		 	=	gcc
+CC		 	=	cc
 CFLAGS		=	-Wall -Wextra -Werror
 LDFLAGS 	=	-L$(LIBFT_DIR) -lft -lreadline
 OBJECTS		=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SOURCES))
